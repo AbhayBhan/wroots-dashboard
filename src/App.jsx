@@ -39,6 +39,7 @@ const LazyPayout = lazy(() => import("./pages/payout"));
 const LazyRecruiter = lazy(() => import("./pages/recruiter"));
 const LazyRecruiterDetails = lazy(() => import("./pages/recruiter/details"));
 const LazySkill = lazy(() => import("./pages/skill"));
+const LazyAuthentication = lazy(() => import("./pages/auth"))
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ function App() {
           }
         >
           <Routes>
+            <Route path="/login" element={<LazyAuthentication />}></Route>
             <Route path="/" element={<LazyMainLayout />}>
               <Route index element={<LazyDashboard />} />
               <Route path="candidate" element={<LazyCandidateList />} />
