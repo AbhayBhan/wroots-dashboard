@@ -108,7 +108,7 @@ const Dashboard = () => {
       </div>
       <div className="p-4 mt-4 rounded-md bg-background">
         <div className="flex justify-between w-full">
-          <Card1 />
+          <Card1 isLoading={isLoading}/>
           <Card2 />
           <Card3 />
         </div>
