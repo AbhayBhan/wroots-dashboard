@@ -20,7 +20,7 @@ export function UserAuthForm({ className, ...props }) {
 
 	const {mutate} = useMutation(login, {
 		onSuccess : ({data}) => {
-			localStorage.setItem('userdata', JSON.parse(data.recruiter));
+			localStorage.setItem('userdata', JSON.stringify(data.recruiter));
 			navigate("/");
 		}
 	});

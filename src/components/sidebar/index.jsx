@@ -23,13 +23,20 @@ const routes = [
   getItem("Recruiters", "/recruiter", "recruiter", MdPersonSearch),
 ];
 
-const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
+const Sidebar = ({
+  isSidebarOpen,
+  setSidebarOpen,
+  className,
+  isSuperAdmin,
+}) => {
   const location = useLocation();
   const { pathname } = location;
 
   return (
     <div
-      className={` ${isSidebarOpen ? "w-60" : "w-20"} p-4 border-r h-screen sticky top-0 bg-background`}
+      className={` ${
+        isSidebarOpen ? "w-60" : "w-20"
+      } p-4 border-r h-screen sticky top-0 bg-background`}
     >
       <div>
         {isSidebarOpen ? (
@@ -38,29 +45,44 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
           <img src={LogoHalf} alt="logo" />
         )}
       </div>
-      <nav
-        className={cn(
-          "flex flex-col space-y-1 mt-5",
-          className
-        )}
-      >
+      <nav className={cn("flex flex-col space-y-1 mt-5", className)}>
         {routes.map((route) => {
           const Icon = route?.icon;
-          return (
-            <Link
-              key={route.key}
-              to={route.link}
-              className={cn(
-                buttonVariants({ variant: "ghost" }),
-                pathname === route.link
-                  ? "bg-muted hover:bg-muted"
-                  : "hover:bg-transparent hover:underline",
-                "justify-start"
-              )}
-            >
-              {route.label}
-            </Link>
-          );
+          if (!isSuperAdmin) {
+            if (route.label === "Candidates") {
+              return (
+                <Link
+                  key={route.key}
+                  to={route.link}
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    pathname === route.link
+                      ? "bg-muted hover:bg-muted"
+                      : "hover:bg-transparent hover:underline",
+                    "justify-start"
+                  )}
+                >
+                  {route.label}
+                </Link>
+              );
+            }
+          } else {  
+            return (
+              <Link
+                key={route.key}
+                to={route.link}
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  pathname === route.link
+                    ? "bg-muted hover:bg-muted"
+                    : "hover:bg-transparent hover:underline",
+                  "justify-start"
+                )}
+              >
+                {route.label}
+              </Link>
+            );
+          }
         })}
       </nav>
     </div>

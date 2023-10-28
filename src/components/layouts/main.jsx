@@ -6,11 +6,14 @@ import { ScrollArea } from "../ui/scroll-area";
 
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const userData = JSON.stringify(localStorage.getItem('userdata'));
+  const isSuperAdmin = userData.isSuperAdmin;
   return (
     <div className="relative flex h-screen bg-secondary">
       <Sidebar
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
+        isSuperAdmin={isSuperAdmin}
       />
       <div className="flex-1 h-screen overflow-y-auto">
         <Header setIsSidebarOpen={setIsSidebarOpen} />
