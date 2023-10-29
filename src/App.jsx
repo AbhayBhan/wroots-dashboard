@@ -55,7 +55,7 @@ function App() {
           }
         >
           <Routes>
-            <Route path="/login" element={<LazyAuthentication />}></Route>
+            <Route path="/login" element={<LazyAuthentication />} />
             <Route path="/" element={<LazyMainLayout />}>
               <Route index element={<LazyDashboard />} />
               <Route path="candidate" element={<LazyCandidateList />} />

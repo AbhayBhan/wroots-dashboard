@@ -27,10 +27,12 @@ const Sidebar = ({
   isSidebarOpen,
   setSidebarOpen,
   className,
-  isSuperAdmin,
 }) => {
   const location = useLocation();
   const { pathname } = location;
+
+  const userData = JSON.parse(localStorage.getItem('userdata'));
+  const isSuperAdmin = userData?.isSuperAdmin;
 
   return (
     <div
