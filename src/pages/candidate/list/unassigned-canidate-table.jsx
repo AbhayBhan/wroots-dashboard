@@ -16,7 +16,8 @@ import { assignCandidate, fetchUnassignCandidates } from "@/services/candidate";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const columns = [
   {
@@ -120,15 +121,21 @@ const UnassignedCanidateTable = () => {
 };
 
 const AssignMeButton = ({ id }) => {
-  const { mutate, isLoading } = useMutation({
-    mutationFn: assignCandidate,
+  const navigate = useNavigate();
+  const { mutate, isLoading } = useMutation(assignCandidate, {
+    onSuccess : () => {
+      toast.success("Candidate Assigned, Redirecting...");
+      setTimeout(() => {
+        navigate(`/candidate/${id}/details`)
+      },5000);
+    }
   });
 
   const handleClick = () => {
-    const recruiterId = JSON.parse(localStorage.getItem('userdata')).id;
+    const userdata = JSON.parse(localStorage.getItem('userdata'));
     mutate({
-      recruiterId,
-      candidateId: id,
+      recruiterEmail : userdata.email,
+      candidateID: id,
     });
   };
 
