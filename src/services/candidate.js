@@ -31,7 +31,7 @@ export const fetchUnassignCandidates = (categoryId, page) => {
 };
 
 export const assignCandidate = (payload) =>
-  axiosInstance.post("/candidate/assignCandidate", payload);
+  axiosInstance.post("/candidate/assignStatus", payload);
 
 export const updateCandidate = (payload) =>
   axiosInstance.post("/location/updatelocation", payload);

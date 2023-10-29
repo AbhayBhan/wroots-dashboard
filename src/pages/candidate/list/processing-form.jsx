@@ -1,3 +1,4 @@
+import React,{useState} from "react";
 import SearchFilter from "@/components/organism/search-filter";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,29 +19,49 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchActiveJobs } from "@/services/jobs";
-import { useQuery } from "@tanstack/react-query";
+import { createProcessing } from "@/services/candidate";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { statusData } from "@/services/mock/skill";
+import Spinner from "@/components/organism/spinner";
 
-const ProcessingForm = () => {
+const ProcessingForm = ({ candidateId }) => {
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     // defaultValues,
     mode: "onChange",
   });
+  
+  const [processLoading, setProcessLoading] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["Job", "Active"],
     queryFn: () => fetchActiveJobs(),
   });
 
+  const {mutate} = useMutation(createProcessing, {
+    onSuccess : ({data}) => {
+      setProcessLoading(false);
+      window.location.reload(); // On success, We must close the dialog box, This is Temporary Fix.
+    }
+  })
+
   function onSubmit(data) {
-    console.log(data);
+    setProcessLoading(true);
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const reqBody = {
+      ...data,
+      recruiterId: userdata.id,
+      recruiterEmail: userdata.email,
+      candidateId,
+      candidateInterestedInRole: true,
+      candidateInterestedInCompany : true,
+      locationIds : [4]
+    };
+    mutate(reqBody);
   }
 
-  const jobOptions = data?.data?.roles?.records?.map((job) => ({
-    label: job?.name,
-    value: job?.id,
-  }));
+  const jobOptions = data?.data?.roles;
 
   return (
     <Form {...form}>
@@ -48,7 +69,7 @@ const ProcessingForm = () => {
         <div className="flex gap-2 w-full">
           <FormField
             control={form.control}
-            name="job"
+            name="roleId"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Job</FormLabel>
@@ -65,8 +86,13 @@ const ProcessingForm = () => {
                   <SelectContent className="w-[227px]">
                     <ScrollArea className="h-60">
                       {jobOptions?.map((option) => (
-                        <SelectItem value={option.value} key={option.value}>
-                          {option.label}
+                        <SelectItem value={option.id} key={option.id}>
+                          <div className="flex flex-col gap-1">
+                            <h1>{option.name}</h1>
+                            <h1 className="text-slate-400">
+                              {option.CompanyName}
+                            </h1>
+                          </div>
                         </SelectItem>
                       ))}
                     </ScrollArea>
@@ -78,13 +104,14 @@ const ProcessingForm = () => {
           />
           <FormField
             control={form.control}
-            name="status"
+            name="statusId"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Status</FormLabel>
                 <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  onValueChange={(e) => field.onChange(Number(e))}
+                  value={field.value}
+                  placeholder="Select a status"
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -92,9 +119,11 @@ const ProcessingForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {statusData.map((st) => (
+                      <SelectItem value={st.id} key={st.id}>
+                        {st.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -104,7 +133,7 @@ const ProcessingForm = () => {
         </div>
         <FormField
           control={form.control}
-          name="note"
+          name="candidateNotes"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Note</FormLabel>
@@ -121,7 +150,7 @@ const ProcessingForm = () => {
         />
 
         <Button type="submit" className="w-full">
-          Update
+          {processLoading ? <Spinner /> : "Create"}
         </Button>
       </form>
     </Form>

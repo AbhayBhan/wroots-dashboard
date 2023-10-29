@@ -1,6 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { processingData } from "@/data/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
+import { FaTrash } from "react-icons/fa";
 // import { getAllProcessing } from "@/services/mock/candidate";
 // import { useQuery } from "@tanstack/react-query";
 
@@ -38,6 +39,11 @@ const Card = ({ data }) => (
     <div className="flex_between mt-2">
       <p className="text-xs ">Updated by {data?.recruiter?.name}</p>
       <p className="text-xs">Updated on {formatTimestamp(data?.updatedAt)}</p>
+    </div>
+    <div className="mt-2">
+      <button>
+        <FaTrash color="red" />
+      </button>
     </div>
   </article>
 );

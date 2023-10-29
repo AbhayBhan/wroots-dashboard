@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -58,7 +59,7 @@ const MyCandidateAction = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Create Processing</DialogTitle>
-            <ProcessingForm />
+            <ProcessingForm candidateId={rowData.id}/>
             <ScrollArea className="h-72 w-full mt-3 rounded-md border">
               <div className="p-4">
                 {!loading ? (

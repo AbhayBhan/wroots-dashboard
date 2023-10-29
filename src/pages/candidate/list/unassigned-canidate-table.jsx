@@ -125,8 +125,9 @@ const AssignMeButton = ({ id }) => {
   });
 
   const handleClick = () => {
+    const recruiterId = JSON.parse(localStorage.getItem('userdata')).id;
     mutate({
-      recruiterId: 2,
+      recruiterId,
       candidateId: id,
     });
   };
