@@ -101,7 +101,7 @@ const MyCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <Select>
+        {/* <Select>               Hidden for this release.
           <SelectTrigger className="max-w-[200px] w-full">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
@@ -110,7 +110,7 @@ const MyCanidateTable = () => {
             <SelectItem value="m@support.com">Category 2</SelectItem>
             <SelectItem value="m@google.com">Category 3</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <SimpleTable
         columns={columns}

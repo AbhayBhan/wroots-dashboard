@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,9 +12,26 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { fetchSingleCandidate } from "@/services/candidate";
 import ProcessingForm from "../processing-form";
+import Spinner from "@/components/organism/spinner";
+import Processinglist from "../../detail/processing-section/processing-list";
 
 const MyCandidateAction = ({ rowData }) => {
+  const [loading, setLoading] = useState(true);
+  const [processingList, setProcessingList] = useState([]);
+  const { mutate } = useMutation(fetchSingleCandidate, {
+    onSuccess: ({ data }) => {
+      setLoading(false);
+      console.log(data);
+      setProcessingList(data[0].candidateProcessingHistory);
+    },
+  });
+
+  useEffect(() => {
+    mutate(rowData.id);
+  }, []);
   return (
     <div className="flex justify-end gap-2">
       <Link
@@ -43,15 +61,11 @@ const MyCandidateAction = ({ rowData }) => {
             <ProcessingForm />
             <ScrollArea className="h-72 w-full mt-3 rounded-md border">
               <div className="p-4">
-                <h4 className="mb-4 text-sm font-medium leading-none">
-                  Processing History
-                </h4>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((tag) => (
-                  <div key={tag}>
-                    <div className="text-sm">{tag}</div>
-                    <Separator className="my-2" />
-                  </div>
-                ))}
+                {!loading ? (
+                  <Processinglist data={processingList} />
+                ) : (
+                  <div className="w-full h-full flex justify-center items-center"><Spinner /></div>
+                )}
               </div>
             </ScrollArea>
           </DialogHeader>

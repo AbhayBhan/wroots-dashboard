@@ -16,6 +16,9 @@ import UnassignedCanidateTable from "./unassigned-canidate-table";
 import MyCanidateTable from "./my-candidate-table";
 
 const CandidateList = () => {
+  const isSuperAdmin = JSON.parse(
+    localStorage.getItem("userdata")
+  ).isSuperAdmin;
   return (
     <div>
       <div className="flex_between mb-5">
@@ -41,8 +44,13 @@ const CandidateList = () => {
       </div>
       <Tabs defaultValue="Unassigned Candidates">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
-          {["Unassigned Candidates", "My Candidates", "All Candidates"].map(
-            (item) => (
+          {[
+            "Unassigned Candidates",
+            "My Candidates",
+            isSuperAdmin && "All Candidates",
+          ]
+            .filter((item) => item !== false)
+            .map((item) => (
               <TabsTrigger
                 key={item}
                 value={item}
@@ -50,8 +58,7 @@ const CandidateList = () => {
               >
                 {item}
               </TabsTrigger>
-            )
-          )}
+            ))}
         </TabsList>
         <div className="p-4 mt-4 rounded-md bg-background">
           <TabsContent value="Unassigned Candidates" className="m-0">

@@ -81,10 +81,11 @@ export const columns = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
+  const categoryId = JSON.parse(localStorage.getItem('userdata')).categoryId;
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page],
-    queryFn: () => fetchUnassignCandidates(null, page),
+    queryFn: () => fetchUnassignCandidates(categoryId, page),
   });
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
@@ -97,7 +98,7 @@ const UnassignedCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <Select>
+        {/* <Select>                   Hidden for this release.
           <SelectTrigger className="max-w-[200px] w-full">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
@@ -106,7 +107,7 @@ const UnassignedCanidateTable = () => {
             <SelectItem value="m@support.com">Category 2</SelectItem>
             <SelectItem value="m@google.com">Category 3</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <SimpleTable
         columns={columns}

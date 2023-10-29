@@ -30,7 +30,7 @@ const ProcessingForm = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["Job", "Active"],
-    queryFn: fetchActiveJobs,
+    queryFn: () => fetchActiveJobs(),
   });
 
   function onSubmit(data) {

@@ -6,7 +6,7 @@ import { ScrollArea } from "../ui/scroll-area";
 
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const userData = JSON.stringify(localStorage.getItem('userdata'));
+  const userData = JSON.parse(localStorage.getItem('userdata'));
   const isSuperAdmin = userData.isSuperAdmin;
   return (
     <div className="relative flex h-screen bg-secondary">
