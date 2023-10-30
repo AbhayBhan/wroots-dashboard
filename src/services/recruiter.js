@@ -1,10 +1,7 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchRecruiters = (page) => {
-  const params = {
-    pageno: page || 0,
-  };
-  return axiosInstance.post("/recruiter/getAllRecruiters", { params });
+export const fetchRecruiters = (payload) => {
+  return axiosInstance.post("/recruiter/getAllRecruiters",payload);
 };
 export const fetchCandidatesHandled = (payload) => {
   return axiosInstance.post("/recruiter/getCandidatesHandled", payload);

@@ -48,7 +48,12 @@ const RecruiterTable = () => {
   });
 
   useEffect(() => {
-    mutate();
+    const id = JSON.parse(localStorage.getItem('userdata')).id;
+    const reqbody = {
+      pageno : page,
+      recruiterId : id
+    }
+    mutate(reqbody);
   }, []);
 
   const recruiterData = data?.data?.recruiters;
