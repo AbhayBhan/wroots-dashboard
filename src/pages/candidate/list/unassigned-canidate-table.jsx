@@ -11,13 +11,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { candidateData } from "@/data/candidate";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { assignCandidate, fetchUnassignCandidates } from "@/services/candidate";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { formatTimestamp } from "@/utils/dateTime";
 
 export const columns = [
   {
@@ -37,10 +39,15 @@ export const columns = [
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
       <div className="flex flex-col ">
-        <span className="capitalize">{row.referror["name"]}</span>
-        <span className="text-xs text-muted-foreground">
-          {row.referror["phoneNumber"]}
+        <span className="capitalize">
+          {row.self ? "Self Applied" : `${row.referror["name"]}`}
         </span>
+        {!row.self && (
+          <span className="text-xs text-muted-foreground">
+            {row.referror["phoneNumber"]}
+          </span>
+        )}
+        <span className="text-xs text-muted-foreground">{formatTimestamp(row.createdDate)}</span>
       </div>
     ),
   },
@@ -55,6 +62,22 @@ export const columns = [
         </span>
       </div>
     ),
+  },
+  {
+    id: "status",
+    header: "Latest Status",
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-col">
+          <span className="inline-block">
+            <Badge>{row.latestStatus}</Badge>
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {formatTimestamp(row.updatedDate)}
+          </span>
+        </div>
+      );
+    },
   },
   {
     id: "action",
@@ -82,13 +105,14 @@ export const columns = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const categoryId = JSON.parse(localStorage.getItem('userdata')).categoryId;
+  const categoryId = JSON.parse(localStorage.getItem("userdata")).categoryId;
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page],
     queryFn: () => fetchUnassignCandidates(categoryId, page),
   });
 
+  console.log(data?.data);
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
 
   return (
@@ -123,18 +147,18 @@ const UnassignedCanidateTable = () => {
 const AssignMeButton = ({ id }) => {
   const navigate = useNavigate();
   const { mutate, isLoading } = useMutation(assignCandidate, {
-    onSuccess : () => {
+    onSuccess: () => {
       toast.success("Candidate Assigned, Redirecting...");
       setTimeout(() => {
-        navigate(`/candidate/${id}/details`)
-      },5000);
-    }
+        navigate(`/candidate/${id}/details`);
+      }, 5000);
+    },
   });
 
   const handleClick = () => {
-    const userdata = JSON.parse(localStorage.getItem('userdata'));
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
     mutate({
-      recruiterEmail : userdata.email,
+      recruiterEmail: userdata.email,
       candidateID: id,
     });
   };
