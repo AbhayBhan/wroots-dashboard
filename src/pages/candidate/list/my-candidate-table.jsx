@@ -14,6 +14,7 @@ import { useState } from "react";
 import MyCandidateAction from "./actions/mycandidate-action";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMyCandidates } from "@/services/candidate";
+import Spinner from "@/components/organism/spinner";
 
 export const columns = [
   {
@@ -83,12 +84,13 @@ export const columns = [
 ];
 
 const MyCanidateTable = () => {
+  const recruiterId = JSON.parse(localStorage.getItem("userdata")).id;
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery({
     queryKey: ["Candidate", "My", page],
-    queryFn: () => fetchMyCandidates(12, page),
+    queryFn: () => fetchMyCandidates(recruiterId, page),
   });
 
   // data && console.log(data?.data);
@@ -112,12 +114,20 @@ const MyCanidateTable = () => {
           </SelectContent>
         </Select> */}
       </div>
-      <SimpleTable
-        columns={columns}
-        data={data?.data?.candidates}
-        isLoading={isLoading}
-      />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      {isLoading ? (
+        <div className="flex w-full justify-center items-center">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <SimpleTable
+            columns={columns}
+            data={data?.data?.candidates}
+            isLoading={isLoading}
+          />
+          <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+        </>
+      )}
     </div>
   );
 };
