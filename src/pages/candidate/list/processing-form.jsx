@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Spinner from "@/components/organism/spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +21,6 @@ import { createProcessing } from "@/services/candidate";
 import { fetchActiveJobs } from "@/services/jobs";
 import { statusData } from "@/services/mock/skill";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 

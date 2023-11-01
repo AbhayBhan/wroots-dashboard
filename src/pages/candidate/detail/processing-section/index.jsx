@@ -9,7 +9,7 @@ import {
 import ProcessingForm from "../../list/processing-form";
 import Processinglist from "./processing-list";
 
-const ProcessingSection = ({processingData}) => {
+const ProcessingSection = ({processingData,candidateId}) => {
   return (
     <div>
       <div className="flex_end">
@@ -22,7 +22,7 @@ const ProcessingSection = ({processingData}) => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Processing</DialogTitle>
-              <ProcessingForm />
+              <ProcessingForm candidateId={candidateId} />
             </DialogHeader>
           </DialogContent>
         </Dialog>

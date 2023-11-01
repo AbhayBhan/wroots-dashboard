@@ -82,6 +82,7 @@ const CandidateDetail = () => {
         >
           <ProcessingSection
             processingData={candidateData?.candidateProcessingHistory}
+            candidateId={parseInt(id)}
           />
         </TabsContent>
         <TabsContent
