@@ -62,7 +62,7 @@ const ProcessingForm = ({ candidateId }) => {
 
   const jobOptions = data?.data?.roles;
 
-  const generateOPtions = (list) =>
+  const generateOptions = (list) =>
     list?.map((option) => ({
       value: option.id,
       label: `${option.name} - ${option.CompanyName}`,
@@ -116,7 +116,7 @@ const ProcessingForm = ({ candidateId }) => {
               <FormLabel>Job</FormLabel>
               <FormControl>
                 <ReactSelect
-                  options={generateOPtions(jobOptions)}
+                  options={generateOptions(jobOptions)}
                   isSearchable
                   className="text-sm"
                   value={field.value}

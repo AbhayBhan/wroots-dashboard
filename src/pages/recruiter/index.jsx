@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
 import UsersTable from "./recruiter-table";
-import { AddRecruiterForm } from "@/components/organism/add-recruiter-form";
+import { AddRecruiterForm } from "@/pages/recruiter/add-recruiter-form";
 
 const Recruiter = () => {
   return (
