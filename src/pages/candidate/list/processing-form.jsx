@@ -23,17 +23,24 @@ import { statusData } from "@/services/mock/skill";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-const ProcessingForm = ({ candidateId }) => {
+const generateOptions = (list) =>
+  list?.map((option) => ({
+    value: option.id,
+    label: `${option.name} - ${option.CompanyName}`,
+  }));
+
+const ProcessingForm = ({ candidateId, onSuccessAction }) => {
+  const [processLoading, setProcessLoading] = useState(false);
+
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     // defaultValues,
     mode: "onChange",
   });
 
-  const [processLoading, setProcessLoading] = useState(false);
-
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["Job", "Active"],
     queryFn: () => fetchActiveJobs(),
   });
@@ -41,13 +48,14 @@ const ProcessingForm = ({ candidateId }) => {
   const { mutate } = useMutation(createProcessing, {
     onSuccess: ({ data }) => {
       setProcessLoading(false);
+      onSuccessAction();
       window.location.reload(); // On success, We must close the dialog box, This is Temporary Fix.
     },
   });
 
   function onSubmit(data) {
     setProcessLoading(true);
-    const selectedJob = jobOptions.find(option => option.id === data.roleId);
+    const selectedJob = jobOptions.find((option) => option.id === data.roleId);
     const userdata = JSON.parse(localStorage.getItem("userdata"));
     const reqBody = {
       ...data,
@@ -56,21 +64,15 @@ const ProcessingForm = ({ candidateId }) => {
       candidateId,
       candidateInterestedInRole: true,
       candidateInterestedInCompany: true,
-      self_apply : false,
+      self_apply: false,
       locationIds: [4],
-      referralAmount : selectedJob ? selectedJob.referral_amount : null,
-      hiringCompanyId : selectedJob ? selectedJob.company_id : null
+      referralAmount: selectedJob ? selectedJob.referral_amount : null,
+      hiringCompanyId: selectedJob ? selectedJob.company_id : null,
     };
     mutate(reqBody);
   }
 
   const jobOptions = data?.data?.roles;
-
-  const generateOptions = (list) =>
-    list?.map((option) => ({
-      value: option.id,
-      label: `${option.name} - ${option.CompanyName}`,
-    }));
 
   return (
     <Form {...form}>
@@ -86,7 +88,9 @@ const ProcessingForm = ({ candidateId }) => {
                   options={generateOptions(jobOptions)}
                   isSearchable
                   className="text-sm"
-                  value={generateOptions(jobOptions)?.find(option => option.value === field.value) }
+                  value={generateOptions(jobOptions)?.find(
+                    (option) => option.value === field.value
+                  )}
                   onChange={(e) => field.onChange(e.value)}
                 />
               </FormControl>
@@ -112,11 +116,13 @@ const ProcessingForm = ({ candidateId }) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {statusData.map((st) => (
-                    <SelectItem value={st.id} key={st.id}>
-                      {st.name}
-                    </SelectItem>
-                  ))}
+                  <ScrollArea className="w-full h-72">
+                    {statusData.map((st) => (
+                      <SelectItem value={st.id} key={st.id}>
+                        {st.name}
+                      </SelectItem>
+                    ))}
+                  </ScrollArea>
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -1,8 +1,9 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchAllCandidates = (page) => {
+export const fetchAllCandidates = (page, filterTerm) => {
   const params = {
     pageno: page || 1,
+    q: filterTerm || null,
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
@@ -14,18 +15,20 @@ export const fetchSingleCandidate = (id) => {
   return axiosInstance.get("/nc/getSingleCandidate", { params });
 };
 
-export const fetchMyCandidates = (recruiterId, page) => {
+export const fetchMyCandidates = (recruiterId, page, filterTerm) => {
   const params = {
     recruiterId: recruiterId || null,
     pageno: page || 1,
+    q: filterTerm || null,
   };
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };
 
-export const fetchUnassignCandidates = (categoryId, page) => {
+export const fetchUnassignCandidates = (category, page, filterTerm) => {
   const params = {
-    categoryId: categoryId || null,
-    pageno: page || 0,
+    categoryId: category || null,
+    pageno: page || 1,
+    q: filterTerm || null,
   };
   return axiosInstance.get("/nc/getUnassignedCandidates", { params });
 };
@@ -36,8 +39,8 @@ export const assignCandidate = (payload) =>
 export const updateCandidate = (payload) =>
   axiosInstance.post("/location/updatelocation", payload);
 
-export const addCandidate = (payload) =>
-  axiosInstance.post("/location/addlocation", payload);
+export const createCandidate = (payload) =>
+  axiosInstance.post("/candidate/addcandidate", payload);
 
 export const deleteCandidate = (payload) =>
   axiosInstance.post("/location/deletelocation", payload);
