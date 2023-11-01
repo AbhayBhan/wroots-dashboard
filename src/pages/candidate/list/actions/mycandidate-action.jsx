@@ -21,6 +21,7 @@ import Processinglist from "../../detail/processing-section/processing-list";
 
 const MyCandidateAction = ({ rowData }) => {
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [processingList, setProcessingList] = useState([]);
   const { mutate } = useMutation(fetchSingleCandidate, {
     onSuccess: ({ data }) => {
@@ -46,7 +47,7 @@ const MyCandidateAction = ({ rowData }) => {
       >
         <EyeOpenIcon className="w-5 h-5 text-slate-500" />
       </Link>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen} >
         <DialogTrigger asChild>
           <Button
             size="sm"
@@ -59,7 +60,7 @@ const MyCandidateAction = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Create Processing</DialogTitle>
-            <ProcessingForm candidateId={rowData.id}/>
+            <ProcessingForm onSuccessAction={() => setIsOpen(false)} candidateId={rowData.id}/>
             <ScrollArea className="h-72 w-full mt-3 rounded-md border">
               <div className="p-4">
                 {!loading ? (

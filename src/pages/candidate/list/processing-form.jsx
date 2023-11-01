@@ -24,7 +24,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 
-const ProcessingForm = ({ candidateId }) => {
+const ProcessingForm = ({ onSuccessAction, candidateId }) => {
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     // defaultValues,
@@ -41,7 +41,7 @@ const ProcessingForm = ({ candidateId }) => {
   const { mutate } = useMutation(createProcessing, {
     onSuccess: ({ data }) => {
       setProcessLoading(false);
-      window.location.reload(); // On success, We must close the dialog box, This is Temporary Fix.
+      onSuccessAction(); // On success, We must close the dialog box, This is Temporary Fix.
     },
   });
 
