@@ -6,8 +6,10 @@ import SimpleTable from "@/components/organism/simple-table";
 import { buttonVariants } from "@/components/ui/button";
 import { usersData } from "@/data/users";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { fetchAllAppusers } from "@/services/Appusers";
 
 export const columns = [
   {
@@ -64,12 +66,28 @@ const UsersTable = () => {
   const [isLoading, setIsLoading]=useState(true);
   const [usersDataArray,setUsersDataArray]=useState({});
 
-  fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
-  .then(res=>res.json())
-  .then((res)=>{
-    setUsersDataArray(res.referrors);
-    setIsLoading(false)})
-  .catch(err=>console.log(err));
+  const { mutate } = useMutation(fetchAllAppusers, {
+    onSuccess: ({ data }) => {
+      console.log(data);
+      // Use the setUserDataArray to update data array
+      setIsLoading(false);
+    },
+    onError: (err)=>{
+      console.log(err);
+      setIsLoading(false);
+    }
+  });
+
+  useEffect(()=>{
+    mutate();
+  },[])
+
+  // fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
+  // .then(res=>res.json())
+  // .then((res)=>{
+  //   setUsersDataArray(res.referrors);
+  //   setIsLoading(false)})
+  // .catch(err=>console.log(err));
 
   return (
     <div className="w-full">
