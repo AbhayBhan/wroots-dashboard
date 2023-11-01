@@ -71,43 +71,6 @@ const ProcessingForm = ({ candidateId }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        {/* <FormField
-          control={form.control}
-          name="roleId"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Job</FormLabel>
-              <Select
-                onValueChange={(e) => field.onChange(Number(e))}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="text-left max-w-[455px] w-full truncate">
-                    <SelectValue placeholder="Select a job" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="w-[462px]">
-                  <ScrollArea className="h-60">
-                    {generateOPtions(jobOptions)?.map((option) => (
-                      <SelectItem
-                        value={option.value}
-                        key={option.id}
-                        className="text-left"
-                      >
-                      
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </ScrollArea>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-
-        {/* trying react select */}
-
         <FormField
           control={form.control}
           name="roleId"
@@ -119,7 +82,7 @@ const ProcessingForm = ({ candidateId }) => {
                   options={generateOptions(jobOptions)}
                   isSearchable
                   className="text-sm"
-                  value={field.value}
+                  value={generateOptions(jobOptions)?.find(option => option.value === field.value) }
                   onChange={(e) => field.onChange(e.value)}
                 />
               </FormControl>

@@ -30,15 +30,30 @@ import {
 } from "../../components/ui/dropdown-menu";
 import { Checkbox } from "../../components/ui/checkbox";
 import { createRecruiter } from "@/services/recruiter";
+import ReactSelect from "react-select";
 
+const categoryOptions = [
+  {
+    label: "BPO",
+    value: 1,
+  },
+  {
+    label: "IT",
+    value: 6,
+  },
+  {
+    label: "NON IT",
+    value: 7,
+  },
+];
 
 export function AddRecruiterForm() {
   const form = useForm({
     mode: "onChange",
   });
 
-  const {mutate} = useMutation(createRecruiter, {
-    onSuccess : ({data}) => console.log(data)
+  const { mutate } = useMutation(createRecruiter, {
+    onSuccess: ({ data }) => console.log(data),
   });
 
   function onSubmit(data) {
@@ -56,7 +71,7 @@ export function AddRecruiterForm() {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="name"
+                  placeholder="Name"
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
                   id="name"
@@ -73,7 +88,7 @@ export function AddRecruiterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <Input
-                placeholder="email"
+                placeholder="Email"
                 value={field.value}
                 onChange={(e) => field.onChange(e.target.value)}
                 id="email"
@@ -90,7 +105,7 @@ export function AddRecruiterForm() {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="password"
+                  placeholder="Password"
                   type="password"
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
@@ -101,23 +116,21 @@ export function AddRecruiterForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="categoryId"
           render={({ field }) => (
-            <FormItem className="flex space-x-5 justify-center">
+            <FormItem>
               <FormLabel className="my-auto">Category</FormLabel>
-              <FormControl className="">
-                <select
-                  className="border border-black rounded-md"
-                  name=""
-                  placeholder="Select"
-                  id="dropdown"
-                >
-                  <option value="1">BPO</option>
-                  <option value="6">IT</option>
-                  <option value="7">NOT IT</option>
-                </select>
+              <FormControl>
+                <ReactSelect
+                  options={categoryOptions}
+                  className="text-sm"
+                  isSearchable={false}
+                  value={categoryOptions.find(option => option.value === field.value)}
+                  onChange={(e) => field.onChange(e.value)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,15 +140,15 @@ export function AddRecruiterForm() {
           control={form.control}
           name="isSuperAdmin"
           render={({ field }) => (
-            <FormItem className="flex space-x-12 justify-center">
-              <FormLabel className="my-auto">Super Admin</FormLabel>
-              <Checkbox id="superAdmin" className="" />
+            <FormItem className="flex gap-2">
+              <Checkbox id="superAdmin" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <FormLabel>Super Admin</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="mt-4 w-full">
           Create
         </Button>
       </form>
