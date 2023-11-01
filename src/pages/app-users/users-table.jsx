@@ -14,35 +14,35 @@ export const columns = [
     id: "full_name",
     header: "Name",
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("full_name")}</div>
+      <div className="capitalize">{getValue("name")}</div>
     ),
   },
   {
     id: "referrals",
     header: "Total Referrals",
-    cell: ({ getValue }) => <div className="lowercase">{56}</div>,
+    cell: ({ getValue }) => <div className="lowercase">{0}</div>,
   },
   {
     id: "mobile",
     header: "Contect info",
     cell: ({ getValue }) => (
-      <div className="lowercase">{getValue("mobile")}</div>
+      <div className="lowercase">{getValue("phone_number")}</div>
     ),
   },
   {
     id: "join_date",
     header: "Last login at",
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("join_date")}</div>
+      <div className="capitalize">{getValue("updated_date")}</div>
     ),
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({getValue}) => {
       return (
         <div className="flex justify-end gap-2">
           <Link
-            to={"/app-users/details"}
+            to={`/app-users/details/${getValue("id")}`}
             // className="hidden h-8 ml-auto lg:flex"
             className={cn(
               buttonVariants({ variant: "ghost", size: "icon" }),
@@ -61,6 +61,15 @@ export const columns = [
 const UsersTable = () => {
   const [page, setPage] = useState(1);
   const [filterTerm, setFilterTerm] = useState("");
+  const [isLoading, setIsLoading]=useState(true);
+  const [usersDataArray,setUsersDataArray]=useState({});
+
+  fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
+  .then(res=>res.json())
+  .then((res)=>{
+    setUsersDataArray(res.referrors);
+    setIsLoading(false)})
+  .catch(err=>console.log(err));
 
   return (
     <div className="w-full">
@@ -69,8 +78,9 @@ const UsersTable = () => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <SimpleTable columns={columns} data={usersData} />
-      <Pagination page={page} setPage={setPage} totalPages={1000} />
+      <SimpleTable columns={columns} data={usersDataArray} isLoading={isLoading} />
+      <Pagination page={page} setPage={setPage} totalPages={10} />
+
     </div>
   );
 };
