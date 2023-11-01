@@ -71,12 +71,13 @@ const MyCandidateAction = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Create Processing</DialogTitle>
+
             <ProcessingForm
-              candidateId={rowData.id}
               onSuccessAction={() => setIsOpen(false)}
+              candidateId={rowData.id}
             />
             <ScrollArea className="w-full mt-3 border rounded-md h-72">
-              <div className="h-full px-4">
+              <div className="p-4">
                 {!loading ? (
                   <Processinglist data={processingList} />
                 ) : (
