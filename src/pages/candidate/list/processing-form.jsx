@@ -47,6 +47,7 @@ const ProcessingForm = ({ candidateId }) => {
 
   function onSubmit(data) {
     setProcessLoading(true);
+    const selectedJob = jobOptions.find(option => option.id === data.roleId);
     const userdata = JSON.parse(localStorage.getItem("userdata"));
     const reqBody = {
       ...data,
@@ -55,7 +56,10 @@ const ProcessingForm = ({ candidateId }) => {
       candidateId,
       candidateInterestedInRole: true,
       candidateInterestedInCompany: true,
+      self_apply : false,
       locationIds: [4],
+      referralAmount : selectedJob ? selectedJob.referral_amount : null,
+      hiringCompanyId : selectedJob ? selectedJob.company_id : null
     };
     mutate(reqBody);
   }
