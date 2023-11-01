@@ -151,7 +151,7 @@ const AssignMeButton = ({ id }) => {
       toast.success("Candidate Assigned, Redirecting...");
       setTimeout(() => {
         navigate(`/candidate/${id}/details`);
-      }, 5000);
+      }, 500);
     },
   });
 
