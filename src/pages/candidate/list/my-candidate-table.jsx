@@ -15,6 +15,7 @@ import MyCandidateAction from "./actions/mycandidate-action";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMyCandidates } from "@/services/candidate";
 import Spinner from "@/components/organism/spinner";
+import { formatTimestamp } from "@/utils/dateTime";
 
 export const columns = [
   {
@@ -34,9 +35,16 @@ export const columns = [
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
       <div className="flex flex-col ">
-        <span className="capitalize">{row.referror["name"]}</span>
+        <span className="capitalize">
+          {row.self ? "Self Applied" : `${row.referror["name"]}`}
+        </span>
+        {!row.self && (
+          <span className="text-xs text-muted-foreground">
+            {row.referror["phoneNumber"]}
+          </span>
+        )}
         <span className="text-xs text-muted-foreground">
-          {row.referror["phoneNumber"]}
+          {formatTimestamp(row.createdDate)}
         </span>
       </div>
     ),
@@ -55,21 +63,16 @@ export const columns = [
   },
   {
     id: "status",
-    header: "Latest status",
-    cell: ({ getValue }) => {
-      const status = getValue("status");
-      const status_ref = {
-        Pending: "default",
-        Rejected: "destructive",
-        Accepted: "success",
-      };
+    header: "Latest S tatus",
+    cell: ({ row }) => {
       return (
-        <div className="capitalize ">
-          {status_ref[status] ? (
-            <Badge variant={status_ref[status]}>{status}</Badge>
-          ) : (
-            "-"
-          )}
+        <div className="flex flex-col">
+          <span className="inline-block">
+            <Badge>{row.latestStatus}</Badge>
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {formatTimestamp(row.updatedDate)}
+          </span>
         </div>
       );
     },
