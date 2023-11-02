@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { AddForm } from "@/components/organism/add-form";
+import { InfoCardEditForm } from "./info-card-edit-form";
 
 const InfoCard = ({
   hide = [],
@@ -32,7 +32,7 @@ const InfoCard = ({
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Edit details</DialogTitle>
-              Edit form will be there.
+              <InfoCardEditForm />
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -50,7 +50,7 @@ const InfoCard = ({
             <span className="text-muted-foreground">{phone}</span>
           </li>
         )}
-        {!hide.includes("language") && (
+        {/* {!hide.includes("language") && (
           <li>
             <span className="font-medium">Language:</span>{" "}
             <span className="text-muted-foreground">{languages}</span>
@@ -66,6 +66,24 @@ const InfoCard = ({
           <li>
             <span className="font-medium">Status:</span>{" "}
             <span className="text-muted-foreground">{status}</span>
+          </li>
+        )} */}
+        {!hide.includes("expected_salary") && (
+          <li>
+            <span className="font-medium">Expexted Salary:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
+          </li>
+        )}
+        {!hide.includes("notice_period") && (
+          <li>
+            <span className="font-medium">Notice Period:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
+          </li>
+        )}
+        {!hide.includes("experience") && (
+          <li>
+            <span className="font-medium">Experience:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
           </li>
         )}
         {!hide.includes("resume") && (
@@ -98,6 +116,30 @@ const InfoCard = ({
           <li>
             <span className="font-medium">Skills:</span>{" "}
             <span className="text-muted-foreground">{skills}</span>
+          </li>
+        )}
+        {!hide.includes("selected_date") && (
+          <li>
+            <span className="font-medium">Selected Date:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
+          </li>
+        )}
+        {!hide.includes("offered_date") && (
+          <li>
+            <span className="font-medium">Offered Date:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
+          </li>
+        )}
+        {!hide.includes("joined_date") && (
+          <li>
+            <span className="font-medium">Joined Date:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
+          </li>
+        )}
+        {!hide.includes("completion_date") && (
+          <li>
+            <span className="font-medium">Completion Date:</span>{" "}
+            <span className="text-muted-foreground">{"NaN"}</span>
           </li>
         )}
       </ul>
