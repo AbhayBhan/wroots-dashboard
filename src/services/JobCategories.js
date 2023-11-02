@@ -1,6 +1,6 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const getAllCategories = () => axiosInstance.get("/category/getCategory");
+export const fetchAllCategories = () => axiosInstance.get("/category/getCategory");
 
 export const updateCategory = (payload) =>
   axiosInstance.post("/category/updateCategory", payload);

@@ -1,33 +1,35 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CandidateTable from "./all-candidate-table";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { AddForm } from "@/components/organism/add-form";
-import { getAllCandidates } from "@/services/mock/candidate";
-import UnassignedCanidateTable from "./unassigned-canidate-table";
+import { useState } from "react";
+import { CandidateForm } from "../components/candidate-form";
+import CandidateTable from "./all-candidate-table";
 import MyCanidateTable from "./my-candidate-table";
+import UnassignedCanidateTable from "./unassigned-canidate-table";
 
 const CandidateList = () => {
   const isSuperAdmin = JSON.parse(
     localStorage.getItem("userdata")
   ).isSuperAdmin;
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
-      <div className="flex_between mb-5">
+      <div className="mb-5 flex_between">
         <h2 className="text-2xl font-bold tracking-tight">Candidate List</h2>
         <div className="flex items-center">
           <Button variant="outline" className="mr-2">
             Export
           </Button>
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant="default" className="ml-auto">
                 <PlusIcon className="w-4 h-4 mr-1" /> Create
@@ -36,12 +38,13 @@ const CandidateList = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle className="mb-3">Add new Candidate</DialogTitle>
-                <AddForm />
+                <CandidateForm onSuccessAction={() => setIsOpen(false)} />
               </DialogHeader>
             </DialogContent>
           </Dialog>
         </div>
       </div>
+      {/* all candidate tab will only visible to superAdmin  */}
       <Tabs defaultValue="Unassigned Candidates">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
           {[
@@ -68,7 +71,7 @@ const CandidateList = () => {
             <MyCanidateTable />
           </TabsContent>
           <TabsContent value="All Candidates" className="m-0">
-            <CandidateTable fetchFuntion={getAllCandidates} />
+            <CandidateTable />
           </TabsContent>
         </div>
       </Tabs>

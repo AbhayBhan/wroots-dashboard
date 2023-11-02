@@ -16,10 +16,12 @@ import { cn } from "@/lib/utils";
 import { assignCandidate, fetchUnassignCandidates } from "@/services/candidate";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatTimestamp } from "@/utils/dateTime";
+import { fetchAllCategories } from "@/services/JobCategories";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const columns = [
   {
@@ -47,7 +49,9 @@ export const columns = [
             {row.referror["phoneNumber"]}
           </span>
         )}
-        <span className="text-xs text-muted-foreground">{formatTimestamp(row.createdDate)}</span>
+        <span className="text-xs text-muted-foreground">
+          {formatTimestamp(row.createdDate)}
+        </span>
       </div>
     ),
   },
@@ -84,7 +88,7 @@ export const columns = [
     header: "",
     cell: ({ row }) => {
       return (
-        <div className="flex_end gap-2">
+        <div className="gap-2 flex_end">
           <Link
             to={`/candidate/${row?.id}/details`}
             // className="hidden h-8 ml-auto lg:flex"
@@ -96,7 +100,7 @@ export const columns = [
           >
             <EyeOpenIcon className="w-5 h-5 text-slate-500" />
           </Link>
-          <AssignMeButton id={row?.id} />
+          <AssignMeButton candidateId={row?.id} />
         </div>
       );
     },
@@ -105,34 +109,51 @@ export const columns = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const categoryId = JSON.parse(localStorage.getItem("userdata")).categoryId;
+  // const categoryId = JSON.parse(localStorage.getItem("userdata")).categoryId;
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
-    queryKey: ["Canidate", "Unassign", page],
-    queryFn: () => fetchUnassignCandidates(categoryId, page),
+    queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
+    queryFn: () => fetchUnassignCandidates(selectedCategory, page, filterTerm),
+  });
+  const categoryQuery = useQuery({
+    queryKey: ["Category"],
+    queryFn: () => fetchAllCategories(),
   });
 
-  console.log(data?.data);
+  useEffect(() => {
+    setPage(1);
+  }, [filterTerm]);
+
+  // console.log(data?.data);
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const categoryOptions = categoryQuery.data?.data?.category?.records;
 
   return (
     <div className="w-full">
-      <div className="flex_between pb-4">
+      <div className="pb-4 flex_between">
         <SearchFilter
           className=""
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        {/* <Select>                   Hidden for this release.
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
           <SelectTrigger className="max-w-[200px] w-full">
-            <SelectValue placeholder="Category" />
+            <SelectValue placeholder="Category " />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="m@example.com">Category 1</SelectItem>
-            <SelectItem value="m@support.com">Category 2</SelectItem>
-            <SelectItem value="m@google.com">Category 3</SelectItem>
+            <ScrollArea className="w-full h-72">
+              <SelectItem value={null} disabled>
+                Select category
+              </SelectItem>
+              {categoryOptions?.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.name}
+                </SelectItem>
+              ))}
+            </ScrollArea>
           </SelectContent>
-        </Select> */}
+        </Select>
       </div>
       <SimpleTable
         columns={columns}
@@ -144,13 +165,13 @@ const UnassignedCanidateTable = () => {
   );
 };
 
-const AssignMeButton = ({ id }) => {
+const AssignMeButton = ({ candidateId }) => {
   const navigate = useNavigate();
   const { mutate, isLoading } = useMutation(assignCandidate, {
     onSuccess: () => {
       toast.success("Candidate Assigned, Redirecting...");
       setTimeout(() => {
-        navigate(`/candidate/${id}/details`);
+        navigate(`/candidate/${candidateId}/details`);
       }, 500);
     },
   });
@@ -159,7 +180,7 @@ const AssignMeButton = ({ id }) => {
     const userdata = JSON.parse(localStorage.getItem("userdata"));
     mutate({
       recruiterEmail: userdata.email,
-      candidateID: id,
+      candidateID: candidateId,
     });
   };
 
