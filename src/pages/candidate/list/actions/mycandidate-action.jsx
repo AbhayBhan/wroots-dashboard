@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import Spinner from "@/components/organism/spinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,21 +6,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import { fetchSingleCandidate } from "@/services/candidate";
-import ProcessingForm from "../processing-form";
-import Spinner from "@/components/organism/spinner";
+import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Processinglist from "../../detail/processing-section/processing-list";
+import ProcessingForm from "../processing-form";
 
 const MyCandidateAction = ({ rowData }) => {
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [queryFlag, setQueryFlag] = useState(false);
   const [processingList, setProcessingList] = useState([]);
   const { mutate } = useMutation(fetchSingleCandidate, {
     onSuccess: ({ data }) => {
@@ -31,8 +31,14 @@ const MyCandidateAction = ({ rowData }) => {
   });
 
   useEffect(() => {
-    mutate(rowData.id);
-  }, []);
+    if (queryFlag) {
+      mutate(rowData.id);
+    }
+    return () => {
+      setQueryFlag(false);
+    };
+  }, [queryFlag]);
+
   return (
     <div className="flex justify-end gap-2">
       <Link
@@ -46,7 +52,13 @@ const MyCandidateAction = ({ rowData }) => {
       >
         <EyeOpenIcon className="w-5 h-5 text-slate-500" />
       </Link>
-      <Dialog>
+      <Dialog
+        open={isOpen}
+        onOpenChange={(e) => {
+          setIsOpen(e);
+          setQueryFlag(true);
+        }}
+      >
         <DialogTrigger asChild>
           <Button
             size="sm"
@@ -59,13 +71,19 @@ const MyCandidateAction = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Create Processing</DialogTitle>
-            <ProcessingForm candidateId={rowData.id}/>
-            <ScrollArea className="h-72 w-full mt-3 rounded-md border">
+
+            <ProcessingForm
+              onSuccessAction={() => setIsOpen(false)}
+              candidateId={rowData.id}
+            />
+            <ScrollArea className="w-full mt-3 border rounded-md h-72">
               <div className="p-4">
                 {!loading ? (
                   <Processinglist data={processingList} />
                 ) : (
-                  <div className="w-full h-full flex justify-center items-center"><Spinner /></div>
+                  <div className="flex items-center justify-center w-full h-full">
+                    <Spinner />
+                  </div>
                 )}
               </div>
             </ScrollArea>

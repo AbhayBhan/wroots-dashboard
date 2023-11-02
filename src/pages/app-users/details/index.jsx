@@ -8,8 +8,23 @@ import Numberscard from "@/pages/candidate/detail/numbers-card";
 import InfoCard from "@/pages/candidate/detail/info-card";
 import PayoutTable from "@/pages/payout/payout-table";
 import CandidateReferredTable from "../candidate-referred-table";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const AppUserDetail = () => {
+
+  const {id} = useParams();
+  const [userData, setUserData] = useState({});
+
+  fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
+  .then(res=>res.json())
+  .then((res)=>{
+    setUserData(res.referrors[id-1]);
+    setIsLoading(false)})
+  .catch(err=>console.log(err));
+
+  console.log(userData);
+
   return (
     <div className="grid grid-cols-12 gap-4">
       <h2 className="mb-5 text-2xl font-bold tracking-tight col-span-full">
@@ -22,13 +37,13 @@ const AppUserDetail = () => {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <h4 className="text-2xl font-medium">John Deo</h4>
+            <h4 className="text-2xl font-medium">{userData.name}</h4>
           </div>
 
           <Numberscard />
 
           <hr className="mx-4 my-4" />
-          <InfoCard />
+          <InfoCard userData={userData}/>
         </div>
         {/* <ExperienceCard /> */}
         {/* <ExtraInfoCard /> */}

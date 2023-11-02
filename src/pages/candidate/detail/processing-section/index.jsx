@@ -8,12 +8,14 @@ import {
 } from "@/components/ui/dialog";
 import ProcessingForm from "../../list/processing-form";
 import Processinglist from "./processing-list";
+import { useState } from "react";
 
-const ProcessingSection = ({processingData}) => {
+const ProcessingSection = ({processingData,candidateId}) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
       <div className="flex_end">
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button title="Create Processing" className="whitespace-nowrap">
               Create Processing
@@ -22,7 +24,7 @@ const ProcessingSection = ({processingData}) => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Processing</DialogTitle>
-              <ProcessingForm />
+              <ProcessingForm onSuccessAction={() => setIsOpen(false)} candidateId={candidateId} />
             </DialogHeader>
           </DialogContent>
         </Dialog>

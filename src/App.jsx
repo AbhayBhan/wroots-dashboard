@@ -79,7 +79,7 @@ function App() {
               <Route path="job-categories" element={<LazyJobCategories />} />
               <Route path="skill" element={<LazySkill />} />
               <Route path="app-users" element={<LazyAppUsers />} />
-              <Route path="app-users/details" element={<LazyAppUserDetail />} />
+              <Route path="app-users/details/:id" element={<LazyAppUserDetail />} />
               <Route path="location" element={<LazyLocation />} />
               <Route path="payout" element={<LazyPayout />} />
             </Route>

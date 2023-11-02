@@ -1,5 +1,5 @@
-import React,{useState} from "react";
-import SearchFilter from "@/components/organism/search-filter";
+import { useState } from "react";
+import Spinner from "@/components/organism/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -18,36 +17,44 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchActiveJobs } from "@/services/jobs";
 import { createProcessing } from "@/services/candidate";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { fetchActiveJobs } from "@/services/jobs";
 import { statusData } from "@/services/mock/skill";
-import Spinner from "@/components/organism/spinner";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import ReactSelect from "react-select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-const ProcessingForm = ({ candidateId }) => {
+const generateOptions = (list) =>
+  list?.map((option) => ({
+    value: option.id,
+    label: `${option.name} - ${option.CompanyName}`,
+  }));
+
+const ProcessingForm = ({ candidateId, onSuccessAction }) => {
+  const [processLoading, setProcessLoading] = useState(false);
+
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     // defaultValues,
     mode: "onChange",
   });
-  
-  const [processLoading, setProcessLoading] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["Job", "Active"],
     queryFn: () => fetchActiveJobs(),
   });
 
-  const {mutate} = useMutation(createProcessing, {
-    onSuccess : ({data}) => {
+  const { mutate } = useMutation(createProcessing, {
+    onSuccess: ({ data }) => {
       setProcessLoading(false);
-      window.location.reload(); // On success, We must close the dialog box, This is Temporary Fix.
-    }
-  })
+      onSuccessAction(); // On success, We must close the dialog box, This is Temporary Fix.
+    },
+  });
 
   function onSubmit(data) {
     setProcessLoading(true);
+    const selectedJob = jobOptions.find((option) => option.id === data.roleId);
     const userdata = JSON.parse(localStorage.getItem("userdata"));
     const reqBody = {
       ...data,
@@ -55,8 +62,11 @@ const ProcessingForm = ({ candidateId }) => {
       recruiterEmail: userdata.email,
       candidateId,
       candidateInterestedInRole: true,
-      candidateInterestedInCompany : true,
-      locationIds : [4]
+      candidateInterestedInCompany: true,
+      self_apply: false,
+      locationIds: [4],
+      referralAmount: selectedJob ? selectedJob.referral_amount : null,
+      hiringCompanyId: selectedJob ? selectedJob.company_id : null,
     };
     mutate(reqBody);
   }
@@ -66,71 +76,58 @@ const ProcessingForm = ({ candidateId }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        <div className="flex gap-2 w-full">
-          <FormField
-            control={form.control}
-            name="roleId"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Job</FormLabel>
-                <Select
-                  onValueChange={(e) => field.onChange(Number(e))}
-                  value={field.value}
-                  placeholder="Select job"
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a job" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="w-[227px]">
-                    <ScrollArea className="h-60">
-                      {jobOptions?.map((option) => (
-                        <SelectItem value={option.id} key={option.id}>
-                          <div className="flex flex-col gap-1">
-                            <h1>{option.name}</h1>
-                            <h1 className="text-slate-400">
-                              {option.CompanyName}
-                            </h1>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </ScrollArea>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="statusId"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={(e) => field.onChange(Number(e))}
-                  value={field.value}
-                  placeholder="Select a status"
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
+        <FormField
+          control={form.control}
+          name="roleId"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Job</FormLabel>
+              <FormControl>
+                <ReactSelect
+                  options={generateOptions(jobOptions)}
+                  isSearchable
+                  className="text-sm"
+                  value={generateOptions(jobOptions)?.find(
+                    (option) => option.value === field.value
+                  )}
+                  onChange={(e) => field.onChange(e.value)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="statusId"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Status</FormLabel>
+              <Select
+                onValueChange={(e) => field.onChange(Number(e))}
+                value={field.value}
+                placeholder="Select a status"
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <ScrollArea className="w-full h-72">
                     {statusData.map((st) => (
                       <SelectItem value={st.id} key={st.id}>
                         {st.name}
                       </SelectItem>
                     ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                  </ScrollArea>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="candidateNotes"

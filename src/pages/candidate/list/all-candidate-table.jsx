@@ -2,21 +2,15 @@ import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { fetchAllCandidates } from "@/services/candidate";
+import { formatTimestamp } from "@/utils/dateTime";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 export const columns = [
   {
@@ -36,9 +30,16 @@ export const columns = [
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
       <div className="flex flex-col ">
-        <span className="capitalize">{row?.referror?.name}</span>
+        <span className="capitalize">
+          {row.self ? "Self Applied" : `${row.referror["name"]}`}
+        </span>
+        {!row.self && (
+          <span className="text-xs text-muted-foreground">
+            {row.referror["phoneNumber"]}
+          </span>
+        )}
         <span className="text-xs text-muted-foreground">
-          {row?.referror?.phoneNumber}
+          {formatTimestamp(row.createdDate)}
         </span>
       </div>
     ),
@@ -57,21 +58,16 @@ export const columns = [
   },
   {
     id: "status",
-    header: "Latest status",
-    cell: ({ getValue }) => {
-      const status = getValue("status");
-      const status_ref = {
-        Pending: "default",
-        Rejected: "destructive",
-        Accepted: "success",
-      };
+    header: "Latest Status",
+    cell: ({ row }) => {
       return (
-        <div className="capitalize ">
-          {status_ref[status] ? (
-            <Badge variant={status_ref[status]}>{status}</Badge>
-          ) : (
-            "-"
-          )}
+        <div className="flex flex-col">
+          <span className="inline-block">
+            <Badge>{row.latestStatus}</Badge>
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {formatTimestamp(row.updatedDate)}
+          </span>
         </div>
       );
     },
@@ -99,35 +95,29 @@ export const columns = [
   },
 ];
 
-const CandidateTable = ({ fetchFuntion }) => {
+const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
-    queryFn: () => fetchAllCandidates(page),
-    queryKey: ["Candidates", "All", page],
+    queryFn: () => fetchAllCandidates(page, filterTerm),
+    queryKey: ["Candidates", "All", page, filterTerm],
     // keepPreviousData: true,
   });
+
+  useEffect(() => {
+    setPage(1);
+  }, [filterTerm]);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">
-      <div className="flex_between pb-4">
+      <div className="pb-4 flex_between">
         <SearchFilter
           className=""
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <Select>
-          <SelectTrigger className="max-w-[200px] w-full">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="m@example.com">Category 1</SelectItem>
-            <SelectItem value="m@support.com">Category 2</SelectItem>
-            <SelectItem value="m@google.com">Category 3</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
       <SimpleTable
         columns={columns}
