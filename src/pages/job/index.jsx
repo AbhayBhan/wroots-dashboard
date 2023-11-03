@@ -18,7 +18,7 @@ const Job = () => {
     <div>
       <div className="flex mb-5">
         <h2 className="text-2xl font-bold tracking-tight">Jobs List</h2>
-        <Dialog>
+        {/* <Dialog>
           <DialogTrigger asChild>
             <Button variant="default" className="ml-auto">
               <PlusIcon className="w-4 h-4 mr-1" /> Add new Job
@@ -30,7 +30,10 @@ const Job = () => {
               Add job form will be there.
             </DialogHeader>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
+        <Button onClick={() => window.location.href = "https://wroots-form.netlify.app/"} variant="default" className="ml-auto">
+          <PlusIcon className="w-4 h-4 mr-1" /> Add new Job
+        </Button>
       </div>
       {/* <Tabs defaultValue="active">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">

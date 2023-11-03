@@ -52,7 +52,7 @@ export const columns = [
         <div className="flex flex-col whitespace-nowrap">
           <p>{row.original["name"]}</p>
           <p className="text-xs text-muted-foreground">
-            {row.original["company"] || "-"}
+            {row.original["CompanyName"] || "-"}
           </p>
         </div>
       </div>
@@ -68,18 +68,18 @@ export const columns = [
       </div>
     ),
   },
-  {
-    id: "counts",
-    header: "Counts",
-    cell: ({ row }) => {
-      return (
-        <div className="text-xs whitespace-nowrap">
-          <p>{row.original["appliedCount"] || 0} Applied</p>
-          <p>{row.original["referredCount"] || 0} Referred</p>
-        </div>
-      );
-    },
-  },
+  // {
+  //   id: "counts",
+  //   header: "Counts",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="text-xs whitespace-nowrap">
+  //         <p>{row.original["appliedCount"] || 0} Applied</p>
+  //         <p>{row.original["referredCount"] || 0} Referred</p>
+  //       </div>
+  //     );
+  //   },
+  // },
 
   {
     id: "actions",

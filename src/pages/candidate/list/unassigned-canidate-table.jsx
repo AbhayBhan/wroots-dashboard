@@ -137,7 +137,7 @@ const UnassignedCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+        {/* <Select value={selectedCategory} onValueChange={setSelectedCategory}>
           <SelectTrigger className="max-w-[200px] w-full">
             <SelectValue placeholder="Category " />
           </SelectTrigger>
@@ -153,7 +153,7 @@ const UnassignedCanidateTable = () => {
               ))}
             </ScrollArea>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <SimpleTable
         columns={columns}

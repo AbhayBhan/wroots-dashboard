@@ -6,11 +6,19 @@ import { useEffect, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { fetchAllCandidates } from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const columns = [
   {
@@ -98,10 +106,16 @@ export const columns = [
 const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { data, isLoading } = useQuery({
     queryFn: () => fetchAllCandidates(page, filterTerm),
     queryKey: ["Candidates", "All", page, filterTerm],
     // keepPreviousData: true,
+  });
+
+  const categoryQuery = useQuery({
+    queryKey: ["Category"],
+    queryFn: () => fetchAllCategories(),
   });
 
   useEffect(() => {
@@ -109,6 +123,7 @@ const CandidateTable = () => {
   }, [filterTerm]);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const categoryOptions = categoryQuery.data?.data?.category?.records;
 
   return (
     <div className="w-full">
@@ -118,6 +133,23 @@ const CandidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="max-w-[200px] w-full">
+            <SelectValue placeholder="Category " />
+          </SelectTrigger>
+          <SelectContent>
+            <ScrollArea className="w-full h-72">
+              <SelectItem value={null} disabled>
+                Select category
+              </SelectItem>
+              {categoryOptions?.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.name}
+                </SelectItem>
+              ))}
+            </ScrollArea>
+          </SelectContent>
+        </Select>
       </div>
       <SimpleTable
         columns={columns}
