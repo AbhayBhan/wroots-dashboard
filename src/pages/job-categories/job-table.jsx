@@ -27,8 +27,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { jobCategoryData } from "@/data/job-categories";
-import { useState } from "react";
+import Spinner from "@/components/organism/spinner";
+import { fetchAllCategories } from "@/services/JobCategories";
+import { useMutation } from "@tanstack/react-query";
 import { JobCategoryForm } from "./job-category-form";
 
 export const columns = [
@@ -41,7 +42,7 @@ export const columns = [
           {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <p>{getValue("category")}</p>
+        <p>{getValue("name")}</p>
       </div>
     ),
   },
@@ -113,8 +114,21 @@ export const columns = [
 ];
 
 const JobTable = () => {
-  const [page, setPage] = useState(1);
-  const [filterTerm, setFilterTerm] = useState("");
+  const [page, setPage] = React.useState(1);
+  const [filterTerm, setFilterTerm] = React.useState("");
+
+  const [categoryData, setCategoryData] = React.useState([]);
+
+  const { mutate, isLoading } = useMutation(fetchAllCategories, {
+    onSuccess: ({ data }) => {
+      setCategoryData(data.category.records);
+      console.log(data.category.records);
+    },
+  });
+
+  React.useEffect(() => {
+    mutate();
+  }, []);
 
   return (
     <div className="w-full">
@@ -124,7 +138,13 @@ const JobTable = () => {
           placeholder="Filter by name..."
         />
       </div>
-      <SimpleTable data={jobCategoryData} columns={columns} />
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : (
+        <SimpleTable data={categoryData} columns={columns} />
+      )}
       <Pagination page={page} setPage={setPage} totalPages={100} />
     </div>
   );
