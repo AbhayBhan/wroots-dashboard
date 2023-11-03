@@ -47,25 +47,6 @@ export const columns = [
     ),
   },
   {
-    id: "average_salary",
-    header: "Average Salary",
-    cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("average_salary")}</div>
-    ),
-  },
-  {
-    id: "job_growth_rate",
-    header: "Job Growth Rate",
-    cell: ({ getValue }) => {
-      return (
-        <div className="text-xs">
-          <p>{getValue("job_growth_rate")}</p>
-        </div>
-      );
-    },
-  },
-
-  {
     id: "actions",
     header: "",
     cell: ({ row }) => {
