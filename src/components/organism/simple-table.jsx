@@ -16,6 +16,11 @@ const getValueFromRow = (row, accessorKey) => {
   return null; // Return null if the key doesn't exist
 };
 function SimpleTable({ data, columns, isLoading }) {
+  {data?
+    data.map((row,i)=>{
+      console.log(i,row)
+    })
+  :""}
   return (
     <div className="border rounded-md">
       <Table>
