@@ -7,6 +7,7 @@ import ReferrerTable from "./referrer-table";
 import { useLocation, useParams } from "react-router-dom";
 import Alert from "@/components/ui/alert";
 import PeriodCompleteTable from "./period-complete-table";
+import { toast } from "react-toastify";
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -20,7 +21,10 @@ const JobDetail = () => {
           Job Detail
         </h2>
         <div className="space-x-2">
-          <Button variant="outline">Copy link</Button>
+          <Button onClick={() => {
+            navigator.clipboard.writeText(`https://jobs.wraeglobal.com/job?id=${id}`);
+            toast.success("Copied Link to Clipboard")
+          }} variant="outline">Copy link</Button>
           <Button>Send push</Button>
         </div>
       </div>

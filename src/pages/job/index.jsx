@@ -30,7 +30,8 @@ const Job = () => {
               Add job form will be there.
             </DialogHeader>
           </DialogContent>
-        </Dialog> */}
+        </Dialog> */} 
+        {/* Instead of Creating a job in app, we are redirecting to deployed form */}
         <Button onClick={() => window.location.href = "https://wroots-form.netlify.app/"} variant="default" className="ml-auto">
           <PlusIcon className="w-4 h-4 mr-1" /> Add new Job
         </Button>
