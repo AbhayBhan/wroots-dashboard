@@ -9,21 +9,21 @@ import InfoCard from "@/pages/candidate/detail/info-card";
 import PayoutTable from "@/pages/payout/payout-table";
 import CandidateReferredTable from "../candidate-referred-table";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AppUsersInfoCard from "./appusers-info-card";
+import { useAppUsersContext } from "@/contexts/appUsersContext";
 
 const AppUserDetail = () => {
 
   const {id} = useParams();
   const [userData, setUserData] = useState({});
 
-  fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
-  .then(res=>res.json())
-  .then((res)=>{
-    setUserData(res.referrors[id-1]);
-    setIsLoading(false)})
-  .catch(err=>console.log(err));
+  const {details, setDetails}=useAppUsersContext();
 
-  console.log(userData);
+  useEffect(()=>{
+    console.log(details.find(item=>item.id==id));
+    setUserData(details.find(item=>item.id==id));
+  },[])
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -37,13 +37,13 @@ const AppUserDetail = () => {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <h4 className="text-2xl font-medium">{userData.name}</h4>
+            <h4 className="text-2xl font-medium">{userData.first_name}{userData.middle_name}{userData.last_name}</h4>
           </div>
 
           <Numberscard />
 
           <hr className="mx-4 my-4" />
-          <InfoCard userData={userData}/>
+          <AppUsersInfoCard userData={userData}/>
         </div>
         {/* <ExperienceCard /> */}
         {/* <ExtraInfoCard /> */}
