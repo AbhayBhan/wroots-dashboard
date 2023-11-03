@@ -87,14 +87,8 @@ const UsersTable = () => {
     mutate();
   },[])
 
-  // fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
-  // .then(res=>res.json())
-  // .then((res)=>{
-  //   setUsersDataArray(res.referrors);
-  //   setIsLoading(false)
-  //   setDetails(res.referrors);
-  // })
-  // .catch(err=>console.log(err));
+
+
 
   return (
     <div className="w-full">

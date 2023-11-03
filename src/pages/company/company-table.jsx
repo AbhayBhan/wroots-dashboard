@@ -34,7 +34,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { locationData } from "@/data/location";
+import { useMutation } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
+import { getCompanies } from "@/services/companies";
 import { Link } from "react-router-dom";
 
 export const columns = [
@@ -118,9 +120,18 @@ const CompanyTable = () => {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [companyData, setCompanyData] = React.useState([]);
+
+  const {mutate} = useMutation(getCompanies,{
+    onSuccess : ({data}) => setCompanyData(data.companies)
+  });
+
+  React.useEffect(() => {
+    mutate();
+  },[])
 
   const table = useReactTable({
-    data: locationData,
+    data: companyData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
