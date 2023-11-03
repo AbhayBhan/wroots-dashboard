@@ -1,10 +1,9 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
-import { applicantsData } from "@/data/job";
 import { fetchAllCandidates } from "@/services/candidate";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
@@ -52,16 +51,25 @@ const columns = [
       </div>
     ),
   },
+  {
+    id: "update",
+    header: "Update on",
+    cell: ({ getValue }) => (
+      <div className=" whitespace-nowrap">
+        {new Date(getValue("applied_date")).toLocaleString()}
+      </div>
+    ),
+  },
 ];
 
-const ReferrerTable = ({ roleId }) => {
+const PeriodCompleteTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const statusId = 6;
+  const statusId = 10;
 
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidate", "My", page, filterTerm, roleId, statusId],
+    queryKey: ["Candidate", "All", page, filterTerm, roleId, statusId],
     queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
   });
 
@@ -78,10 +86,16 @@ const ReferrerTable = ({ roleId }) => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <SimpleTable columns={columns} data={applicantsData} />
+
+      <SimpleTable
+        columns={columns}
+        data={data?.data?.candidates}
+        isLoading={isLoading}
+      />
+
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );
 };
 
-export default ReferrerTable;
+export default PeriodCompleteTable;

@@ -19,7 +19,7 @@ const DetailsTab = ({ jobDetails }) => {
   return (
     // <section className="grid grid-cols-12 gap-4">
     <section className="flex flex-col gap-4">
-      <div className="card  col-span-9">
+      <div className="col-span-9 card">
         <div className="flex_between">
           <h2 className="heading_1">{jobDetails?.name}</h2>
           <Dialog>
@@ -43,15 +43,15 @@ const DetailsTab = ({ jobDetails }) => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h4 className="font-medium text-lg">Reliance Jio</h4>
-            <p className="text-muted-foreground flex_center text-sm">
+            <h4 className="text-lg font-medium">{jobDetails?.CompanyName}</h4>
+            <p className="flex items-center text-sm text-muted-foreground">
               <HiOutlineLocationMarker size={18} className="mr-1" />
-              <span>Benguluru, India</span>
+              <span>-</span>
             </p>
           </div>
         </div>
 
-        <div className="mt-4 flex gap-4 text-muted-foreground">
+        <div className="flex gap-4 mt-4 text-muted-foreground">
           <div className="w-full space-y-2">
             <p>
               Referral amount : <strong>{jobDetails?.referral_amount}</strong>
@@ -61,28 +61,27 @@ const DetailsTab = ({ jobDetails }) => {
               <strong>{jobDetails?.active ? "Active" : "Unactive"}</strong>
             </p>
             <p>
-              Allow batches : <strong>22-2023</strong>
+              Allow batches : <strong>-</strong>
             </p>
             <p>
               Start on :{" "}
-              <strong>{formatTimestamp(jobDetails?.start_on)}</strong>
+              <strong>{formatTimestamp(jobDetails?.start_date)}</strong>
             </p>
           </div>
           <div className="w-full space-y-2">
             <p>
-              Referral : <strong>30</strong>
+              Referral : <strong>-</strong>
             </p>
             <p>
-              Applicants : <strong>16</strong>
+              Applicants : <strong>-</strong>
             </p>
             <p>
-              Vacancy : <strong>{jobDetails?.no_of_positions}</strong> (Male
-              only)
+              Vacancy : <strong>{jobDetails?.no_of_positions}</strong>
             </p>
             <p>
               Expired on :{" "}
-              <strong>{formatTimestamp(jobDetails?.end_on)}</strong> (
-              {dayDifference(jobDetails?.start_on, jobDetails?.end_on)} days
+              <strong>{formatTimestamp(jobDetails?.end_date)}</strong> (
+              {dayDifference(jobDetails?.start_date, jobDetails?.end_date)} days
               left)
             </p>
           </div>
@@ -91,8 +90,8 @@ const DetailsTab = ({ jobDetails }) => {
         <div></div>
 
         {/* <div>
-          <h4 className="heading_16 mb-2">Overview</h4>
-          <table className=" text-sm text-muted-foreground">
+          <h4 className="mb-2 heading_16">Overview</h4>
+          <table className="text-sm text-muted-foreground">
             <tbody>
               <tr>
                 <td className="px-2 font-medium">Status :</td>{" "}
@@ -110,8 +109,8 @@ const DetailsTab = ({ jobDetails }) => {
           </table>
         </div>
         <div>
-          <h4 className="heading_16 mt-3 mb-2">Referral Program:</h4>
-          <table className=" text-sm text-muted-foreground">
+          <h4 className="mt-3 mb-2 heading_16">Referral Program:</h4>
+          <table className="text-sm text-muted-foreground">
             <tbody>
               <tr>
                 <td className="px-2 font-medium">Referral amount :</td>{" "}
@@ -125,8 +124,8 @@ const DetailsTab = ({ jobDetails }) => {
           </table>
         </div>
         <div>
-          <h4 className="heading_16 mt-3 mb-2">Applicants:</h4>
-          <table className=" text-sm text-muted-foreground">
+          <h4 className="mt-3 mb-2 heading_16">Applicants:</h4>
+          <table className="text-sm text-muted-foreground">
             <tbody>
               <tr>
                 <td className="px-2 font-medium">Total Applicants :</td>{" "}
@@ -137,11 +136,11 @@ const DetailsTab = ({ jobDetails }) => {
         </div> */}
         <Separator className="my-4" />
         <div className="grid grid-cols-4 gap-4">
-          <div className="rounded bg-secondary p-4">
+          <div className="p-4 rounded bg-secondary">
             <p className="">Employment Type</p>
-            <h3 className="font-medium ">Full Time</h3>
+            <h3 className="font-medium ">-</h3>
           </div>
-          <div className="rounded bg-secondary p-4">
+          <div className="p-4 rounded bg-secondary">
             <p className="">Salary</p>
             <h3 className="font-medium ">
               {" "}
@@ -150,19 +149,21 @@ const DetailsTab = ({ jobDetails }) => {
               {formatNumberWithKM(jobDetails?.max_salary)} lpa
             </h3>
           </div>
-          <div className="rounded bg-secondary p-4">
+          <div className="p-4 rounded bg-secondary">
             <p className="">Industry</p>
-            <h3 className="font-medium ">IT</h3>
+            <h3 className="font-medium ">-</h3>
           </div>
-          <div className="rounded bg-secondary p-4">
-            <p className="">Job Function</p>
-            <h3 className="font-medium ">Business Intelligence</h3>
+          <div className="p-4 rounded bg-secondary">
+            <p className="">Experience</p>
+            <h3 className="font-medium ">
+              {jobDetails?.min_experience} - {jobDetails?.max_experience} years
+            </h3>
           </div>
         </div>
         <Separator className="my-4" />
         <div>
-          {/* <h5 className="font-medium text-lg mb-2 text-primary-foreground">Breif</h5> */}
-          <div className="text-muted-foreground text-sm prose-slate prose-p:mb-3 prose-strong:text-lg prose-strong:text-foreground prose-ul:list-disc prose-ul:pl-6">
+          {/* <h5 className="mb-2 text-lg font-medium text-primary-foreground">Breif</h5> */}
+          <div className="text-sm text-muted-foreground prose-slate prose-p:mb-3 prose-strong:text-lg prose-strong:text-foreground prose-ul:list-disc prose-ul:pl-6">
             {parse(jobDetails?.briefing)}
           </div>
         </div>

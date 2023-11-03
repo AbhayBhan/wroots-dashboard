@@ -106,7 +106,7 @@ const JobTable = () => {
   }, []);
 
   const table = useReactTable({
-    data: data?.data?.roles?.records || [],
+    data: data?.data?.roles || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -114,7 +114,6 @@ const JobTable = () => {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,

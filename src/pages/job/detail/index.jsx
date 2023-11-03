@@ -5,6 +5,8 @@ import DetailsTab from "./details-tab";
 import JoinedTable from "./joined-table";
 import ReferrerTable from "./referrer-table";
 import { useLocation, useParams } from "react-router-dom";
+import Alert from "@/components/ui/alert";
+import PeriodCompleteTable from "./period-complete-table";
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -13,8 +15,8 @@ const JobDetail = () => {
   const jobDetails = state.jobDetails;
   return (
     <section>
-      <div className="flex_between mb-5">
-        <h2 className=" text-2xl font-bold tracking-tight col-span-full">
+      <div className="mb-5 flex_between">
+        <h2 className="text-2xl font-bold tracking-tight col-span-full">
           Job Detail
         </h2>
         <div className="space-x-2">
@@ -45,34 +47,34 @@ const JobDetail = () => {
             <DetailsTab jobDetails={jobDetails} />
           </TabsContent>
           <TabsContent value="Applicants" className="m-0">
-            <div className="border border-amber-500 rounded-md p-4 text-sm text-amber-500 bg-amber-50 dark:bg-amber-900/40 mb-4">
+            <Alert variant="warn">
               This is the original applicants received for this job, In order to
               change status or do any changes, Use candidates list and search
               for the candidate.
-            </div>
-            <ApplicantsTable />
+            </Alert>
+            <ApplicantsTable roleId={jobDetails?.id} />
           </TabsContent>
           <TabsContent value="Referred" className="m-0">
-            <div className="border border-amber-500 rounded-md p-4 text-sm text-amber-500 bg-amber-50 dark:bg-amber-900/40 mb-4">
+            <Alert variant="warn">
               This is the original referrals received for this job, In order to
               change status or do any changes, Use candidates list and search
               for the candidate.
-            </div>
-            <ReferrerTable />
+            </Alert>
+            <ReferrerTable roleId={jobDetails?.id} />
           </TabsContent>
           <TabsContent value="Joined" className="m-0">
-            <div className="border border-amber-500 rounded-md p-4 text-sm text-amber-500 bg-amber-50 dark:bg-amber-900/40 mb-4">
+            <Alert variant="warn">
               This is the original people who joined for this job. Use Candiates
               processing history to reflect changes history.
-            </div>
-            <JoinedTable />
+            </Alert>
+            <JoinedTable roleId={jobDetails?.id} />
           </TabsContent>
           <TabsContent value="Period Complete" className="m-0">
-            <div className="border border-amber-500 rounded-md p-4 text-sm text-amber-500 bg-amber-50 dark:bg-amber-900/40 mb-4">
+            <Alert variant="warn">
               This is the original people who joined for this job. Use Candiates
               processing history to reflect changes history.
-            </div>
-            <JoinedTable />
+            </Alert>
+            <PeriodCompleteTable roleId={jobDetails?.id} />
           </TabsContent>
         </div>
       </Tabs>

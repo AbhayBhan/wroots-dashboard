@@ -36,7 +36,7 @@ const JobTableActions = ({ rowData }) => {
       >
         <EyeOpenIcon className="w-5 h-5 text-slate-500" />
       </Link>
-      <Dialog>
+      {/* <Dialog>
         <DialogTrigger asChild>
           <Button variant="ghost" size="icon">
             <Pencil1Icon className="w-5 h-5 text-slate-500" />
@@ -48,9 +48,9 @@ const JobTableActions = ({ rowData }) => {
             Edit job form will be there.
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
-      <AlertDialog>
+      {/* <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="ghost" size="icon">
             <TrashIcon className="w-5 h-5 text-red-500" />
@@ -69,7 +69,7 @@ const JobTableActions = ({ rowData }) => {
             <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog> */}
     </div>
   );
 };

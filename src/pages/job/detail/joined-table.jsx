@@ -1,17 +1,20 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
-import { applicantsData } from "@/data/job";
-import React, { useState } from "react";
+import { fetchAllCandidates } from "@/services/candidate";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
-    accessorKey: "name",
+    id: "name",
     header: "Name",
     cell: ({ getValue }) => (
       <div className="capitalize whitespace-nowrap min-h-[36px]">
         <p>{getValue("name")}</p>
-        <p className="text-xs text-muted-foreground lowercase">{getValue("email")}</p>
+        <p className="text-xs lowercase text-muted-foreground">
+          {getValue("email")}
+        </p>
       </div>
     ),
   },
@@ -28,7 +31,7 @@ const columns = [
     ),
   },
   {
-    accessorKey: "applied_date",
+    id: "applied_date",
     header: "Refer on",
     cell: ({ getValue }) => (
       <div className="lowercase whitespace-nowrap">
@@ -59,9 +62,23 @@ const columns = [
   },
 ];
 
-const JoinedTable = () => {
+const JoinedTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
+
+  const statusId = 7;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["Candidate", "All", page, filterTerm, roleId, statusId],
+    queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
+  });
+
+  useEffect(() => {
+    setPage(1);
+  }, [filterTerm]);
+
+  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+
   return (
     <div className="w-full">
       <SearchFilter
@@ -70,9 +87,13 @@ const JoinedTable = () => {
         placeholder="Filter by name..."
       />
 
-      <SimpleTable columns={columns} data={applicantsData} />
+      <SimpleTable
+        columns={columns}
+        data={data?.data?.candidates}
+        isLoading={isLoading}
+      />
 
-      <Pagination page={page} setPage={setPage} totalPages={1000} />
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );
 };

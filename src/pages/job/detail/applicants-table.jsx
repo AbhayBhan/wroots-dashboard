@@ -1,12 +1,13 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
-import TableWithPagi from "@/components/organism/simple-table";
-import { applicantsData } from "@/data/job";
-import React, { useState } from "react";
+import SimpleTable from "@/components/organism/simple-table";
+import { fetchAllCandidates } from "@/services/candidate";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 
 const columns = [
   {
-    accessorKey: "name",
+    id: "name",
     header: "Name",
     cell: ({ getValue }) => (
       <div className="capitalize whitespace-nowrap flex items-center min-h-[36px]">
@@ -19,8 +20,10 @@ const columns = [
     header: "Contact",
     cell: ({ getValue }) => (
       <div className=" whitespace-nowrap">
-        <p>{getValue("mobile")}</p>
-        <p className="text-xs text-muted-foreground lowercase">{getValue("email")}</p>
+        <p>{getValue("phoneNumber")}</p>
+        <p className="text-xs lowercase text-muted-foreground">
+          {getValue("email")}
+        </p>
       </div>
     ),
   },
@@ -29,7 +32,7 @@ const columns = [
     header: "Applied on",
     cell: ({ getValue }) => (
       <div className="lowercase whitespace-nowrap">
-        {new Date(getValue("applied_date")).toLocaleString()}
+        {new Date(getValue("applied_date")).toLocaleString() || "-"}
       </div>
     ),
   },
@@ -47,9 +50,23 @@ const columns = [
   },
 ];
 
-const ApplicantsTable = () => {
+const ApplicantsTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
+
+  const statusId = 6;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["Candidate", "All", page, filterTerm, roleId, statusId],
+    queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
+  });
+
+  useEffect(() => {
+    setPage(1);
+  }, [filterTerm]);
+
+  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+
   return (
     <div className="w-full">
       <SearchFilter
@@ -57,8 +74,12 @@ const ApplicantsTable = () => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <TableWithPagi columns={columns} data={applicantsData} />
-      <Pagination page={page} setPage={setPage} totalPages={1000} />
+      <SimpleTable
+        columns={columns}
+        data={data?.data?.candidates}
+        isLoading={isLoading}
+      />
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );
 };

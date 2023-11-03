@@ -27,12 +27,12 @@ const Job = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Add new Job</DialogTitle>
-             Add job form will be there.
+              Add job form will be there.
             </DialogHeader>
           </DialogContent>
         </Dialog>
       </div>
-      <Tabs defaultValue="active">
+      {/* <Tabs defaultValue="active">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
           {["active", "archived"].map((item) => (
             <TabsTrigger
@@ -52,7 +52,10 @@ const Job = () => {
             <JobTable />
           </TabsContent>
         </div>
-      </Tabs>
+      </Tabs> */}
+      <div className="p-4 mt-4 rounded-md bg-background">
+        <JobTable />
+      </div>
     </div>
   );
 };
