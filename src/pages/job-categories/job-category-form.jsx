@@ -46,12 +46,12 @@ export function JobCategoryForm({ initialData }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        <div className="w-full flex_center flex-col text-muted-foreground text-sm">
-          <div className="rounded-full flex_center h-20 w-20 border mb-2">
-            <label htmlFor="image">
+        <div className="flex-col w-full text-sm flex_center text-muted-foreground">
+          <div className="w-20 h-20 mb-2 duration-300 border rounded-full hover:border-primary">
+            <label htmlFor="image" className="w-full h-full flex_center ">
               <PlusIcon className="w-4 h-4" />
+              <input id="image" type="file" className="hidden" />
             </label>
-            <input id="image" type="file" className="hidden" />
           </div>
           <p>Upload image</p>
         </div>
