@@ -8,17 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { InfoCardEditForm } from "./info-card-edit-form";
 
-const InfoCard = ({
-  hide = [],
-  email,
-  phone,
-  languages,
-  country,
-  status,
-  skills,
-}) => {
+const AppUsersInfoCard = ({hide=[], userData}) => {
   return (
     <div className="p-5">
       <div className="flex_between">
@@ -32,7 +23,7 @@ const InfoCard = ({
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Edit details</DialogTitle>
-              <InfoCardEditForm />
+              // Edit form will be here
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -41,49 +32,49 @@ const InfoCard = ({
         {!hide.includes("email") && (
           <li>
             <span className="font-medium">Email:</span>{" "}
-            <span className="text-muted-foreground">{email}</span>{" "}
+            <span className="text-muted-foreground">{userData.email}</span>{" "}
           </li>
         )}
         {!hide.includes("phone") && (
           <li>
             <span className="font-medium">Phone:</span>{" "}
-            <span className="text-muted-foreground">{phone}</span>
+            <span className="text-muted-foreground">{userData.phone_number}</span>
           </li>
         )}
-        {/* {!hide.includes("language") && (
+        {!hide.includes("language") && (
           <li>
             <span className="font-medium">Language:</span>{" "}
-            <span className="text-muted-foreground">{languages}</span>
+            <span className="text-muted-foreground">{userData.languages}</span>
           </li>
         )}
         {!hide.includes("country") && (
           <li>
             <span className="font-medium">Country:</span>{" "}
-            <span className="text-muted-foreground">{country}</span>
+            <span className="text-muted-foreground">{userData.location_id}</span>
           </li>
         )}
         {!hide.includes("status") && (
           <li>
             <span className="font-medium">Status:</span>{" "}
-            <span className="text-muted-foreground">{status}</span>
+            <span className="text-muted-foreground">{userData.status?"Active":"Inactive"}</span>
           </li>
-        )} */}
+        )}
         {!hide.includes("expected_salary") && (
           <li>
             <span className="font-medium">Expexted Salary:</span>{" "}
-            <span className="text-muted-foreground">{"NaN"}</span>
+            <span className="text-muted-foreground">{userData.min_salary}</span>
           </li>
         )}
         {!hide.includes("notice_period") && (
           <li>
             <span className="font-medium">Notice Period:</span>{" "}
-            <span className="text-muted-foreground">{"NaN"}</span>
+            <span className="text-muted-foreground">{userData.notice_period}</span>
           </li>
         )}
         {!hide.includes("experience") && (
           <li>
             <span className="font-medium">Experience:</span>{" "}
-            <span className="text-muted-foreground">{"NaN"}</span>
+            <span className="text-muted-foreground">{userData.experience}</span>
           </li>
         )}
         {!hide.includes("resume") && (
@@ -115,10 +106,10 @@ const InfoCard = ({
         {!hide.includes("skills") && (
           <li>
             <span className="font-medium">Skills:</span>{" "}
-            <span className="text-muted-foreground">{skills}</span>
+            <span className="text-muted-foreground">{userData.skills}</span>
           </li>
         )}
-        {!hide.includes("selected_date") && (
+        {/* {!hide.includes("selected_date") && (
           <li>
             <span className="font-medium">Selected Date:</span>{" "}
             <span className="text-muted-foreground">{"NaN"}</span>
@@ -141,10 +132,10 @@ const InfoCard = ({
             <span className="font-medium">Completion Date:</span>{" "}
             <span className="text-muted-foreground">{"NaN"}</span>
           </li>
-        )}
+        )} */}
       </ul>
     </div>
   );
 };
 
-export default InfoCard;
+export default AppUsersInfoCard;

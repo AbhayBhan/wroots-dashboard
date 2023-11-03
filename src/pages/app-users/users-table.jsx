@@ -6,15 +6,20 @@ import SimpleTable from "@/components/organism/simple-table";
 import { buttonVariants } from "@/components/ui/button";
 import { usersData } from "@/data/users";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { fetchAllAppusers } from "@/services/Appusers";
+import { useAppUsersContext } from "@/contexts/appUsersContext";
+import AppUsersContext from "@/contexts/appUsersContext";
+import { useContext } from "react";
 
 export const columns = [
   {
     id: "full_name",
     header: "Name",
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("name")}</div>
+      <div className="capitalize">{getValue("first_name")}{getValue("middle_name")}{getValue("last_name")}</div>
     ),
   },
   {
@@ -62,14 +67,28 @@ const UsersTable = () => {
   const [page, setPage] = useState(1);
   const [filterTerm, setFilterTerm] = useState("");
   const [isLoading, setIsLoading]=useState(true);
-  const [usersDataArray,setUsersDataArray]=useState({});
+  const [usersDataArray,setUsersDataArray]=useState([]);
 
-  fetch("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1")
-  .then(res=>res.json())
-  .then((res)=>{
-    setUsersDataArray(res.referrors);
-    setIsLoading(false)})
-  .catch(err=>console.log(err));
+  const {details, setDetails}=useAppUsersContext();
+
+  const { mutate } = useMutation(fetchAllAppusers, {
+    onSuccess: ({ data }) => {
+      setUsersDataArray(data.referrors);
+      setIsLoading(false);
+      setDetails(data.referrors);
+    },
+    onError: (err)=>{
+      console.log(err);
+      setIsLoading(false);
+    }
+  });
+
+  useEffect(()=>{
+    mutate();
+  },[])
+
+
+
 
   return (
     <div className="w-full">
@@ -78,8 +97,10 @@ const UsersTable = () => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <SimpleTable columns={columns} data={usersDataArray} isLoading={isLoading} />
-      <Pagination page={page} setPage={setPage} totalPages={10} />
+      <SimpleTable columns={columns} data={usersDataArray.slice((page*10)-10, page*10)} isLoading={isLoading} />
+      {isLoading?""
+      :<Pagination page={page} setPage={setPage} totalPages={usersDataArray.length%10==0?usersDataArray.length/10:usersDataArray.length/10+1} />
+      }
 
     </div>
   );

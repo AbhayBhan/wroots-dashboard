@@ -22,6 +22,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { lazy, Suspense } from "react";
 import Spinner from "@/components/organism/spinner";
 import { CandidateProvider } from "./contexts/candidateContext";
+import { AppUsersProvider } from "./contexts/appUsersContext";
 
 const LazyMainLayout = lazy(() => import("./components/layouts/main"));
 const LazyAppUsers = lazy(() => import("./pages/app-users"));
@@ -78,8 +79,16 @@ function App() {
               <Route path="job/:id/details" element={<LazyJobDetail />} />
               <Route path="job-categories" element={<LazyJobCategories />} />
               <Route path="skill" element={<LazySkill />} />
-              <Route path="app-users" element={<LazyAppUsers />} />
-              <Route path="app-users/details/:id" element={<LazyAppUserDetail />} />
+              <Route path="app-users" element={
+                <AppUsersProvider>
+              <LazyAppUsers />
+                  </AppUsersProvider>
+              } />
+              <Route path="app-users/details/:id" element={
+              <AppUsersProvider>
+                <LazyAppUserDetail />
+              </AppUsersProvider>
+              } />
               <Route path="location" element={<LazyLocation />} />
               <Route path="payout" element={<LazyPayout />} />
             </Route>

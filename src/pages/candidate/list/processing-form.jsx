@@ -48,7 +48,7 @@ const ProcessingForm = ({ candidateId, onSuccessAction }) => {
   const { mutate } = useMutation(createProcessing, {
     onSuccess: ({ data }) => {
       setProcessLoading(false);
-      onSuccessAction(); // On success, We must close the dialog box, This is Temporary Fix.
+      onSuccessAction();
     },
   });
 
