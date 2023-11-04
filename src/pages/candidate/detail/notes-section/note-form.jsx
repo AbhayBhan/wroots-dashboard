@@ -10,38 +10,23 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addNote } from "@/services/mock/candidate";
 import Spinner from "@/components/organism/spinner";
 
-const Noteform = () => {
-  const queryClient = useQueryClient();
+const Noteform = ({submitNote,isLoading}) => {
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     mode: "onChange",
   });
 
-  const { isLoading, mutate } = useMutation({
-    mutationFn: addNote,
-    mutationKey: ["Add-Note"],
-    keepPreviousData: true,
-    onSuccess: () => {
-      form.reset({ description: "" });
-      queryClient.invalidateQueries({ queryKey: ["All-Notes"] });
-    },
-  });
-
   function onSubmit(data) {
-    data["author"] = "David Johnson";
-    console.log(data);
-    mutate(data);
+    submitNote(data.noteString);
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
           control={form.control}
-          name="description"
+          name="noteString"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Note</FormLabel>

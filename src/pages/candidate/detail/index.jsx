@@ -92,7 +92,7 @@ const CandidateDetail = () => {
           <JobTable />
         </TabsContent>
         <TabsContent value="Notes" className="p-4 rounded-md bg-background">
-          <NotesSection />
+          <NotesSection candidateId={parseInt(id)} />
         </TabsContent>
       </Tabs>
     </div>
