@@ -10,6 +10,19 @@ export function formatNumberWithKM(number) {
   return number.toString();
 }
 
+export function processName(name) {
+  let words = name.split(" ");
+  let result = "";
+
+  if (words.length >= 2) {
+    result = words[0].charAt(0) + words[1].charAt(0);
+  } else if (words.length === 1) {
+    result = words[0].slice(0, 2);
+  }
+
+  return result;
+}
+
 
 export function getProcessingStatesDropdown() {
   let processingStates = [

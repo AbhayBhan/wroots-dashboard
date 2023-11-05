@@ -38,7 +38,9 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
         {!hide.includes("phone") && (
           <li>
             <span className="font-medium">Phone:</span>{" "}
-            <span className="text-muted-foreground">{userData.phone_number}</span>
+            <span className="text-muted-foreground">
+              {userData.phone_number}
+            </span>
           </li>
         )}
         {!hide.includes("language") && (
@@ -50,13 +52,17 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
         {!hide.includes("country") && (
           <li>
             <span className="font-medium">Country:</span>{" "}
-            <span className="text-muted-foreground">{userData.location_id}</span>
+            <span className="text-muted-foreground">
+              {userData.location_id}
+            </span>
           </li>
         )}
         {!hide.includes("status") && (
           <li>
             <span className="font-medium">Status:</span>{" "}
-            <span className="text-muted-foreground">{userData.status?"Active":"Inactive"}</span>
+            <span className="text-muted-foreground">
+              {userData.active ? "Active" : "Inactive"}
+            </span>
           </li>
         )}
         {!hide.includes("expected_salary") && (
@@ -68,7 +74,9 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
         {!hide.includes("notice_period") && (
           <li>
             <span className="font-medium">Notice Period:</span>{" "}
-            <span className="text-muted-foreground">{userData.notice_period}</span>
+            <span className="text-muted-foreground">
+              {userData.notice_period}
+            </span>
           </li>
         )}
         {!hide.includes("experience") && (

@@ -15,9 +15,8 @@ import AdvancePagination from "@/components/organism/advance-pagination";
 import AdvanceTable from "@/components/organism/advance-table";
 import SearchFilter from "@/components/organism/search-filter";
 import { fetchActiveJobs } from "@/services/jobs";
-import { formatNumberWithKM } from "@/utils/helper";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { formatNumberWithKM, processName } from "@/utils/helper";
+import { useQuery } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 
 export const columns = [
@@ -47,7 +46,7 @@ export const columns = [
       <div className="flex gap-3">
         <Avatar>
           {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>{processName(row.original["name"])}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col whitespace-nowrap">
           <p>{row.original["name"]}</p>
@@ -63,7 +62,7 @@ export const columns = [
     header: "Salary",
     cell: ({ row }) => (
       <div className="capitalize whitespace-nowrap">
-        {formatNumberWithKM(row.original["min_salary"])} {" - "} 
+        {formatNumberWithKM(row.original["min_salary"])} {" - "}
         {formatNumberWithKM(row.original["max_salary"])}
       </div>
     ),
@@ -93,23 +92,17 @@ export const columns = [
 const JobTable = () => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data, mutate, isLoading } = useMutation({
-    mutationKey: ["Jobs", "Active"],
-    mutationFn: fetchActiveJobs,
+  const { data, isLoading } = useQuery({
+    queryKey: ["Jobs", "Active"],
+    queryFn: fetchActiveJobs,
   });
-
-  useEffect(() => {
-    mutate();
-  }, []);
 
   const table = useReactTable({
     data: data?.data?.roles || [],
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -118,7 +111,6 @@ const JobTable = () => {
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
       rowSelection,
     },
   });

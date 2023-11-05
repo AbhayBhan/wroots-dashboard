@@ -163,8 +163,8 @@ const DetailsTab = ({ jobDetails }) => {
         <Separator className="my-4" />
         <div>
           {/* <h5 className="mb-2 text-lg font-medium text-primary-foreground">Breif</h5> */}
+          <h1 className="text-3xl font-bold mb-4">Job Overview</h1>
           <div className="text-sm text-muted-foreground prose-slate prose-p:mb-3 prose-strong:text-lg prose-strong:text-foreground prose-ul:list-disc prose-ul:pl-6">
-            <h1 className="text-3xl font-bold mb-4">Briefing</h1>
             {parse(jobDetails?.briefing)}
           </div>
         </div>

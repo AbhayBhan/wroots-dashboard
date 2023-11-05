@@ -4,22 +4,23 @@ import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { buttonVariants } from "@/components/ui/button";
-import { usersData } from "@/data/users";
+import { useAppUsersContext } from "@/contexts/appUsersContext";
 import { cn } from "@/lib/utils";
+import { fetchAllAppusers } from "@/services/Appusers";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { fetchAllAppusers } from "@/services/Appusers";
-import { useAppUsersContext } from "@/contexts/appUsersContext";
-import AppUsersContext from "@/contexts/appUsersContext";
-import { useContext } from "react";
 
 export const columns = [
   {
     id: "full_name",
     header: "Name",
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("first_name")}{getValue("middle_name")}{getValue("last_name")}</div>
+      <div className="capitalize">
+        {getValue("first_name")}
+        {getValue("middle_name")}
+        {getValue("last_name")}
+      </div>
     ),
   },
   {
@@ -43,7 +44,7 @@ export const columns = [
   },
   {
     id: "actions",
-    cell: ({getValue}) => {
+    cell: ({ getValue }) => {
       return (
         <div className="flex justify-end gap-2">
           <Link
@@ -66,10 +67,10 @@ export const columns = [
 const UsersTable = () => {
   const [page, setPage] = useState(1);
   const [filterTerm, setFilterTerm] = useState("");
-  const [isLoading, setIsLoading]=useState(true);
-  const [usersDataArray,setUsersDataArray]=useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [usersDataArray, setUsersDataArray] = useState([]);
 
-  const {details, setDetails}=useAppUsersContext();
+  const { details, setDetails } = useAppUsersContext();
 
   const { mutate } = useMutation(fetchAllAppusers, {
     onSuccess: ({ data }) => {
@@ -77,18 +78,15 @@ const UsersTable = () => {
       setIsLoading(false);
       setDetails(data.referrors);
     },
-    onError: (err)=>{
+    onError: (err) => {
       console.log(err);
       setIsLoading(false);
-    }
+    },
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     mutate();
-  },[])
-
-
-
+  }, []);
 
   return (
     <div className="w-full">
@@ -97,11 +95,24 @@ const UsersTable = () => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <SimpleTable columns={columns} data={usersDataArray.slice((page*10)-10, page*10)} isLoading={isLoading} />
-      {isLoading?""
-      :<Pagination page={page} setPage={setPage} totalPages={usersDataArray.length%10==0?usersDataArray.length/10:usersDataArray.length/10+1} />
-      }
-
+      <SimpleTable
+        columns={columns}
+        data={usersDataArray.slice(page * 10 - 10, page * 10)}
+        isLoading={isLoading}
+      />
+      {isLoading ? (
+        ""
+      ) : (
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPages={
+            usersDataArray.length % 10 == 0
+              ? usersDataArray.length / 10
+              : usersDataArray.length / 10 + 1
+          }
+        />
+      )}
     </div>
   );
 };

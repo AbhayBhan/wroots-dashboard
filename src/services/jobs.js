@@ -1,7 +1,7 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchActiveJobs = (payload) =>
-  axiosInstance.get("/roleRouter/getActiveRoles", payload);
+export const fetchActiveJobs = () =>
+  axiosInstance.get("/roleRouter/getActiveRoles");
 
 export const fetchArchivedJobs = () => {
   return axiosInstance.post("/nc/getArchivedRoles");
