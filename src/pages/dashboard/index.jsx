@@ -47,8 +47,8 @@ const Dashboard = () => {
         setFunnelData(data?.funnelData.map((item) => {
           return {
             id : item.candidate_processing_status_id,
-            label : item.candidate_processing_status_id,
-            value : item.count
+            label : item.name,
+            value : item.candidate_count
           }
         }).sort((a, b) => b.value - a.value));
       },
@@ -141,7 +141,7 @@ const Dashboard = () => {
           <Spinner />
           </div>
         ) : (
-          <div className="p-4 mt-4 rounded-md bg-background h-[400px]">
+          <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
             <div className="flex justify-between w-full">
               <Card1 isLoading={isLoading} />
               <Card2 />
