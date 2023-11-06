@@ -1,7 +1,14 @@
 import React from "react";
 import { HiOutlineClipboard, HiOutlineCurrencyDollar } from "react-icons/hi";
 
-const Numberscard = () => {
+const defaultData = {
+  label1: "Jobs Applied",
+  value1: 0,
+  label2: "Payout",
+  value2: 0,
+};
+
+const Numberscard = ({ data = defaultData }) => {
   return (
     <div className="flex justify-center px-5 pb-4 space-x-5">
       <div className="flex gap-2">
@@ -9,9 +16,9 @@ const Numberscard = () => {
           <HiOutlineClipboard className="w-7 h-7" />
         </div>
         <div>
-          <span className="text-lg font-medium">34</span>
+          <span className="text-lg font-medium">{data?.value1}</span>
           <span className="block text-xs font-normal text-muted-foreground">
-            Jobs Applied
+            {data?.label1}
           </span>
         </div>
       </div>
@@ -20,9 +27,9 @@ const Numberscard = () => {
           <HiOutlineCurrencyDollar className="w-7 h-7" />
         </div>
         <div>
-          <span className="text-lg font-medium">34</span>
+          <span className="text-lg font-medium">{data?.value2}</span>
           <span className="block text-xs font-normal text-muted-foreground">
-            Payout
+            {data?.label2}
           </span>
         </div>
       </div>

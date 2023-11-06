@@ -13,24 +13,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { AddForm } from "@/components/organism/add-form";
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Spinner from "@/components/organism/spinner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Spinner from "@/components/organism/spinner";
 import { fetchAllCategories } from "@/services/JobCategories";
 import { useMutation } from "@tanstack/react-query";
 import { JobCategoryForm } from "./job-category-form";
+import { processName } from "@/utils/helper";
 
 export const columns = [
   {
@@ -39,8 +38,8 @@ export const columns = [
     cell: ({ getValue }) => (
       <div className="flex items-center gap-3">
         <Avatar>
-          {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={getValue("imageURL")} loading="lazy" />
+          <AvatarFallback>{processName(getValue("name"))}</AvatarFallback>
         </Avatar>
         <p>{getValue("name")}</p>
       </div>

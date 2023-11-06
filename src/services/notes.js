@@ -6,13 +6,13 @@ export const getAllNotes = (candidateId) => {
     }
    return axiosInstance.post("/note/getNotesForACandidate", p);
 }
-export const updateCategory = (payload) =>
-  axiosInstance.post("/category/updateCategory", payload);
+export const updateNote = (payload) =>
+  axiosInstance.post("/note/updateNote", payload);
 
 export const addNote = (payload) => {
    return axiosInstance.post("/note/createNote", payload);
 }
 
-export const deleteCategory = (payload) =>
-  axiosInstance.post("/category/deletCategory", payload);
+export const deleteNote = (payload) =>
+  axiosInstance.post("/note/deletNote", payload);
 

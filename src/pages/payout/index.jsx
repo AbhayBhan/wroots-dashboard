@@ -4,17 +4,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { CandidateForm } from "../candidate/components/candidate-form";
-import CandidateTable from "../recruiter/candidate-table";
-import MyCanidateTable from "../candidate/list/my-candidate-table";
-// import UnassignedCanidateTable from "../candidate/list/unassigned-canidate-table";
-import PayoutDueTable from "./PayoutDueTable";
-import PaymentCompletedTable from "./PaymentCompletedTable";
+import PayoutCompletedTable from "./payout-complete-table";
+import PayoutDueTable from "./payout-due-table";
 
 const Payout = () => {
   const isSuperAdmin = JSON.parse(
@@ -49,27 +46,22 @@ const Payout = () => {
       {/* all candidate tab will only visible to superAdmin  */}
       <Tabs defaultValue="Payout Due">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
-          {[
-            "Payout Due",
-            "Completed Payments"
-          ]
-            .filter((item) => item !== false)
-            .map((item) => (
-              <TabsTrigger
-                key={item}
-                value={item}
-                className="data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none border-b-2 border-transparent rounded-none capitalize"
-              >
-                {item}
-              </TabsTrigger>
-            ))}
+          {["Payout Due", "Completed Payments"].map((item) => (
+            <TabsTrigger
+              key={item}
+              value={item}
+              className="data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none border-b-2 border-transparent rounded-none capitalize"
+            >
+              {item}
+            </TabsTrigger>
+          ))}
         </TabsList>
         <div className="p-4 mt-4 rounded-md bg-background">
           <TabsContent value="Payout Due" className="m-0">
             <PayoutDueTable />
           </TabsContent>
           <TabsContent value="Completed Payments" className="m-0">
-            <PaymentCompletedTable />
+            <PayoutCompletedTable />
           </TabsContent>
         </div>
       </Tabs>
