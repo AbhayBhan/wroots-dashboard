@@ -10,16 +10,18 @@ import { fetchAllAppusers } from "@/services/Appusers";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { searchReferror } from "@/services/Appusers";
 
 export const columns = [
   {
     id: "full_name",
     header: "Name",
     cell: ({ getValue }) => (
-      <div className="capitalize">
-        {getValue("first_name")}
-        {getValue("middle_name")}
-        {getValue("last_name")}
+      <div className="capitalize space-x-1">
+        <span>{getValue("first_name")}</span>
+        <span>{getValue("middle_name")}</span>
+        <span>{getValue("last_name")}</span>
+        
       </div>
     ),
   },
@@ -69,14 +71,35 @@ const UsersTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [usersDataArray, setUsersDataArray] = useState([]);
+  const [usersData, setUsersData]=useState({});
+  const [totalPages, setTotalPages]=useState(0);
+  const [apiInUse, setApiInUse]=useState("fetchAllAppusers");
 
   const { details, setDetails } = useAppUsersContext();
 
   const { mutate } = useMutation(fetchAllAppusers, {
     onSuccess: ({ data }) => {
+      setUsersData(data);
+      setTotalPages(Math.ceil(data.totalCount / 30));
       setUsersDataArray(data.referrors);
       setIsLoading(false);
       setDetails(data.referrors);
+      setApiInUse("fetchAllAppusers");
+    },
+    onError: (err) => {
+      console.log(err);
+      setIsLoading(false);
+    },
+  });
+
+  const searchReferrorMutate = useMutation(searchReferror, {
+    onSuccess: ({ data }) => {
+      setUsersData(data);
+      setTotalPages(Math.ceil(data.referrors.length / 30));
+      setUsersDataArray(data.referrors);
+      setIsLoading(false);
+      setDetails(data.referrors);
+      setApiInUse("searchReferror");
     },
     onError: (err) => {
       console.log(err);
@@ -85,8 +108,17 @@ const UsersTable = () => {
   });
 
   useEffect(() => {
-    mutate();
-  }, []);
+    setIsLoading(true);
+    mutate(page);
+    console.log(page)
+  }, [page]);
+
+  useEffect(()=>{
+    if (filterTerm){
+      setIsLoading(true);
+      searchReferrorMutate.mutate(filterTerm);
+    }
+  },[filterTerm]);
 
   return (
     <div className="w-full">
@@ -97,7 +129,7 @@ const UsersTable = () => {
       />
       <SimpleTable
         columns={columns}
-        data={usersDataArray.slice(page * 10 - 10, page * 10)}
+        data={apiInUse=="fetchAllAppusers"?usersDataArray:usersDataArray.slice((page*30)-30, 30)}
         isLoading={isLoading}
       />
       {isLoading ? (
@@ -106,11 +138,7 @@ const UsersTable = () => {
         <Pagination
           page={page}
           setPage={setPage}
-          totalPages={
-            usersDataArray.length % 10 == 0
-              ? usersDataArray.length / 10
-              : usersDataArray.length / 10 + 1
-          }
+          totalPages={totalPages}
         />
       )}
     </div>
