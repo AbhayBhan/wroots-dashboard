@@ -6,11 +6,7 @@ export const fetchAllAppusers = (page) => {
     pageno: page || 1,
   };
 
-  // This method was giving me 400 bad request
-  // return axiosInstance.get("/referror/getallReferror", { params });
-
-  // So i used this direct and crude method for getting the job done 
-  return axios.get("https://wroots-backend.onrender.com/referror/getallReferror?pageno=1");
+  return axiosInstance.get("/referror/getallReferror", { params });
 };
 
 // This is Second tab in App users details page 
@@ -25,9 +21,9 @@ export const fetchcandidatesReferred = (page, referroId) => {
 
 export const searchReferror = (text) => {
     const params = {
-        searchItem: text
+        q: text
       }
-  return axiosInstance.get("/referror/assignCandidate", {params});
+  return axiosInstance.get("/referror/searchReferror", {params});
     };
 
 export const fetchJobsApplied = (referroId) => {
