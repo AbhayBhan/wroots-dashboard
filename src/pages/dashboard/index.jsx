@@ -19,13 +19,18 @@ import { useForm } from "react-hook-form";
 import { fetchActiveJobs } from "@/services/jobs";
 import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
 import { Card1, Card2, Card3 } from "./cards/cards";
-import { getSuperAdminDashboard, getRecruiterDashboard } from "@/services/dashboard";
+import {
+  getSuperAdminDashboard,
+  getRecruiterDashboard,
+} from "@/services/dashboard";
 import Spinner from "@/components/organism/spinner";
 import MyResponsiveFunnel from "./cards/funnel";
 
 const Dashboard = () => {
-  const userdata = JSON.parse(localStorage.getItem('userdata'));
-  const [funnelData, setFunnelData] = useState([{id : 1, label : "test", value : 2000}]);
+  const userdata = JSON.parse(localStorage.getItem("userdata"));
+  const [funnelData, setFunnelData] = useState([
+    { id: 1, label: "test", value: 2000 },
+  ]);
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -45,13 +50,17 @@ const Dashboard = () => {
     userdata.isSuperAdmin ? getSuperAdminDashboard : getRecruiterDashboard,
     {
       onSuccess: ({ data }) => {
-        setFunnelData(data?.funnelData.map((item) => {
-          return {
-            id : item.candidate_processing_status_id,
-            label : item.name,
-            value : item.candidate_count
-          }
-        }).sort((a, b) => b.value - a.value));
+        const allowedLabels = ["In_Process", "Joined", "Selected", "Quit"];
+        const filteredData = data?.funnelData
+          .filter((item) => allowedLabels.includes(item.name))
+          .map((item) => ({
+            id: item.candidate_processing_status_id,
+            label: item.name,
+            value: item.candidate_count,
+          }))
+          .sort((a, b) => b.value - a.value);
+
+        setFunnelData(filteredData);
       },
     }
   );
@@ -66,16 +75,19 @@ const Dashboard = () => {
   }));
 
   useEffect(() => {
-    if(userdata.isSuperAdmin){
+    if (userdata.isSuperAdmin) {
       mutate(form.getValues());
     } else {
-      mutate({...form.getValues(), recruiterId : userdata.id});
+      mutate({ ...form.getValues(), recruiterId: userdata.id });
     }
   }, []);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 h-[1000px]">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2 h-[1000px]"
+      >
         <div className="flex justify-between mb-5">
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
@@ -143,7 +155,7 @@ const Dashboard = () => {
         </div>
         {dashboardLoading ? (
           <div className="flex justify-center items-center">
-          <Spinner />
+            <Spinner />
           </div>
         ) : (
           <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
@@ -152,7 +164,7 @@ const Dashboard = () => {
               <Card2 />
               <Card3 />
             </div>
-            <MyResponsiveFunnel data={funnelData}/>
+            <MyResponsiveFunnel data={funnelData} />
           </div>
         )}
       </form>
