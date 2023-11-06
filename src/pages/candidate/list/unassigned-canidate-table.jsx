@@ -109,12 +109,12 @@ export const columns = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  // const categoryId = JSON.parse(localStorage.getItem("userdata")).categoryId;
+  const {categoryId, isManager} = JSON.parse(localStorage.getItem("userdata"));
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
-    queryFn: () => fetchUnassignCandidates(selectedCategory, page, filterTerm),
+    queryFn: () => fetchUnassignCandidates(categoryId, page, filterTerm, isManager),
   });
   const categoryQuery = useQuery({
     queryKey: ["Category"],

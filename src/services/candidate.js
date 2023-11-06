@@ -26,9 +26,9 @@ export const fetchMyCandidates = (recruiterId, page, filterTerm, latestStatus) =
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };
 
-export const fetchUnassignCandidates = (category, page, filterTerm) => {
+export const fetchUnassignCandidates = (category, page, filterTerm, isManager) => {
   const params = {
-    categoryId: category || null,
+    categoryId: isManager ? null : category,
     pageno: page || 1,
     q: filterTerm || null,
   };
