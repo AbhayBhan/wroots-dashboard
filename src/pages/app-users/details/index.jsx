@@ -37,7 +37,11 @@ const AppUserDetail = () => {
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <h4 className="text-2xl font-medium">{userData.first_name}{userData.middle_name}{userData.last_name}</h4>
+            <h4 className="text-2xl font-medium space-x-1">
+              <span>{userData.first_name}</span>
+              <span>{userData.middle_name}</span>
+              <span>{userData.last_name}</span>
+            </h4>
           </div>
 
           <Numberscard />
