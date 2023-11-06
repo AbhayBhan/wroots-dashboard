@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusIcon } from "@radix-ui/react-icons";
@@ -13,13 +13,28 @@ import { CandidateForm } from "../components/candidate-form";
 import CandidateTable from "./all-candidate-table";
 import MyCanidateTable from "./my-candidate-table";
 import UnassignedCanidateTable from "./unassigned-canidate-table";
+import { useSearchParams } from "react-router-dom";
 
 const CandidateList = () => {
   const isSuperAdmin = JSON.parse(
     localStorage.getItem("userdata")
   ).isSuperAdmin;
 
+  const [searchParams, setSearchParams] = useSearchParams({
+    currentTab: "Unassigned Candidate",
+  });
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const onTabChange = (e) => {
+    setSearchParams(
+      (pre) => {
+        pre.set("currentTab", e);
+        return pre;
+      },
+      { replace: true}
+    );
+  };
 
   return (
     <div>
@@ -45,7 +60,7 @@ const CandidateList = () => {
         </div>
       </div>
       {/* all candidate tab will only visible to superAdmin  */}
-      <Tabs defaultValue="Unassigned Candidates">
+      <Tabs value={searchParams.get("currentTab")} onValueChange={onTabChange}>
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
           {[
             "Unassigned Candidates",

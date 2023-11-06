@@ -12,7 +12,12 @@ const getItem = (label, link, key, icon) => ({ label, link, key, icon });
 
 const routes = [
   getItem("Dashboard", "/", "dashboard", AiFillAlert),
-  getItem("Candidates", "/candidate", "candidate", FaUserTie),
+  getItem(
+    "Candidates",
+    "/candidate?currentTab=Unassigned+Candidates",
+    "candidate",
+    FaUserTie
+  ),
   getItem("Jobs", "/job", "job", MdWork),
   getItem("Jobs Categories", "/job-categories", "job-categories", MdWork),
   getItem("App Users", "/app-users", "app-users", MdWork),
@@ -23,15 +28,11 @@ const routes = [
   getItem("Recruiters", "/recruiter", "recruiter", MdPersonSearch),
 ];
 
-const Sidebar = ({
-  isSidebarOpen,
-  setSidebarOpen,
-  className,
-}) => {
+const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
   const location = useLocation();
   const { pathname } = location;
 
-  const userData = JSON.parse(localStorage.getItem('userdata'));
+  const userData = JSON.parse(localStorage.getItem("userdata"));
   const isSuperAdmin = userData?.isSuperAdmin;
 
   return (
@@ -68,7 +69,7 @@ const Sidebar = ({
                 </Link>
               );
             }
-          } else {  
+          } else {
             return (
               <Link
                 key={route.key}

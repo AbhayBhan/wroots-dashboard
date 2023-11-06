@@ -2,28 +2,36 @@ import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import Spinner from "@/components/organism/spinner";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { candidateData } from "@/data/candidate";
 import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { assignCandidate, fetchUnassignCandidates } from "@/services/candidate";
+import {
+  assignCandidate,
+  assignCandidateInBulk,
+  fetchUnassignCandidates,
+} from "@/services/candidate";
+import { statusColors } from "@/utils/colorMap";
+import { formatTimestamp } from "@/utils/dateTime";
 import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { formatTimestamp } from "@/utils/dateTime";
-import { fetchAllCategories } from "@/services/JobCategories";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const columns = [
+  {
+    id: "selection",
+    header: ({ selectAllRows, getIsAllRowSelected }) => (
+      <Checkbox checked={getIsAllRowSelected} onCheckedChange={selectAllRows} />
+    ),
+    cell: ({ row, getIsRowSelected, toggleRowSelection }) => (
+      <Checkbox
+        checked={getIsRowSelected(row.id)}
+        onCheckedChange={() => toggleRowSelection(row.id)}
+      />
+    ),
+  },
   {
     id: "name",
     header: "Details",
@@ -74,7 +82,11 @@ export const columns = [
       return (
         <div className="flex flex-col">
           <span className="inline-block">
-            <Badge>{row.latestStatus}</Badge>
+            <Badge
+              className={`${statusColors[row.latestStatus] || "bg-gray-400"}`}
+            >
+              {row.latestStatus}
+            </Badge>
           </span>
           <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
@@ -109,25 +121,62 @@ export const columns = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const {categoryId, isManager} = JSON.parse(localStorage.getItem("userdata"));
+  const { categoryId, isManager } = JSON.parse(
+    localStorage.getItem("userdata")
+  );
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
-    queryFn: () => fetchUnassignCandidates(categoryId, page, filterTerm, isManager),
+    queryFn: () =>
+      fetchUnassignCandidates(categoryId, page, filterTerm, isManager),
   });
-  const categoryQuery = useQuery({
-    queryKey: ["Category"],
-    queryFn: () => fetchAllCategories(),
+
+  const assignMutation = useMutation({
+    mutationFn: assignCandidateInBulk,
+    onSuccess: () => {
+      toast.success("Candidates Assigned");
+      navigate(`/candidate?currentTab=My+Candidates`);
+    },
   });
+
+  const candidateList = data?.data?.candidates || [];
+
+  const selectAllRows = (e) => {
+    if (e) {
+      const allRowIds = candidateList?.map((candidate) => candidate.id);
+      setSelectedRows(allRowIds);
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
+  const toggleRowSelection = (rowId) => {
+    if (selectedRows.includes(rowId)) {
+      setSelectedRows(selectedRows.filter((id) => id !== rowId));
+    } else {
+      setSelectedRows([...selectedRows, rowId]);
+    }
+  };
+
+  const handleAssignAction = () => {
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: userdata?.id,
+    };
+    // console.log(payload);
+    assignMutation.mutate(payload);
+  };
 
   useEffect(() => {
     setPage(1);
   }, [filterTerm]);
 
-  // console.log(data?.data);
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
-  const categoryOptions = categoryQuery.data?.data?.category?.records;
 
   return (
     <div className="w-full">
@@ -137,28 +186,20 @@ const UnassignedCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        {/* <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="max-w-[200px] w-full">
-            <SelectValue placeholder="Category " />
-          </SelectTrigger>
-          <SelectContent>
-            <ScrollArea className="w-full h-72">
-              <SelectItem value={null} disabled>
-                Select category
-              </SelectItem>
-              {categoryOptions?.map((option) => (
-                <SelectItem key={option.id} value={option.id}>
-                  {option.name}
-                </SelectItem>
-              ))}
-            </ScrollArea>
-          </SelectContent>
-        </Select> */}
+        {selectedRows.length > 0 && (
+          <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
+            {isLoading ? <Spinner className="text-white" /> : "Assign Selected"}
+          </Button>
+        )}
       </div>
       <SimpleTable
         columns={columns}
-        data={data?.data?.candidates}
+        data={candidateList}
         isLoading={isLoading}
+        selectAllRows={selectAllRows}
+        toggleRowSelection={toggleRowSelection}
+        getIsRowSelected={(id) => selectedRows.includes(id)}
+        getIsAllRowSelected={selectedRows.length === candidateList.length}
       />
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
@@ -186,7 +227,7 @@ const AssignMeButton = ({ candidateId }) => {
 
   return (
     <Button size="sm" disabled={isLoading} onClick={handleClick}>
-      {isLoading ? <Spinner /> : "Assign to me"}
+      {isLoading ? <Spinner className="text-white" /> : "Assign to me"}
     </Button>
   );
 };

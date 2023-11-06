@@ -4,7 +4,7 @@ export const fetchAllCandidates = (page, filterTerm, latestStatus) => {
   const params = {
     pageno: page || 1,
     q: filterTerm || null,
-    latestStatus
+    latestStatus,
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
@@ -16,12 +16,17 @@ export const fetchSingleCandidate = (id) => {
   return axiosInstance.get("/nc/getSingleCandidate", { params });
 };
 
-export const fetchMyCandidates = (recruiterId, page, filterTerm, latestStatus) => {
+export const fetchMyCandidates = (
+  recruiterId,
+  page,
+  filterTerm,
+  latestStatus
+) => {
   const params = {
     recruiterId: recruiterId || null,
     pageno: page || 1,
     q: filterTerm || null,
-    latestStatus
+    latestStatus,
   };
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };
@@ -37,6 +42,9 @@ export const fetchUnassignCandidates = (category, page, filterTerm, isManager) =
 
 export const assignCandidate = (payload) =>
   axiosInstance.post("/candidate/assignStatus", payload);
+  
+export const assignCandidateInBulk = (payload) =>
+  axiosInstance.post("/candidate/assignStatusinBulk", payload);
 
 export const updateCandidate = (payload) =>
   axiosInstance.post("/location/updatelocation", payload);

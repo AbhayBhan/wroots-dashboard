@@ -1,0 +1,16 @@
+export const statusColors = {
+  All: "bg-gray-400",
+  New: "bg-green-400",
+  Dropped: "bg-gray-400",
+  Rejected: "bg-red-500",
+  Not_Interested: "bg-orange-500",
+  On_Hold: "bg-gray-400",
+  Selected: "bg-emerald-500",
+  No_Show: "bg-gray-400",
+  Offered: "bg-emerald-500",
+  Joined: "bg-blue-500",
+  Period_Complete: "bg-purple-500",
+  Interviewed: "bg-indigo-500",
+  Shortlisted: "bg-sky-500",
+  In_Process: "bg-amber-400",
+};

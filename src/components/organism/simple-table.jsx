@@ -15,7 +15,15 @@ const getValueFromRow = (row, accessorKey) => {
   }
   return null; // Return null if the key doesn't exist
 };
-function SimpleTable({ data, columns, isLoading }) {
+function SimpleTable({
+  data,
+  columns,
+  isLoading,
+  selectAllRows,
+  toggleRowSelection,
+  getIsRowSelected,
+  getIsAllRowSelected,
+}) {
   // {data?
   //   data.map((row,i)=>{
   //     console.log(i,row)
@@ -29,7 +37,14 @@ function SimpleTable({ data, columns, isLoading }) {
             {columns.map((column, index) => (
               <TableHead key={index}>
                 {typeof column.header === "function"
-                  ? column.header({ table: { data, columns } })
+                  ? column.header({
+                      table: {
+                        data,
+                        columns,
+                      },
+                      selectAllRows,
+                      getIsAllRowSelected,
+                    })
                   : column.header}
               </TableHead>
             ))}
@@ -39,7 +54,7 @@ function SimpleTable({ data, columns, isLoading }) {
           <TableBody>
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24">
-                <div className="w-full flex justify-center items-center">
+                <div className="flex items-center justify-center w-full">
                   <Spinner />
                 </div>
               </TableCell>
@@ -55,6 +70,8 @@ function SimpleTable({ data, columns, isLoading }) {
                       {typeof column.cell === "function"
                         ? column.cell({
                             row,
+                            toggleRowSelection,
+                            getIsRowSelected,
                             table: { data, columns },
                             getValue: (accessorKey) =>
                               getValueFromRow(row, accessorKey),

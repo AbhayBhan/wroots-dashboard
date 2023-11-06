@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
+import { fetchAllCategories } from "@/services/JobCategories";
 
 export const columns = [
   {
@@ -111,14 +112,14 @@ const CandidateTable = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const { data, isLoading } = useQuery({
-    queryFn: () => fetchAllCandidates(page, filterTerm, selectedStatus),
     queryKey: ["Candidates", "All", page, selectedStatus, filterTerm],
+    queryFn: () => fetchAllCandidates(page, filterTerm, selectedStatus),
     // keepPreviousData: true,
   });
 
   const categoryQuery = useQuery({
-    queryKey: ["Category"],
-    queryFn: () => fetchAllCategories(),
+    queryKey: ["Category", "All"],
+    queryFn: fetchAllCategories,
   });
 
   useEffect(() => {
