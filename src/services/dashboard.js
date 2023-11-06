@@ -6,12 +6,7 @@ export const getSuperAdminDashboard = (payload) => {
 } 
 
 export const getRecruiterDashboard = (payload) => {
-   return axiosInstance.post("/dashboard/getRecruiterDashboard", payload);
-
-}
-
-export const getRecruiterWiseDashboard = (payload) => {
-   return axiosInstance.post("/dashboard/getRecruiterDashboard", payload);
+   return axiosInstance.post("/dashboard/getRouterDashboardForRecruiter", payload);
 
 }
   

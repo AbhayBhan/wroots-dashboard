@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
@@ -5,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { fetchMyCandidates } from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import MyCandidateAction from "./actions/mycandidate-action";
+import ReactSelect from "react-select";
+import { latestStatus } from "@/services/mock/latestStatus";
 
 export const columns = [
   {
@@ -80,11 +82,12 @@ export const columns = [
 const MyCanidateTable = () => {
   const recruiterId = JSON.parse(localStorage.getItem("userdata")).id;
   const [filterTerm, setFilterTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidate", "My", page, filterTerm],
-    queryFn: () => fetchMyCandidates(recruiterId, page, filterTerm),
+    queryKey: ["Candidate", "My", selectedStatus, page, filterTerm],
+    queryFn: () => fetchMyCandidates(recruiterId, page, filterTerm, selectedStatus),
   });
 
   useEffect(() => {
@@ -101,6 +104,13 @@ const MyCanidateTable = () => {
         <SearchFilter
           onChange={setFilterTerm}
           placeholder="Filter by name..."
+        />
+        <ReactSelect
+          options={latestStatus}
+          className="w-1/6 text-sm"
+          value={selectedStatus?.label}
+          onChange={(data) => setSelectedStatus(data.value)}
+          placeholder="Select Status"
         />
       </div>
       <SimpleTable

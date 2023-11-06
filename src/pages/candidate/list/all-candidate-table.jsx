@@ -19,6 +19,8 @@ import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactSelect from "react-select";
+import { latestStatus } from "@/services/mock/latestStatus";
 
 export const columns = [
   {
@@ -107,9 +109,10 @@ const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const { data, isLoading } = useQuery({
-    queryFn: () => fetchAllCandidates(page, filterTerm),
-    queryKey: ["Candidates", "All", page, filterTerm],
+    queryFn: () => fetchAllCandidates(page, filterTerm, selectedStatus),
+    queryKey: ["Candidates", "All", page, selectedStatus, filterTerm],
     // keepPreviousData: true,
   });
 
@@ -133,23 +136,32 @@ const CandidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="max-w-[200px] w-full">
-            <SelectValue placeholder="Category " />
-          </SelectTrigger>
-          <SelectContent>
-            <ScrollArea className="w-full h-72">
-              <SelectItem value={null} disabled>
-                Select category
-              </SelectItem>
-              {categoryOptions?.map((option) => (
-                <SelectItem key={option.id} value={option.id}>
-                  {option.name}
+        <div className="flex justify-between w-1/3">
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="max-w-[200px] w-full">
+              <SelectValue placeholder="Category " />
+            </SelectTrigger>
+            <SelectContent>
+              <ScrollArea className="w-full h-72">
+                <SelectItem value={null} disabled>
+                  Select category
                 </SelectItem>
-              ))}
-            </ScrollArea>
-          </SelectContent>
-        </Select>
+                {categoryOptions?.map((option) => (
+                  <SelectItem key={option.id} value={option.id}>
+                    {option.name}
+                  </SelectItem>
+                ))}
+              </ScrollArea>
+            </SelectContent>
+          </Select>
+          <ReactSelect
+            options={latestStatus}
+            className="text-sm"
+            value={selectedStatus?.label}
+            onChange={(data) => setSelectedStatus(data.value)}
+            placeholder="Select Status"
+          />
+        </div>
       </div>
       <SimpleTable
         columns={columns}

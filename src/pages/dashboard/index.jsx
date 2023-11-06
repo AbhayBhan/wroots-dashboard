@@ -19,12 +19,13 @@ import { useForm } from "react-hook-form";
 import { fetchActiveJobs } from "@/services/jobs";
 import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
 import { Card1, Card2, Card3 } from "./cards/cards";
-import { getSuperAdminDashboard } from "@/services/dashboard";
+import { getSuperAdminDashboard, getRecruiterDashboard } from "@/services/dashboard";
 import Spinner from "@/components/organism/spinner";
 import MyResponsiveFunnel from "./cards/funnel";
 
 const Dashboard = () => {
-  const [funnelData, setFunnelData] = useState([]);
+  const userdata = JSON.parse(localStorage.getItem('userdata'));
+  const [funnelData, setFunnelData] = useState([{id : 1, label : "test", value : 2000}]);
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -41,7 +42,7 @@ const Dashboard = () => {
   });
 
   const { mutate, isLoading: dashboardLoading } = useMutation(
-    getSuperAdminDashboard,
+    userdata.isSuperAdmin ? getSuperAdminDashboard : getRecruiterDashboard,
     {
       onSuccess: ({ data }) => {
         setFunnelData(data?.funnelData.map((item) => {
@@ -65,7 +66,11 @@ const Dashboard = () => {
   }));
 
   useEffect(() => {
-    mutate(form.getValues());
+    if(userdata.isSuperAdmin){
+      mutate(form.getValues());
+    } else {
+      mutate({...form.getValues(), recruiterId : userdata.id});
+    }
   }, []);
 
   return (
@@ -77,7 +82,7 @@ const Dashboard = () => {
             <h4>Here is the summary of the overall data</h4>
           </div>
           <div className="flex justify-between mt-2 gap-3">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="category"
               render={({ field }) => (
@@ -103,7 +108,7 @@ const Dashboard = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="startDate"

@@ -1,11 +1,10 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchAllCandidates = (page, filterTerm, roleId, statusId) => {
+export const fetchAllCandidates = (page, filterTerm, latestStatus) => {
   const params = {
     pageno: page || 1,
-    roleId: roleId || null,
     q: filterTerm || null,
-    statusId: statusId || null,
+    latestStatus
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
@@ -17,11 +16,12 @@ export const fetchSingleCandidate = (id) => {
   return axiosInstance.get("/nc/getSingleCandidate", { params });
 };
 
-export const fetchMyCandidates = (recruiterId, page, filterTerm) => {
+export const fetchMyCandidates = (recruiterId, page, filterTerm, latestStatus) => {
   const params = {
     recruiterId: recruiterId || null,
     pageno: page || 1,
     q: filterTerm || null,
+    latestStatus
   };
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };
