@@ -23,24 +23,10 @@ const Payout = () => {
   return (
     <div>
       <div className="mb-5 flex_between">
-        <h2 className="text-2xl font-bold tracking-tight">Candidate List</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Payout Module</h2>
         <div className="flex items-center">
-          <Button variant="outline" className="mr-2">
-            Export
-          </Button>
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button variant="default" className="ml-auto">
-                <PlusIcon className="w-4 h-4 mr-1" /> Create
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="mb-3">Add new Candidate</DialogTitle>
-                <CandidateForm onSuccessAction={() => setIsOpen(false)} />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+         
+          
         </div>
       </div>
       {/* all candidate tab will only visible to superAdmin  */}
