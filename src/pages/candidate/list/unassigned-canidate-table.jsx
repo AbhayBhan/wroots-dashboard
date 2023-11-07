@@ -212,7 +212,7 @@ const UnassignedCanidateTable = () => {
               {isLoading ? (
                 <Spinner className="text-white" />
               ) : (
-                "Assign Selected"
+                "Assign Myself"
               )}
             </Button>
           </div>
