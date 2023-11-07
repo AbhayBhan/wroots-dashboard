@@ -1,3 +1,4 @@
+import React,{useEffect,useRef} from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,16 +14,23 @@ import ProcessingSection from "./processing-section";
 
 const CandidateDetail = () => {
   const { id } = useParams();
+  const ref = useRef()
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["Candidate-Details", id],
     queryFn: () => fetchSingleCandidate(parseInt(id)),
   });
 
+  useEffect(() => {
+    ref.current.scrollIntoView({
+      behavior : "smooth"
+    });
+  },[])
+
   const candidateData = data?.data?.[0];
 
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div ref={ref} className="grid grid-cols-12 gap-4">
       <h2 className="mb-5 text-2xl font-bold tracking-tight col-span-full ">
         Candidate Detail
       </h2>
