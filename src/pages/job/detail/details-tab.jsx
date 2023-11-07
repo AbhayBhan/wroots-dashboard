@@ -14,6 +14,8 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import parse from "html-react-parser";
 import { formatNumberWithKM } from "@/utils/helper";
+import { JobDetailsEditForm } from "./job-details-edit-form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DetailsTab = ({ jobDetails }) => {
   return (
@@ -31,7 +33,9 @@ const DetailsTab = ({ jobDetails }) => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle className="mb-3">Edit Job Details</DialogTitle>
-                <div>Edit form will be there</div>
+                <ScrollArea className="w-full h-[85vh]">
+                <JobDetailsEditForm />
+                </ScrollArea>
               </DialogHeader>
             </DialogContent>
           </Dialog>

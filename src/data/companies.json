@@ -1,0 +1,413 @@
+[
+    {
+      "id": 88,
+      "name": "Concentrix Services India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+     {
+      "id": 130,
+      "name": "Mokobara Lifestyle Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+      {
+      "id": 131,
+      "name": "Standard Chartered Bank",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 89,
+      "name": "Altruist Technologies Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 90,
+      "name": "Accenture India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 91,
+      "name": "Redbus India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 92,
+      "name": "24-7 Intouch India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 93,
+      "name": "Acko General Insurance Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 94,
+      "name": "Ragus Healthcare Private Limited (Sugar Free)",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 95,
+      "name": "Mphasis Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 96,
+      "name": "Alorica India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 97,
+      "name": "Larsen & Toubro Infotech Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 98,
+      "name": "Happiest Minds Technologies Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 99,
+      "name": "Tech Mahindra Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 100,
+      "name": "Better World Technology Private Limited (Zeta)",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 101,
+      "name": "WNS Global Services Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 102,
+      "name": "Teleperformance Business Services India Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 103,
+      "name": "Aegis Customer Support Services Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 104,
+      "name": "Titan Company Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+     "id": 129,
+     "name": "Equinity India Private Limited",
+     "domain_id": 1,
+     "created_by": "admin",
+     "updated_date": "2023-09-21 16:11:09",
+     "updated_by": "admin",
+     "active": true,
+     "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 105,
+      "name": "Globiva Services Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 106,
+      "name": "Cultfit Healthcare Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 107,
+      "name": "Genisys Information Systems India Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 108,
+      "name": "Smartcoin Financials Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 109,
+      "name": "Wipro Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 110,
+      "name": "Nextbillion Technology Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 111,
+      "name": "Bundl Technologies Private Limited (Swiggy)",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 112,
+      "name": "Stock Gro",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 113,
+      "name": "Wizehive India Private. Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 114,
+      "name": "Navi General Insurance Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 115,
+      "name": "Wakefit innovations Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 116,
+      "name": "Infosys BPM Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 117,
+      "name": "Infosys Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 118,
+      "name": "Blu-Smart Mobility Tech Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 119,
+      "name": "International Esha Technologies Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 120,
+      "name": "Firstsource Solutions Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 121,
+      "name": "Omega Healthcare Management Services Private Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 122,
+      "name": "Hinduja Global Solutions Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 123,
+      "name": "Deloitte Touche Tohmatsu India LLP",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 124,
+      "name": "Go Digit General Insurance Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    },
+    {
+      "id": 125,
+      "name": "Go Digit General Insurance Limited",
+      "domain_id": 1,
+      "created_by": "admin",
+      "updated_date": "2023-09-21 16:11:09",
+      "updated_by": "admin",
+      "active": true,
+      "created_date": "2023-09-21 16:11:09"
+    }
+   ]
+   
