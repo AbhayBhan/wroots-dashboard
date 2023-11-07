@@ -81,16 +81,34 @@ export const columns = [
 
 const PayoutDueTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [data, setData]=useState([]);
+  const [isLoading, setIsLoading]=useState(true);
 
-  const { data, isLoading } = useQuery({
-    queryFn: () => getPayouts(page, "due"),
-    queryKey: ["Payouts", "due", page],
-  });
+  // const { data, isLoading } = useQuery({
+  //   queryFn: () => getPayouts(page, "due"),
+  //   queryKey: ["Payouts", "due", page],
+  // });
+
+  const {mutate}=useMutation(getPayouts,{
+    onSuccess:({data})=>{
+      console.log(data);
+      setData(data);
+      setIsLoading(false);
+    },
+    onError:(err)=>{
+      console.log(err)
+    }
+  })
 
   useEffect(() => {
-    setPage(0);
+    setPage(1);
   }, [filterTerm]);
+
+  useEffect(()=>{
+    setIsLoading(true);
+    mutate({page:page,paymentType:"due"});
+  },[])
 
   const totalPages = Math.ceil(data?.data?.data?.totalItems / 30) || 1;
 
@@ -105,7 +123,7 @@ const PayoutDueTable = () => {
       </div>
       <SimpleTable
         columns={columns}
-        data={data?.data?.data?.candidates}
+        data={data?.data?.candidates}
         isLoading={isLoading}
       />
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />

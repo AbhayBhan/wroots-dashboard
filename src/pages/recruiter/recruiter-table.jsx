@@ -41,10 +41,14 @@ export const columns = [
 const RecruiterTable = () => {
   const [filterTerm, setFilterTerm] = useState("second");
   const [page, setPage] = useState(1);
+  const [recruiterList, setRecruiterList] = useState([]);
+  const [recruiterData, setRecruiterData] = useState([]);
 
-  const { data, mutate, isLoading } = useMutation({
-    mutationKey: ["All-Recuiter"],
-    mutationFn: fetchRecruiters,
+  const { mutate, isLoading } = useMutation(fetchRecruiters,{
+    onSuccess : ({data}) => {
+      setRecruiterData(data?.recruiters);
+      setRecruiterList(data?.recruiters);
+    }
   });
 
   useEffect(() => {
@@ -56,14 +60,18 @@ const RecruiterTable = () => {
     mutate(reqbody);
   }, []);
 
-  const recruiterData = data?.data?.recruiters;
-
   return (
     <div className="w-full">
       <div className=" pb-4">
         <SearchFilter
           className=""
-          onChange={setFilterTerm}
+          onChange={(e) => {
+            if(e.length){
+              setRecruiterData(recruiterList.filter((rec) => rec.recruiter_name?.toLowerCase().startsWith(e)))
+            }else{
+              setRecruiterData(recruiterList);
+            }
+          }}
           placeholder="Filter by name..."
         />
       </div>
@@ -72,7 +80,7 @@ const RecruiterTable = () => {
         data={recruiterData}
         isLoading={isLoading}
       />
-      <Pagination page={page} setPage={setPage} totalPages={1000} />
+      <Pagination page={page} setPage={setPage} totalPages={Math.ceil(recruiterData?.length/30) || 1} />
     </div>
   );
 };

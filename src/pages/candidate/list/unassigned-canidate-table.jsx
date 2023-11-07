@@ -11,13 +11,21 @@ import {
   assignCandidateInBulk,
   fetchUnassignCandidates,
 } from "@/services/candidate";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { statusColors } from "@/utils/colorMap";
 import { formatTimestamp } from "@/utils/dateTime";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { CursorArrowIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import RecruiterListModal from "./actions/recruiterListModal";
 
 export const columns = [
   {
@@ -99,22 +107,7 @@ export const columns = [
     id: "action",
     header: "",
     cell: ({ row }) => {
-      return (
-        <div className="gap-2 flex_end">
-          <Link
-            to={`/candidate/${row?.id}/details`}
-            // className="hidden h-8 ml-auto lg:flex"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "hover:bg-muted "
-            )}
-            title="Detail View"
-          >
-            <EyeOpenIcon className="w-5 h-5 text-slate-500" />
-          </Link>
-          <AssignMeButton candidateId={row?.id} />
-        </div>
-      );
+      return <UnassignedAction row={row} />;
     },
   },
 ];
@@ -125,6 +118,7 @@ const UnassignedCanidateTable = () => {
     localStorage.getItem("userdata")
   );
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
@@ -140,6 +134,7 @@ const UnassignedCanidateTable = () => {
     onSuccess: () => {
       toast.success("Candidates Assigned");
       navigate(`/candidate?currentTab=My+Candidates`);
+      setIsOpen(false);
     },
   });
 
@@ -168,7 +163,14 @@ const UnassignedCanidateTable = () => {
       candidateIDs: selectedRows,
       recruiterId: userdata?.id,
     };
-    // console.log(payload);
+    assignMutation.mutate(payload);
+  };
+
+  const handleAssignToRecruiterAction = (id) => {
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: id,
+    };
     assignMutation.mutate(payload);
   };
 
@@ -187,9 +189,33 @@ const UnassignedCanidateTable = () => {
           placeholder="Filter by name..."
         />
         {selectedRows.length > 0 && (
-          <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
-            {isLoading ? <Spinner className="text-white" /> : "Assign Selected"}
-          </Button>
+          <div className="flex gap-2">
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="default" size="sm">
+                  Assign To Recruiter
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
+                  <RecruiterListModal
+                    isLoading={assignMutation.isLoading}
+                    handleAssignToRecruiterAction={
+                      handleAssignToRecruiterAction
+                    }
+                  />
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+            <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
+              {isLoading ? (
+                <Spinner className="text-white" />
+              ) : (
+                "Assign Selected"
+              )}
+            </Button>
+          </div>
         )}
       </div>
       <SimpleTable
@@ -206,13 +232,14 @@ const UnassignedCanidateTable = () => {
   );
 };
 
-const AssignMeButton = ({ candidateId }) => {
+const UnassignedAction = ({ row }) => {
+  const ref = useRef();
   const navigate = useNavigate();
   const { mutate, isLoading } = useMutation(assignCandidate, {
     onSuccess: () => {
       toast.success("Candidate Assigned, Redirecting...");
       setTimeout(() => {
-        navigate(`/candidate/${candidateId}/details`);
+        navigate(`/candidate/${row.id}/details`);
       }, 500);
     },
   });
@@ -221,14 +248,40 @@ const AssignMeButton = ({ candidateId }) => {
     const userdata = JSON.parse(localStorage.getItem("userdata"));
     mutate({
       recruiterEmail: userdata.email,
-      candidateID: candidateId,
+      candidateID: row.id,
     });
   };
 
+  const handleSaveLinkPosn = () => {
+    const divPosn = ref.current.getBoundingClientRect();
+    sessionStorage.setItem("scrollPosition", divPosn.y);
+  };
+
+  useEffect(() => {
+    const scrollPosition = +sessionStorage.getItem("scrollPosition");
+    if (scrollPosition) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [row.id]);
+
   return (
-    <Button size="sm" disabled={isLoading} onClick={handleClick}>
-      {isLoading ? <Spinner className="text-white" /> : "Assign to me"}
-    </Button>
+    <div ref={ref} className="gap-2 flex_end">
+      <Link
+        to={`/candidate/${row?.id}/details`}
+        // className="hidden h-8 ml-auto lg:flex"
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon" }),
+          "hover:bg-muted "
+        )}
+        onClick={handleSaveLinkPosn}
+        title="Detail View"
+      >
+        <EyeOpenIcon className="w-5 h-5 text-slate-500" />
+      </Link>
+      <Button size="sm" disabled={isLoading} onClick={handleClick}>
+        {isLoading ? <Spinner className="text-white" /> : "Assign to me"}
+      </Button>
+    </div>
   );
 };
 
