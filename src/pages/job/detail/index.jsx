@@ -22,7 +22,7 @@ const JobDetail = () => {
         </h2>
         <div className="space-x-2">
           <Button onClick={() => {
-            navigator.clipboard.writeText(`https://jobs.wraeglobal.com/job?id=${id}`);
+            navigator.clipboard.writeText(`https://jobs.wraeglobal.com/jobs?id=${id}`);
             toast.success("Copied Link to Clipboard")
           }} variant="outline">Copy link</Button>
           <Button>Send push</Button>
