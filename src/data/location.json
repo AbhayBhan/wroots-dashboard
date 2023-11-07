@@ -1,0 +1,479 @@
+[
+    {
+      "id": 1,
+      "name": "Kolkata",
+      "created_by": null,
+      "updated_by": null,
+      "active": true,
+      "created_at": "2021-04-25 07:51:30",
+      "updated_at": "2021-04-25 07:51:30"
+    },
+    {
+      "id": 2,
+      "name": "Chennai",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-05-05 20:53:09",
+      "updated_at": "2021-05-05 20:53:09"
+    },
+    {
+      "id": 3,
+      "name": "Delhi",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:40",
+      "updated_at": "2021-06-11 14:19:40"
+    },
+    {
+      "id": 4,
+      "name": "Noida",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:41",
+      "updated_at": "2021-06-11 14:19:41"
+    },
+    {
+      "id": 5,
+      "name": "Pune",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:42",
+      "updated_at": "2021-06-11 14:19:42"
+    },
+    {
+      "id": 6,
+      "name": "Gurgaon",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:42",
+      "updated_at": "2021-06-11 14:19:42"
+    },
+    {
+      "id": 7,
+      "name": "Mumbai",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:43",
+      "updated_at": "2021-06-11 14:19:43"
+    },
+    {
+      "id": 8,
+      "name": "Hyderabad",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:43",
+      "updated_at": "2021-06-11 14:19:43"
+    },
+    {
+      "id": 9,
+      "name": "Kolkatta",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:44",
+      "updated_at": "2021-06-11 14:19:44"
+    },
+    {
+      "id": 10,
+      "name": "Ahmedabad",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:44",
+      "updated_at": "2021-06-11 14:19:44"
+    },
+    {
+      "id": 11,
+      "name": "Jaipur",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:45",
+      "updated_at": "2021-06-11 14:19:45"
+    },
+    {
+      "id": 12,
+      "name": "Kochi",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:45",
+      "updated_at": "2021-06-11 14:19:45"
+    },
+    {
+      "id": 13,
+      "name": "Coimbatore",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:45",
+      "updated_at": "2021-06-11 14:19:45"
+    },
+    {
+      "id": 14,
+      "name": "Visakhapatnam",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:46",
+      "updated_at": "2021-06-11 14:19:46"
+    },
+    {
+      "id": 15,
+      "name": "Pan India",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-06-11 14:19:47",
+      "updated_at": "2021-06-11 14:19:47"
+    },
+    {
+      "id": 16,
+      "name": "Andhra Pradesh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 17,
+      "name": "Arunachal Pradesh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 18,
+      "name": "Assam",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 19,
+      "name": "Bihar",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 20,
+      "name": "Chhattisgarh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 21,
+      "name": "Goa",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 22,
+      "name": "Gujarat",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 23,
+      "name": "Haryana",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 24,
+      "name": "Himachal Pradesh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 25,
+      "name": "Jharkhand",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 26,
+      "name": "Karnataka",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 27,
+      "name": "Kerala",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 28,
+      "name": "Madhya Pradesh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 29,
+      "name": "Maharashtra",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 30,
+      "name": "Manipur",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 31,
+      "name": "Meghalaya",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 32,
+      "name": "Mizoram",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 33,
+      "name": "Nagaland",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 34,
+      "name": "Odisha",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 35,
+      "name": "Punjab",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 36,
+      "name": "Rajasthan",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 37,
+      "name": "Sikkim",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 38,
+      "name": "Tamil Nadu",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 39,
+      "name": "Telangana",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 40,
+      "name": "Tripura",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 41,
+      "name": "Uttar Pradesh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 42,
+      "name": "Uttarakhand",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 43,
+      "name": "West Bengal",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 44,
+      "name": "Andaman and Nicobar Island",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 45,
+      "name": "Chandigarh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 46,
+      "name": "Dadra and Nagar Haveli and Daman and Diu",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 47,
+      "name": "Ladakh",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 48,
+      "name": "Lakshadweep",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 49,
+      "name": "Jammu and Kashmir",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 50,
+      "name": "Puducherry",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2022-03-12 02:28:59",
+      "updated_at": "2022-03-12 02:28:59"
+    },
+    {
+      "id": 54,
+      "name": "KOL",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2023-09-07 14:46:51",
+      "updated_at": "2023-09-07 14:46:51"
+    },
+    {
+      "id": 55,
+      "name": "abc",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-04-25 07:51:30",
+      "updated_at": "2021-04-25 07:51:30"
+    },
+    {
+      "id": 56,
+      "name": "Bangalore",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "active": true,
+      "created_at": "2021-04-25 07:51:30",
+      "updated_at": "2021-04-25 07:51:30"
+    }
+   ]

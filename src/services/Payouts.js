@@ -1,6 +1,6 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const getPayouts = (page, paymentType) => {
+export const getPayouts = ({page, paymentType}) => {
   let params = {
     paymentType: paymentType || null,
     pageno: page || 0,
