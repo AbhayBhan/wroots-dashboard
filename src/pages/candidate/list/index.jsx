@@ -19,6 +19,9 @@ const CandidateList = () => {
   const isSuperAdmin = JSON.parse(
     localStorage.getItem("userdata")
   ).isSuperAdmin;
+  const isManager = JSON.parse(
+    localStorage.getItem("userdata")
+  ).isManager;
 
   const [searchParams, setSearchParams] = useSearchParams({
     currentTab: "Unassigned Candidate",

@@ -130,7 +130,7 @@ const categoryOptions = [
 
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const { categoryId, isManager } = JSON.parse(
+  const { categoryId, isManager, isSuperAdmin } = JSON.parse(
     localStorage.getItem("userdata")
   );
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -145,8 +145,7 @@ const UnassignedCanidateTable = () => {
       fetchUnassignCandidates(
         isManager ? selectedCategory : categoryId,
         page,
-        filterTerm,
-        isManager
+        filterTerm
       ),
   });
 
@@ -258,7 +257,7 @@ const UnassignedCanidateTable = () => {
         )}
       </div>
       <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-400 text-md" >
+        <Badge className="bg-blue-200 text-md" >
           Total Candidates : {data?.data?.totalRows}
         </Badge>
       </div>
@@ -284,7 +283,7 @@ const UnassignedAction = ({ row }) => {
       toast.success("Candidate Assigned, Redirecting...");
       setTimeout(() => {
         navigate(`/candidate/${row.id}/details`);
-      }, 500);
+      }, 200);
     },
   });
 
