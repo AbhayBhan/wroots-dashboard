@@ -22,8 +22,13 @@ const AppUserDetail = () => {
   const {details, setDetails}=useAppUsersContext();
 
   useEffect(()=>{
-    console.log(details.find(item=>item.id==id));
-    setUserData(details.find(item=>item.id==id));
+    if (details){
+      localStorage.setItem("details",JSON.stringify(details.find(item=>item.id==id)));
+      setUserData(details.find(item=>item.id==id));
+    }
+    else{
+      setUserData(JSON.parse(localStorage.getItem("details")));
+    }
   },[])
 
   return (

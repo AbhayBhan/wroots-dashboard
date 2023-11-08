@@ -12,8 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
-import { createRecruiter } from "@/services/recruiter";
+import { updateRecruiter } from "@/services/recruiter";
 import ReactSelect from "react-select";
+import { toast } from "react-toastify";
+import React from "react";
 
 const categoryOptions = [
   {
@@ -31,19 +33,27 @@ const categoryOptions = [
 ];
 
 export function EditRecruiterForm({rowData}) {
-    console.log(rowData)
+  console.log(rowData);
   const form = useForm({
     mode: "onChange",
     values: rowData
   });
 
-  const { mutate } = useMutation(createRecruiter, {
-    onSuccess: ({ data }) => console.log(data),
+  const toastId=React.useRef(null);
+
+  const { mutate } = useMutation(updateRecruiter, {
+    onSuccess: ({ data }) =>{
+      console.log(data)
+      
+    } 
   });
 
   function onSubmit(data) {
-    // mutate(data);
-    console.log(data);
+    mutate(data);
+    toast("Successfully Updated",{autoClose:2000});
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 
   return (

@@ -22,7 +22,24 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { EditRecruiterForm } from "./edit-recruiter-form";
+import { deleteRecruiter } from "@/services/recruiter";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 const RecruiterTableActions = ({ rowData }) => {
+
+  const {mutate}=useMutation(deleteRecruiter,{
+    onSuccess:({data})=>{
+      console.log(data);
+    }
+  })
+
+  function handleDelete(){
+    mutate({id:rowData.id});
+    toast("Successfully Deleted",{autoClose:2000});
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
   return (
     <div className="flex justify-end gap-2">
       <Link
@@ -67,7 +84,7 @@ const RecruiterTableActions = ({ rowData }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
+            <AlertDialogAction variant="destructive" onClick={handleDelete}>Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
