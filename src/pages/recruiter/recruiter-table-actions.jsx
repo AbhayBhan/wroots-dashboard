@@ -21,6 +21,7 @@ import {
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { EditRecruiterForm } from "./edit-recruiter-form";
 const RecruiterTableActions = ({ rowData }) => {
   return (
     <div className="flex justify-end gap-2">
@@ -45,7 +46,7 @@ const RecruiterTableActions = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Edit Recruiter</DialogTitle>
-            Edit form will be there.
+            <EditRecruiterForm rowData={rowData}/>
           </DialogHeader>
         </DialogContent>
       </Dialog>

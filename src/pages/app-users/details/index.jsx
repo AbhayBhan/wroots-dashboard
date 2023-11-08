@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AppUsersInfoCard from "./appusers-info-card";
 import { useAppUsersContext } from "@/contexts/appUsersContext";
+import JobAppliedTable from "./job-applied";
 
 const AppUserDetail = () => {
 
@@ -74,13 +75,13 @@ const AppUserDetail = () => {
           value="Candidate Referred"
           className="p-4 rounded-md bg-background"
         >
-          <CandidateReferredTable />
+          <CandidateReferredTable id={id}/>
         </TabsContent>
         <TabsContent
           value="Job Applied"
           className="p-4 rounded-md bg-background"
         >
-          <JobTable />
+          <JobAppliedTable id={id}/>
         </TabsContent>
         <TabsContent value="Payouts" className="p-4 rounded-md bg-background">
           <PayoutTable />

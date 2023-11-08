@@ -77,7 +77,7 @@ const RecruiterTable = () => {
       </div>
       <SimpleTable
         columns={columns}
-        data={recruiterData}
+        data={recruiterData.slice((page*30)-30, page*30)}
         isLoading={isLoading}
       />
       <Pagination page={page} setPage={setPage} totalPages={Math.ceil(recruiterData?.length/30) || 1} />

@@ -4,7 +4,7 @@ import SimpleTable from "@/components/organism/simple-table";
 import { candidateData } from "@/data/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { fetchcandidatesReferred } from "@/services/Appusers";
+import { fetchJobsApplied } from "@/services/Appusers";
 
 export const columns = [
   {
@@ -17,24 +17,24 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "mobile",
-    header: "Mobile",
+    accessorKey: "roleName",
+    header: "Role Name",
     cell: ({ getValue }) => (
-      <div className="lowercase whitespace-nowrap">{getValue("phoneNumber")}</div>
+      <div className="lowercase whitespace-nowrap">{getValue("roleName")}</div>
     ),
   },
   {
-    id: "date",
-    header: "Referred on",
+    id: "candidateId",
+    header: "Candidate Id",
     cell: ({ getValue }) => (
       <div className=" whitespace-nowrap">
-        {new Date(getValue("date")).toLocaleString()}
+        {getValue("candidateId")}
       </div>
     ),
   },
 ];
 
-const CandidateReferredTable = ({id}) => {
+const JobAppliedTable = ({id}) => {
   const [page, setPage] = useState(1);
   const [filterTerm, setFilterTerm] = useState("");
   const [data, setData]=useState([]);
@@ -46,17 +46,18 @@ const CandidateReferredTable = ({id}) => {
   //   keepPreviousData: true,
   // });
 
-  const {mutate}=useMutation(fetchcandidatesReferred,{
+  const {mutate}=useMutation(fetchJobsApplied,{
     onSuccess:({data})=>{
-      setTotalPages(Math.ceil(data.totalCount/10));
-      setData(data.candidates);
+        console.log(data);
+      setTotalPages(Math.ceil(data.jobs.length/10));
+      setData(data.jobs);
       setIsLoading(false);
     }
   });
 
   useEffect(()=>{
     setIsLoading(true);
-    mutate({page:1, referroId:id});
+    mutate(id);
   },[]);
 
   return (
@@ -72,4 +73,4 @@ const CandidateReferredTable = ({id}) => {
   );
 };
 
-export default CandidateReferredTable;
+export default JobAppliedTable;
