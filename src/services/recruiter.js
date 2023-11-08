@@ -14,3 +14,7 @@ export const createRecruiter = (payload) => {
 export const updateRecruiter = (payload) => {
   return axiosInstance.post("/recruiter/editRecruiter", payload);
 };
+
+export const deleteRecruiter = (payload)=>{
+  return axiosInstance.post("/recruiter/deleteRecruiter", payload);
+}
