@@ -113,6 +113,21 @@ export const columns = [
   },
 ];
 
+const categoryOptions = [
+  {
+    label: "BPO",
+    value: 1,
+  },
+  {
+    label: "IT",
+    value: 6,
+  },
+  {
+    label: "NON IT",
+    value: 7,
+  },
+];
+
 const UnassignedCanidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const { categoryId, isManager } = JSON.parse(
@@ -127,7 +142,12 @@ const UnassignedCanidateTable = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
     queryFn: () =>
-      fetchUnassignCandidates(categoryId, page, filterTerm, isManager),
+      fetchUnassignCandidates(
+        isManager ? selectedCategory : categoryId,
+        page,
+        filterTerm,
+        isManager
+      ),
   });
 
   const assignMutation = useMutation({
@@ -224,8 +244,23 @@ const UnassignedCanidateTable = () => {
             </div>
           </div>
         ) : (
-          <ReactSelect className="w-1/6" />
+          isManager && (
+            <ReactSelect
+              options={categoryOptions}
+              className="w-1/6 text-sm"
+              isSearchable={false}
+              value={categoryOptions.find(
+                (option) => option.value === selectedCategory
+              )}
+              onChange={(e) => setSelectedCategory(e.value)}
+            />
+          )
         )}
+      </div>
+      <div className="flex flex-row justify-center mb-2">
+        <Badge className="bg-blue-400 text-md" >
+          Total Candidates : {data?.data?.totalRows}
+        </Badge>
       </div>
       <SimpleTable
         columns={columns}

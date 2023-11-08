@@ -113,6 +113,11 @@ const MyCanidateTable = () => {
           placeholder="Select Status"
         />
       </div>
+      <div className="flex flex-row justify-center mb-2">
+        <Badge className="bg-blue-400 text-md" >
+          Total Candidates : {data?.data?.totalRows}
+        </Badge>
+      </div>
       <SimpleTable
         columns={columns}
         data={candidateList}
