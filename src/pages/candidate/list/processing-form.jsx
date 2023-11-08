@@ -31,7 +31,7 @@ const generateOptions = (list) =>
     label: `${option.name} - ${option.CompanyName}`,
   }));
 
-const ProcessingForm = ({ candidateId, onSuccessAction }) => {
+const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
   const [processLoading, setProcessLoading] = useState(false);
 
   const form = useForm({
@@ -48,6 +48,7 @@ const ProcessingForm = ({ candidateId, onSuccessAction }) => {
   const { mutate } = useMutation(createProcessing, {
     onSuccess: ({ data }) => {
       setProcessLoading(false);
+      addProcess(data?.candidate[0]?.candidateProcessingHistory);
       onSuccessAction();
     },
   });

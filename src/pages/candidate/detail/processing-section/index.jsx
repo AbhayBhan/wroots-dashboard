@@ -10,7 +10,7 @@ import ProcessingForm from "../../list/processing-form";
 import Processinglist from "./processing-list";
 import { useState } from "react";
 
-const ProcessingSection = ({processingData,candidateId}) => {
+const ProcessingSection = ({processingData,candidateId, addProcess}) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -24,7 +24,7 @@ const ProcessingSection = ({processingData,candidateId}) => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Processing</DialogTitle>
-              <ProcessingForm onSuccessAction={() => setIsOpen(false)} candidateId={candidateId} />
+              <ProcessingForm addProcess={addProcess} onSuccessAction={() => setIsOpen(false)} candidateId={candidateId} />
             </DialogHeader>
           </DialogContent>
         </Dialog>

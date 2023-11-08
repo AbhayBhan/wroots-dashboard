@@ -26,6 +26,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import RecruiterListModal from "./actions/recruiterListModal";
+import ReactSelect from "react-select";
 
 export const columns = [
   {
@@ -188,34 +189,42 @@ const UnassignedCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        {selectedRows.length > 0 && (
-          <div className="flex gap-2">
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button variant="default" size="sm">
-                  Assign To Recruiter
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
-                  <RecruiterListModal
-                    isLoading={assignMutation.isLoading}
-                    handleAssignToRecruiterAction={
-                      handleAssignToRecruiterAction
-                    }
-                  />
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-            <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
-              {isLoading ? (
-                <Spinner className="text-white" />
-              ) : (
-                "Assign Selected"
-              )}
-            </Button>
+        {selectedRows.length > 0 ? (
+          <div>
+            <div className="flex gap-2">
+              <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="default" size="sm">
+                    Assign To Recruiter
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
+                    <RecruiterListModal
+                      isLoading={assignMutation.isLoading}
+                      handleAssignToRecruiterAction={
+                        handleAssignToRecruiterAction
+                      }
+                    />
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+              <Button
+                size="sm"
+                disabled={isLoading}
+                onClick={handleAssignAction}
+              >
+                {isLoading ? (
+                  <Spinner className="text-white" />
+                ) : (
+                  "Assign Selected"
+                )}
+              </Button>
+            </div>
           </div>
+        ) : (
+          <ReactSelect className="w-1/6" />
         )}
       </div>
       <SimpleTable
