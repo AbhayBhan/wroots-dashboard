@@ -47,7 +47,7 @@ const Dashboard = () => {
   });
 
   const { mutate, isLoading: dashboardLoading } = useMutation(
-    userdata.isSuperAdmin ? getSuperAdminDashboard : getRecruiterDashboard,
+    userdata?.isSuperAdmin ? getSuperAdminDashboard : getRecruiterDashboard,
     {
       onSuccess: ({ data }) => {
         const allowedLabels = ["In_Process", "Joined", "Selected", "Quit"];
@@ -75,10 +75,10 @@ const Dashboard = () => {
   }));
 
   useEffect(() => {
-    if (userdata.isSuperAdmin) {
+    if (userdata?.isSuperAdmin) {
       mutate(form.getValues());
     } else {
-      mutate({ ...form.getValues(), recruiterId: userdata.id });
+      mutate({ ...form.getValues(), recruiterId: userdata?.id });
     }
   }, []);
 
