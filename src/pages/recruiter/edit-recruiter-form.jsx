@@ -7,11 +7,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form";
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { createRecruiter } from "@/services/recruiter";
 import ReactSelect from "react-select";
 
@@ -30,9 +30,11 @@ const categoryOptions = [
   },
 ];
 
-export function AddRecruiterForm() {
+export function EditRecruiterForm({rowData}) {
+    console.log(rowData)
   const form = useForm({
     mode: "onChange",
+    values: rowData
   });
 
   const { mutate } = useMutation(createRecruiter, {
@@ -40,7 +42,8 @@ export function AddRecruiterForm() {
   });
 
   function onSubmit(data) {
-    mutate(data);
+    // mutate(data);
+    console.log(data);
   }
 
   return (
@@ -124,7 +127,7 @@ export function AddRecruiterForm() {
           name="isSuperAdmin"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="superAdmin" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox id="superAdmin" className="mt-2" checked={field.value} value={field.value} onCheckedChange={(e) => field.onChange(e)} />
               <FormLabel>Super Admin</FormLabel>
               <FormMessage />
             </FormItem>
@@ -135,7 +138,7 @@ export function AddRecruiterForm() {
           name="isManager"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="Manager" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox id="Manager" className="mt-2" checked={field.value} value={field.value} onCheckedChange={(e) => field.onChange(e)} />
               <FormLabel>Manager</FormLabel>
               <FormMessage />
             </FormItem>
@@ -143,7 +146,7 @@ export function AddRecruiterForm() {
         />
 
         <Button type="submit" className="mt-4 w-full">
-          Create Recruiter
+          Update Recruiter
         </Button>
       </form>
     </Form>

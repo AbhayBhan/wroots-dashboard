@@ -10,7 +10,7 @@ export const fetchAllAppusers = (page) => {
 };
 
 // This is Second tab in App users details page 
-export const fetchcandidatesReferred = (page, referroId) => {
+export const fetchcandidatesReferred = ({page, referroId}) => {
     const params = {
         pageno: page || 1,
         referror_id: referroId

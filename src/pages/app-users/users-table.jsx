@@ -108,9 +108,10 @@ const UsersTable = () => {
   });
 
   useEffect(() => {
-    setIsLoading(true);
-    mutate(page);
-    console.log(page)
+    if (apiInUse=="fetchAllAppusers"){
+      setIsLoading(true);
+      mutate(page);
+    }
   }, [page]);
 
   useEffect(()=>{
@@ -129,7 +130,7 @@ const UsersTable = () => {
       />
       <SimpleTable
         columns={columns}
-        data={apiInUse=="fetchAllAppusers"?usersDataArray:usersDataArray.slice((page*30)-30, 30)}
+        data={apiInUse=="fetchAllAppusers"?usersDataArray:usersDataArray.slice((page*30)-30, page*30)}
         isLoading={isLoading}
       />
       {isLoading ? (
