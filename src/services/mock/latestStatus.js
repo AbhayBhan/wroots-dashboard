@@ -1,8 +1,10 @@
 export const latestStatus = [
   { label: "All", value: null },
   { label: "New", value: "New" },
-  { label: "Dropped", value: "Dropped" },
+  { label: "In_Process", value: "In_Process" },
+  { label: "Recruiter Assigned", value:"Recruiter Assigned" },
   { label: "Rejected", value: "Rejected" },
+  { label: "Dropped", value: "Dropped" },
   { label: "Not_Interested", value: "Not_Interested" },
   { label: "On_Hold", value: "On_Hold" },
   { label: "Selected", value: "Selected" },
@@ -12,5 +14,5 @@ export const latestStatus = [
   { label: "Period_Complete", value: "Period_Complete" },
   { label: "Interviewed", value: "Interviewed" },
   { label: "Shortlisted", value: "Shortlisted" },
-  { label: "In_Process", value: "In_Process" },
+  
 ];

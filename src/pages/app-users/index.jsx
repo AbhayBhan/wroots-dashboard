@@ -15,22 +15,10 @@ const AppUsers = () => {
     <div>
       <div className="flex mb-5">
         <h2 className="text-2xl font-bold tracking-tight">App User List</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="default" className="ml-auto">
-              <PlusIcon className="w-4 h-4 mr-1" /> Add new User
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="mb-3">Add new User</DialogTitle>
-              <AddForm />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        
       </div>
       <div className="p-4 mt-4 rounded-md bg-background">
-        <UsersTable />
+        <UsersTable />``
       </div>
     </div>
   );

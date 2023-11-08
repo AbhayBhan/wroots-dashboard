@@ -147,9 +147,20 @@ export function AddRecruiterForm() {
             </FormItem>
           )}
         />
+         <FormField
+          control={form.control}
+          name="isManager"
+          render={({ field }) => (
+            <FormItem className="flex gap-2">
+              <Checkbox id="Manager" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <FormLabel>Manager</FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button type="submit" className="mt-4 w-full">
-          Create
+          Create Recruiter
         </Button>
       </form>
     </Form>

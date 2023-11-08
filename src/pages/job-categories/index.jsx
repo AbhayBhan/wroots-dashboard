@@ -49,9 +49,9 @@ const JobCategories = () => {
           <TabsContent value="active" className="m-0">
             <JobTable />
           </TabsContent>
-          <TabsContent value="archived" className="m-0">
+          {/* <TabsContent value="archived" className="m-0">
             <JobTable />
-          </TabsContent>
+          </TabsContent> */}
         </div>
       </Tabs>
     </div>
