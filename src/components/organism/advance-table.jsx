@@ -48,6 +48,7 @@ const AdvanceTable = ({ table, columnLength, isLoading = false }) => {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-muted-light"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

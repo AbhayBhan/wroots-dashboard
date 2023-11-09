@@ -64,7 +64,7 @@ function SimpleTable({
           <TableBody>
             {data?.length ? (
               data.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
+                <TableRow key={rowIndex} className="hover:bg-muted-light">
                   {columns.map((column, colIndex) => (
                     <TableCell key={colIndex}>
                       {typeof column.cell === "function"

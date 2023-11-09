@@ -3,6 +3,7 @@ import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { applicantsData } from "@/data/job";
 import { fetchAllCandidates } from "@/services/candidate";
+import { getCandidatesOffered } from "@/services/jobs";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 
@@ -58,18 +59,16 @@ const ReferrerTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const statusId = 6;
-
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidate", "My", page, filterTerm, roleId, statusId],
-    queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
+    queryKey: ["Job", "CandidateOffered", roleId, page],
+    queryFn: () => getCandidatesOffered(roleId, page),
   });
 
   useEffect(() => {
     setPage(1);
   }, [filterTerm]);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">
@@ -78,7 +77,12 @@ const ReferrerTable = ({ roleId }) => {
         onChange={setFilterTerm}
         placeholder="Filter by name..."
       />
-      <SimpleTable columns={columns} data={applicantsData} />
+      <SimpleTable
+        columns={columns}
+        // data={applicantsData}
+        data={data?.data?.candidates}
+        isLoading={isLoading}
+      />
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );

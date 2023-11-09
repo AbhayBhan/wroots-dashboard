@@ -1,11 +1,12 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
-import { fetchAllCandidates } from "@/services/candidate";
+import { getCanddiatesJoined } from "@/services/jobs";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { columns } from "./applicants-table";
 
-const columns = [
+const columns1 = [
   {
     id: "name",
     header: "Name",
@@ -66,18 +67,16 @@ const JoinedTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const statusId = 7;
-
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidate", "All", page, filterTerm, roleId, statusId],
-    queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
+    queryKey: ["Job", "CandidateJoined", roleId, page],
+    queryFn: () => getCanddiatesJoined(roleId, page),
   });
 
   useEffect(() => {
     setPage(1);
   }, [filterTerm]);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">

@@ -4,6 +4,10 @@ export const formatTimestamp = (timestamp) => {
   return dayjs(timestamp).format("DD/MM/YYYY @ HH:mm");
 };
 
+export const formatDateForInput = (timestamp) => {
+  return dayjs(timestamp).format("YYYY-MM-DD");
+};
+
 export const dayDifference = (from, to) => {
   const date1 = dayjs(from);
   const date2 = dayjs(to);

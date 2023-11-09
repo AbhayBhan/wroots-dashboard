@@ -18,6 +18,7 @@ import { fetchActiveJobs } from "@/services/jobs";
 import { formatNumberWithKM, processName } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
+import { Link } from "react-router-dom";
 
 export const columns = [
   {
@@ -43,7 +44,11 @@ export const columns = [
     accessorKey: "name",
     header: "Job Name",
     cell: ({ row }) => (
-      <div className="flex gap-3">
+      <Link
+        className="flex gap-3"
+        to={`/job/${row.original["id"]}/details`}
+        state={{ jobDetails: row.original }}
+      >
         <Avatar>
           {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
           <AvatarFallback>{processName(row.original["name"])}</AvatarFallback>
@@ -54,7 +59,7 @@ export const columns = [
             {row.original["CompanyName"] || "-"}
           </p>
         </div>
-      </div>
+      </Link>
     ),
   },
   {
