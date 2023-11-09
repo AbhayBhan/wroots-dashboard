@@ -1,10 +1,11 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchAllCandidates = (page, filterTerm, latestStatus) => {
+export const fetchAllCandidates = (page, filterTerm, latestStatus, categoryId) => {
   const params = {
     pageno: page || 1,
     q: filterTerm || null,
     latestStatus,
+    categoryId : categoryId || null
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
