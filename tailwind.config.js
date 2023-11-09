@@ -36,6 +36,7 @@ module.exports = {
         },
         muted: {
           DEFAULT: "var(--muted)",
+          light: "var(--muted-light)",
           foreground: "var(--muted-foreground)",
         },
         accent: {

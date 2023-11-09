@@ -1,17 +1,17 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
-import { fetchAllCandidates } from "@/services/candidate";
+import { getCandidatesApplied } from "@/services/jobs";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-const columns = [
+export const columns = [
   {
     id: "name",
     header: "Name",
     cell: ({ getValue }) => (
       <div className="capitalize whitespace-nowrap flex items-center min-h-[36px]">
-        {getValue("name")}
+        {getValue("name") || "-"}
       </div>
     ),
   },
@@ -22,7 +22,7 @@ const columns = [
       <div className=" whitespace-nowrap">
         <p>{getValue("phoneNumber")}</p>
         <p className="text-xs lowercase text-muted-foreground">
-          {getValue("email")}
+          {getValue("email") || "-"}
         </p>
       </div>
     ),
@@ -30,11 +30,14 @@ const columns = [
   {
     accessorKey: "applied_date",
     header: "Applied on",
-    cell: ({ getValue }) => (
-      <div className="lowercase whitespace-nowrap">
-        {new Date(getValue("applied_date")).toLocaleString() || "-"}
-      </div>
-    ),
+    cell: ({ getValue }) => {
+      const appliedDate = getValue("applied_date");
+      return (
+        <div className="lowercase whitespace-nowrap">
+          {appliedDate ? new Date(appliedDate).toLocaleString() : "-"}
+        </div>
+      );
+    },
   },
   {
     id: "recruiter",
@@ -43,7 +46,7 @@ const columns = [
       <div className=" whitespace-nowrap">
         <p>{getValue("recruiter_name")}</p>
         <p className="text-xs text-muted-foreground">
-          {getValue("recruiter_contact")}
+          {getValue("recruiter_contact") || "-"}
         </p>
       </div>
     ),
@@ -54,18 +57,16 @@ const ApplicantsTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const statusId = 6;
-
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidate", "All", page, filterTerm, roleId, statusId],
-    queryFn: () => fetchAllCandidates(page, filterTerm, roleId, statusId),
+    queryKey: ["Job", "CandidateApplied", roleId, page],
+    queryFn: () => getCandidatesApplied(roleId, page),
   });
 
   useEffect(() => {
     setPage(1);
   }, [filterTerm]);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">

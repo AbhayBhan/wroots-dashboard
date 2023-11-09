@@ -16,25 +16,32 @@ import parse from "html-react-parser";
 import { formatNumberWithKM } from "@/utils/helper";
 import { JobDetailsEditForm } from "./job-details-edit-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
 
 const DetailsTab = ({ jobDetails }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     // <section className="grid grid-cols-12 gap-4">
     <section className="flex flex-col gap-4">
       <div className="col-span-9 card">
         <div className="flex_between">
           <h2 className="heading_1">{jobDetails?.name}</h2>
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" title="Edit Job Details">
                 <Pencil1Icon className="w-5 h-5 text-slate-500" />
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-full lg:max-w-4xl">
               <DialogHeader>
                 <DialogTitle className="mb-3">Edit Job Details</DialogTitle>
-                <ScrollArea className="w-full h-[85vh]">
-                <JobDetailsEditForm />
+                <ScrollArea className="w-full h-[80vh]">
+                  <div className="px-1">
+                    <JobDetailsEditForm
+                      initialData={jobDetails}
+                      onSuccessAction={() => setIsOpen(false)}
+                    />
+                  </div>
                 </ScrollArea>
               </DialogHeader>
             </DialogContent>
@@ -167,9 +174,9 @@ const DetailsTab = ({ jobDetails }) => {
         <Separator className="my-4" />
         <div>
           {/* <h5 className="mb-2 text-lg font-medium text-primary-foreground">Breif</h5> */}
-          <h1 className="text-3xl font-bold mb-4">Job Overview</h1>
+          <h1 className="mb-4 text-2xl font-bold">Job Overview</h1>
           <div className="text-sm text-muted-foreground prose-slate prose-p:mb-3 prose-strong:text-lg prose-strong:text-foreground prose-ul:list-disc prose-ul:pl-6">
-            {parse(jobDetails?.briefing)}
+            {jobDetails?.briefing && parse(jobDetails?.briefing)}
           </div>
         </div>
       </div>

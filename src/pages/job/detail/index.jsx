@@ -33,7 +33,7 @@ const JobDetail = () => {
           {[
             "Details",
             "Applicants",
-            "Referred",
+            "Offered",
             "Joined",
             "Period Complete",
           ].map((item) => (
@@ -58,9 +58,9 @@ const JobDetail = () => {
             </Alert>
             <ApplicantsTable roleId={jobDetails?.id} />
           </TabsContent>
-          <TabsContent value="Referred" className="m-0">
+          <TabsContent value="Offered" className="m-0">
             <Alert variant="warn">
-              This is the original referrals received for this job, In order to
+              This is the original offered candidates for this job, In order to
               change status or do any changes, Use candidates list and search
               for the candidate.
             </Alert>
