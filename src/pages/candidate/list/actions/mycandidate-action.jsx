@@ -16,12 +16,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Processinglist from "../../detail/processing-section/processing-list";
 import ProcessingForm from "../processing-form";
+import useScroll from "@/hooks/useScroll";
 
 const MyCandidateAction = ({ rowData }) => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [queryFlag, setQueryFlag] = useState(false);
   const [processingList, setProcessingList] = useState([]);
+
+  const currentDivId = `mycandidate-${rowData.id}`;
+  const { saveRowPosition } = useScroll(currentDivId);
+
   const { mutate } = useMutation(fetchSingleCandidate, {
     onSuccess: ({ data }) => {
       setLoading(false);
@@ -40,7 +45,7 @@ const MyCandidateAction = ({ rowData }) => {
   }, [queryFlag]);
 
   return (
-    <div className="flex justify-end gap-2">
+    <div className="flex justify-end gap-2" id={currentDivId}>
       <Link
         to={`/candidate/${rowData.id}/details`}
         // className="hidden h-8 ml-auto lg:flex"
@@ -48,6 +53,7 @@ const MyCandidateAction = ({ rowData }) => {
           buttonVariants({ variant: "ghost", size: "icon" }),
           "hover:bg-muted "
         )}
+        onClick={saveRowPosition}
         title="Detail View"
       >
         <EyeOpenIcon className="w-5 h-5 text-slate-500" />

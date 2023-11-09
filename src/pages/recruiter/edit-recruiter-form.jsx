@@ -16,41 +16,26 @@ import { updateRecruiter } from "@/services/recruiter";
 import ReactSelect from "react-select";
 import { toast } from "react-toastify";
 import React from "react";
+import { categoryOptions } from "@/utils/contants";
 
-const categoryOptions = [
-  {
-    label: "BPO",
-    value: 1,
-  },
-  {
-    label: "IT",
-    value: 6,
-  },
-  {
-    label: "NON IT",
-    value: 7,
-  },
-];
-
-export function EditRecruiterForm({rowData}) {
+export function EditRecruiterForm({ rowData }) {
   console.log(rowData);
   const form = useForm({
     mode: "onChange",
-    values: rowData
+    values: rowData,
   });
 
-  const toastId=React.useRef(null);
+  const toastId = React.useRef(null);
 
   const { mutate } = useMutation(updateRecruiter, {
-    onSuccess: ({ data }) =>{
-      console.log(data)
-      
-    } 
+    onSuccess: ({ data }) => {
+      console.log(data);
+    },
   });
 
   function onSubmit(data) {
     mutate(data);
-    toast("Successfully Updated",{autoClose:2000});
+    toast("Successfully Updated", { autoClose: 2000 });
     setTimeout(() => {
       window.location.reload();
     }, 2000);
@@ -124,7 +109,9 @@ export function EditRecruiterForm({rowData}) {
                   options={categoryOptions}
                   className="text-sm"
                   isSearchable={false}
-                  value={categoryOptions.find(option => option.value === field.value)}
+                  value={categoryOptions.find(
+                    (option) => option.value === field.value
+                  )}
                   onChange={(e) => field.onChange(e.value)}
                 />
               </FormControl>
@@ -137,25 +124,37 @@ export function EditRecruiterForm({rowData}) {
           name="isSuperAdmin"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="superAdmin" className="mt-2" checked={field.value} value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox
+                id="superAdmin"
+                className="mt-2"
+                checked={field.value}
+                value={field.value}
+                onCheckedChange={(e) => field.onChange(e)}
+              />
               <FormLabel>Super Admin</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="isManager"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="Manager" className="mt-2" checked={field.value} value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox
+                id="Manager"
+                className="mt-2"
+                checked={field.value}
+                value={field.value}
+                onCheckedChange={(e) => field.onChange(e)}
+              />
               <FormLabel>Manager</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="mt-4 w-full">
+        <Button type="submit" className="w-full mt-4">
           Update Recruiter
         </Button>
       </form>

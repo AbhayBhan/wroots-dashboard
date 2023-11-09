@@ -4,8 +4,7 @@ import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -13,22 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fetchAllCandidates } from "@/services/candidate";
-import { formatTimestamp } from "@/utils/dateTime";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import ReactSelect from "react-select";
-import { latestStatus } from "@/services/mock/latestStatus";
 import { fetchAllCategories } from "@/services/JobCategories";
+import { fetchAllCandidates } from "@/services/candidate";
+import { latestStatus } from "@/services/mock/latestStatus";
+import { formatTimestamp } from "@/utils/dateTime";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import ReactSelect from "react-select";
+import AllCandidateAction from "./actions/all-candidate-action";
 
 export const columns = [
   {
     id: "name",
     header: "Details",
     cell: ({ getValue }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{getValue("name")}</span>
         <span className="text-xs text-muted-foreground">
           {getValue("phoneNumber")}
@@ -40,7 +38,7 @@ export const columns = [
     id: "referrer",
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap ">
         <span className="capitalize">
           {row.self ? "Self Applied" : `${row.referror["name"]}`}
         </span>
@@ -59,7 +57,7 @@ export const columns = [
     id: "job",
     header: "Category & Role",
     cell: ({ row }) => (
-      <div className="flex flex-col">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
           {row.category["name"]}
@@ -72,7 +70,7 @@ export const columns = [
     header: "Latest Status",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col whitespace-nowrap">
           <span className="inline-block">
             <Badge>{row.latestStatus}</Badge>
           </span>
@@ -87,30 +85,30 @@ export const columns = [
     id: "action",
     header: "",
     cell: ({ row }) => {
-      return (
-        <div className="flex_end">
-          <Link
-            to={`/candidate/${row.id}/details`}
-            // className="hidden h-8 ml-auto lg:flex"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "hover:bg-muted "
-            )}
-            title="Detail View"
-          >
-            <EyeOpenIcon className="w-5 h-5 text-slate-500" />
-          </Link>
-        </div>
-      );
+      return <AllCandidateAction row={row} />;
     },
   },
 ];
 
 const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
+
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  const page = Number(searchParams.get("page"));
+
+  const handlePageChange = (page) => {
+    setSearchParams(
+      (pre) => {
+        pre.set("page", `${page}`);
+        return pre;
+      },
+      { replace: true }
+    );
+  };
+
   const { data, isLoading } = useQuery({
     queryKey: ["Candidates", "All", page, selectedStatus, filterTerm],
     queryFn: () => fetchAllCandidates(page, filterTerm, selectedStatus),
@@ -123,7 +121,9 @@ const CandidateTable = () => {
   });
 
   useEffect(() => {
-    setPage(1);
+    if (filterTerm) {
+      handlePageChange(1);
+    }
   }, [filterTerm]);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
@@ -174,7 +174,11 @@ const CandidateTable = () => {
         data={data?.data?.candidates}
         isLoading={isLoading}
       />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination
+        page={page || 1}
+        setPage={handlePageChange}
+        totalPages={totalPages}
+      />
     </div>
   );
 };

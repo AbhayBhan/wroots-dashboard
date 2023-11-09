@@ -3,14 +3,8 @@ import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import Spinner from "@/components/organism/spinner";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
-import {
-  assignCandidate,
-  assignCandidateInBulk,
-  fetchUnassignCandidates,
-} from "@/services/candidate";
 import {
   Dialog,
   DialogContent,
@@ -18,15 +12,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  assignCandidateInBulk,
+  fetchUnassignCandidates,
+} from "@/services/candidate";
 import { statusColors } from "@/utils/colorMap";
+import { categoryOptions } from "@/utils/contants";
 import { formatTimestamp } from "@/utils/dateTime";
-import { CursorArrowIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import ReactSelect from "react-select";
 import { toast } from "react-toastify";
 import RecruiterListModal from "./actions/recruiterListModal";
-import ReactSelect from "react-select";
+import UnassignedCandidateAction from "./actions/unassigned-candidate-action";
 
 export const columns = [
   {
@@ -45,7 +44,7 @@ export const columns = [
     id: "name",
     header: "Details",
     cell: ({ getValue }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{getValue("name")}</span>
         <span className="text-xs text-muted-foreground">
           {getValue("phoneNumber")}
@@ -57,7 +56,7 @@ export const columns = [
     id: "referrer",
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">
           {row.self ? "Self Applied" : `${row.referror["name"]}`}
         </span>
@@ -76,7 +75,7 @@ export const columns = [
     id: "job",
     header: "Category & Role",
     cell: ({ row }) => (
-      <div className="flex flex-col">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
           {row.category["name"]}
@@ -89,7 +88,7 @@ export const columns = [
     header: "Latest Status",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col whitespace-nowrap">
           <span className="inline-block">
             <Badge
               className={`${statusColors[row.latestStatus] || "bg-gray-400"}`}
@@ -108,23 +107,8 @@ export const columns = [
     id: "action",
     header: "",
     cell: ({ row }) => {
-      return <UnassignedAction row={row} />;
+      return <UnassignedCandidateAction row={row} />;
     },
-  },
-];
-
-const categoryOptions = [
-  {
-    label: "BPO",
-    value: 1,
-  },
-  {
-    label: "IT",
-    value: 6,
-  },
-  {
-    label: "NON IT",
-    value: 7,
   },
 ];
 
@@ -136,8 +120,21 @@ const UnassignedCanidateTable = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [page, setPage] = useState(1);
   const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  const page = Number(searchParams.get("page"));
+
+  const handlePageChange = (page) => {
+    setSearchParams(
+      (pre) => {
+        pre.set("page", `${page}`);
+        return pre;
+      },
+      { replace: true }
+    );
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
@@ -195,10 +192,12 @@ const UnassignedCanidateTable = () => {
   };
 
   useEffect(() => {
-    setPage(1);
+    if (filterTerm) {
+      handlePageChange(1);
+    }
   }, [filterTerm]);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">
@@ -257,7 +256,7 @@ const UnassignedCanidateTable = () => {
         )}
       </div>
       <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-200 text-md" >
+        <Badge className="bg-blue-200 text-md">
           Total Candidates : {data?.data?.totalRows}
         </Badge>
       </div>
@@ -270,60 +269,12 @@ const UnassignedCanidateTable = () => {
         getIsRowSelected={(id) => selectedRows.includes(id)}
         getIsAllRowSelected={selectedRows.length === candidateList.length}
       />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </div>
-  );
-};
-
-const UnassignedAction = ({ row }) => {
-  const ref = useRef();
-  const navigate = useNavigate();
-  const { mutate, isLoading } = useMutation(assignCandidate, {
-    onSuccess: () => {
-      toast.success("Candidate Assigned, Redirecting...");
-      setTimeout(() => {
-        navigate(`/candidate/${row.id}/details`);
-      }, 200);
-    },
-  });
-
-  const handleClick = () => {
-    const userdata = JSON.parse(localStorage.getItem("userdata"));
-    mutate({
-      recruiterEmail: userdata.email,
-      candidateID: row.id,
-    });
-  };
-
-  const handleSaveLinkPosn = () => {
-    const divPosn = ref.current.getBoundingClientRect();
-    sessionStorage.setItem("scrollPosition", divPosn.y);
-  };
-
-  useEffect(() => {
-    const scrollPosition = +sessionStorage.getItem("scrollPosition");
-    if (scrollPosition) {
-      window.scrollTo(0, scrollPosition);
-    }
-  }, [row.id]);
-
-  return (
-    <div ref={ref} className="gap-2 flex_end">
-      <Link
-        to={`/candidate/${row?.id}/details`}
-        // className="hidden h-8 ml-auto lg:flex"
-        className={cn(
-          buttonVariants({ variant: "ghost", size: "icon" }),
-          "hover:bg-muted "
-        )}
-        onClick={handleSaveLinkPosn}
-        title="Detail View"
-      >
-        <EyeOpenIcon className="w-5 h-5 text-slate-500" />
-      </Link>
-      <Button size="sm" disabled={isLoading} onClick={handleClick}>
-        {isLoading ? <Spinner className="text-white" /> : "Assign to me"}
-      </Button>
+      <Pagination
+        page={page || 1}
+        setPage={handlePageChange}
+        // onPageChange={setPage}
+        totalPages={totalPages}
+      />
     </div>
   );
 };

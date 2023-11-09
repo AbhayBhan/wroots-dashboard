@@ -10,12 +10,19 @@ import { Button } from "../ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "../ui/scroll-area";
 
-const Pagination = ({ setPage, page, totalPages }) => {
+const Pagination = ({ page, totalPages, setPage }) => {
+  const handleNextClick = () => {
+    setPage(page + 1);
+  };
+  const handlePreviousClick = () => {
+    setPage(page - 1);
+  };
+
   return (
     <div className="flex items-center justify-end pt-4 space-x-2">
       <div className="flex items-center space-x-2">
         <p className="text-sm font-medium">Page No.</p>
-        <Select value={page} onValueChange={(value) => setPage(Number(value))}>
+        <Select value={page} onValueChange={(value) => setPage(value)}>
           <SelectTrigger className="h-8 w-[70px]">
             <SelectValue />
           </SelectTrigger>
@@ -38,21 +45,21 @@ const Pagination = ({ setPage, page, totalPages }) => {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage((pre) => pre - 1)}
+          onClick={handlePreviousClick}
           disabled={page === 1}
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeftIcon className="w-4 h-4" />
           {/* Previous */}
         </Button>
 
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage((pre) => pre + 1)}
+          onClick={handleNextClick}
           disabled={totalPages === page}
         >
           {/* <span className="sr-only">Go to last page</span> */}
-          <ChevronRightIcon className="h-4 w-4" />
+          <ChevronRightIcon className="w-4 h-4" />
         </Button>
       </div>
     </div>

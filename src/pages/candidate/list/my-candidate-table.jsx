@@ -9,13 +9,14 @@ import { useQuery } from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
+import { useSearchParams } from "react-router-dom";
 
 export const columns = [
   {
     id: "name",
     header: "Details",
     cell: ({ getValue }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{getValue("name")}</span>
         <span className="text-xs text-muted-foreground">
           {getValue("phoneNumber")}
@@ -27,7 +28,7 @@ export const columns = [
     id: "referrer",
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
-      <div className="flex flex-col ">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">
           {row.self ? "Self Applied" : `${row.referror["name"]}`}
         </span>
@@ -46,7 +47,7 @@ export const columns = [
     id: "job",
     header: "Category & Role",
     cell: ({ row }) => (
-      <div className="flex flex-col">
+      <div className="flex flex-col whitespace-nowrap">
         <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
           {row.category["name"]}
@@ -59,7 +60,7 @@ export const columns = [
     header: "Latest Status",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col whitespace-nowrap">
           <span className="inline-block">
             <Badge>{row.latestStatus}</Badge>
           </span>
@@ -83,19 +84,33 @@ const MyCanidateTable = () => {
   const recruiterId = JSON.parse(localStorage.getItem("userdata")).id;
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  const page = Number(searchParams.get("page"));
+
+  const handlePageChange = (page) => {
+    setSearchParams(
+      (pre) => {
+        pre.set("page", `${page}`);
+        return pre;
+      },
+      { replace: true }
+    );
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["Candidate", "My", selectedStatus, page, filterTerm],
-    queryFn: () => fetchMyCandidates(recruiterId, page, filterTerm, selectedStatus),
+    queryFn: () =>
+      fetchMyCandidates(recruiterId, page, filterTerm, selectedStatus),
   });
 
   useEffect(() => {
-    setPage(1);
+    if (filterTerm) {
+      handlePageChange(1);
+    }
   }, [filterTerm]);
 
-  // data && console.log(data?.data);
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
   const candidateList = data?.data?.candidates;
 
   return (
@@ -114,7 +129,7 @@ const MyCanidateTable = () => {
         />
       </div>
       <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-400 text-md" >
+        <Badge className="bg-blue-400 text-md">
           Total Candidates : {data?.data?.totalRows}
         </Badge>
       </div>
@@ -123,7 +138,11 @@ const MyCanidateTable = () => {
         data={candidateList}
         isLoading={isLoading}
       />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      <Pagination
+        page={page || 1}
+        setPage={handlePageChange}
+        totalPages={totalPages}
+      />
     </div>
   );
 };

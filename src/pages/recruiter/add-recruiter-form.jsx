@@ -14,21 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Checkbox } from "../../components/ui/checkbox";
 import { createRecruiter } from "@/services/recruiter";
 import ReactSelect from "react-select";
-
-const categoryOptions = [
-  {
-    label: "BPO",
-    value: 1,
-  },
-  {
-    label: "IT",
-    value: 6,
-  },
-  {
-    label: "NON IT",
-    value: 7,
-  },
-];
+import { categoryOptions } from "@/utils/contants";
 
 export function AddRecruiterForm() {
   const form = useForm({
@@ -111,7 +97,9 @@ export function AddRecruiterForm() {
                   options={categoryOptions}
                   className="text-sm"
                   isSearchable={false}
-                  value={categoryOptions.find(option => option.value === field.value)}
+                  value={categoryOptions.find(
+                    (option) => option.value === field.value
+                  )}
                   onChange={(e) => field.onChange(e.value)}
                 />
               </FormControl>
@@ -124,25 +112,35 @@ export function AddRecruiterForm() {
           name="isSuperAdmin"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="superAdmin" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox
+                id="superAdmin"
+                className="mt-2"
+                value={field.value}
+                onCheckedChange={(e) => field.onChange(e)}
+              />
               <FormLabel>Super Admin</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="isManager"
           render={({ field }) => (
             <FormItem className="flex gap-2">
-              <Checkbox id="Manager" className="mt-2" value={field.value} onCheckedChange={(e) => field.onChange(e)} />
+              <Checkbox
+                id="Manager"
+                className="mt-2"
+                value={field.value}
+                onCheckedChange={(e) => field.onChange(e)}
+              />
               <FormLabel>Manager</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="mt-4 w-full">
+        <Button type="submit" className="w-full mt-4">
           Create Recruiter
         </Button>
       </form>
