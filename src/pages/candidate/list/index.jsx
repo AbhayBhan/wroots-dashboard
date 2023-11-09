@@ -68,7 +68,7 @@ const CandidateList = () => {
           {[
             "Unassigned Candidates",
             "My Candidates",
-            isSuperAdmin && "All Candidates",
+            isManager && "All Candidates",
           ]
             .filter((item) => item !== false)
             .map((item) => (
