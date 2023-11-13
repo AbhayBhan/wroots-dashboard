@@ -8,8 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { auth } from "@/services/firebaseConfig";
+import { signOut } from 'firebase/auth';
 
 const UserProfile = () => {
+  const navigate = useNavigate();
+  const signout = () => {
+    signOut(auth).then(() => {
+      localStorage.clear();
+      navigate('/login');
+    })
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +43,7 @@ const UserProfile = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log Out</DropdownMenuItem>
+        <DropdownMenuItem onClick={signout}>Log Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
