@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import React from "react";
 import { categoryOptions } from "@/utils/contants";
 
-export function EditRecruiterForm({ rowData }) {
+export function EditRecruiterForm({ rowData , refresh}) {
   console.log(rowData);
   const form = useForm({
     mode: "onChange",
@@ -36,9 +36,7 @@ export function EditRecruiterForm({ rowData }) {
   function onSubmit(data) {
     mutate(data);
     toast("Successfully Updated", { autoClose: 2000 });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    refresh(true);
   }
 
   return (

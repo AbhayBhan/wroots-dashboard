@@ -25,7 +25,7 @@ import { EditRecruiterForm } from "./edit-recruiter-form";
 import { deleteRecruiter } from "@/services/recruiter";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-const RecruiterTableActions = ({ rowData }) => {
+const RecruiterTableActions = ({ rowData, refresh }) => {
 
   const {mutate}=useMutation(deleteRecruiter,{
     onSuccess:({data})=>{
@@ -36,9 +36,7 @@ const RecruiterTableActions = ({ rowData }) => {
   function handleDelete(){
     mutate({id:rowData.id});
     toast("Successfully Deleted",{autoClose:2000});
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    refresh(true);
   }
   return (
     <div className="flex justify-end gap-2">
@@ -63,7 +61,7 @@ const RecruiterTableActions = ({ rowData }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-3">Edit Recruiter</DialogTitle>
-            <EditRecruiterForm rowData={rowData}/>
+            <EditRecruiterForm rowData={rowData} refresh={refresh}/>
           </DialogHeader>
         </DialogContent>
       </Dialog>

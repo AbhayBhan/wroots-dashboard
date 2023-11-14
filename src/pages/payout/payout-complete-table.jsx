@@ -2,8 +2,10 @@ import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { getPayouts } from "@/services/Payouts";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 export const columns = [
   {
@@ -19,13 +21,13 @@ export const columns = [
     ),
   },
   {
-    id: "candidate_name",
+    id: "candidateName",
     header: () => <div>Candidate Name</div>,
     cell: ({ getValue, row }) => (
       <div className="flex flex-col ">
-        <span className="capitalize">{getValue("candidateName")}</span>
+        <span className="capitalize">{getValue("candidate")[0].name}</span>
         <span className="text-xs text-muted-foreground">
-          {getValue("candidatePhoneNumber")}
+          {getValue("candidate")[0].phoneNumber}
         </span>
       </div>
     ),
@@ -35,9 +37,9 @@ export const columns = [
     header: "Job / Details",
     cell: ({ getValue }) => (
       <div className="flex flex-col">
-        <span className="capitalize"> {getValue("roleName")}</span>
+        <span className="capitalize"> {getValue("candidate")[0].roleName}</span>
         <span className="text-xs text-muted-foreground">
-          {getValue("companyName")}
+          {getValue("candidate")[0].companyName}
         </span>
       </div>
     ),
@@ -49,52 +51,65 @@ export const columns = [
       return (
         <div className="flex flex-col">
           <span className="capitalize">
-            {getValue("referralDueAmount")}
+            {getValue("candidate")[0].processingStatus[0].referralDueAmount}
           </span>
-          <span className="text-xs text-muted-foreground">
+          {/* <span className="text-xs text-muted-foreground">
             {getValue("processingStatusName")}
+          </span> */}
+        </div>
+      );
+    },
+  },
+  {
+    id: "action",
+    header: "Status",
+    cell: ({ row, getValue }) => {
+      return (
+        <div className="gap-2 flex_end">
+          <span
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              `w-full hover:bg-muted ${getValue("candidate")[0].processingStatus[0].status=='Joined'?"bg-green-500":"bg-red-400"}`
+            )}
+            title="Detail View"
+          >
+            {getValue("candidate")[0].processingStatus[0].status}
           </span>
         </div>
       );
     },
   },
-  // {
-  //   id: "action",
-  //   header: "",
-  //   cell: ({ row, getValue }) => {
-  //     return (
-  //       <div className="gap-2 flex_end">
-  //         <Link
-  //           // to={`/candidate/${row?.id}/details`}
-  //           to=""
-  //           className={cn(
-  //             buttonVariants({ variant: "ghost", size: "icon" }),
-  //             "hover:bg-muted "
-  //           )}
-  //           title="Detail View"
-  //         >
-  //           <EyeOpenIcon className="w-5 h-5 text-slate-500" />
-  //         </Link>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];
 
 const PayoutCompletedTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [data, setData]=useState({});
+  const [isLoading, setIsLoading]=useState(true);
 
-  const { data, isLoading } = useQuery({
-    queryFn: () => getPayouts(page, "comp"),
-    queryKey: ["Payouts", "completed", page],
-  });
+  // const { data, isLoading } = useQuery({
+  //   queryFn: () => getPayouts(page, "comp"),
+  //   queryKey: ["Payouts", "completed", page],
+  // });
+
+  const {mutate}=useMutation(getPayouts,{
+    onSuccess:({data})=>{
+      console.log(data);
+      setData(data);
+      setIsLoading(false);
+    }
+  })
+
+  useEffect(()=>{
+    setIsLoading(true);
+    mutate({page:page, paymentType:"comp"})
+  },[])
 
   useEffect(() => {
-    setPage(0);
+    setPage(1);
   }, [filterTerm]);
 
-  const totalPages = Math.ceil(data?.data?.data?.totalItems / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalItems / 30) || 1;
 
   return (
     <div className="w-full">
@@ -107,7 +122,7 @@ const PayoutCompletedTable = () => {
       </div>
       <SimpleTable
         columns={columns}
-        data={data?.data?.data?.candidates}
+        data={data?.data?.candidates}
         isLoading={isLoading}
       />
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />

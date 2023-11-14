@@ -10,8 +10,10 @@ import {
 import { PlusIcon } from "@radix-ui/react-icons";
 import UsersTable from "./recruiter-table";
 import { AddRecruiterForm } from "@/pages/recruiter/add-recruiter-form";
+import { useState } from "react";
 
 const Recruiter = () => {
+  const [shouldRefresh, setShouldRefresh]=useState(false);
   return (
     <div>
       <div className="flex mb-5">
@@ -25,13 +27,13 @@ const Recruiter = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Add new Recruiter</DialogTitle>
-              <AddRecruiterForm />
+              <AddRecruiterForm refresh={setShouldRefresh}/>
             </DialogHeader>
           </DialogContent>
         </Dialog>
       </div>
       <div className="p-4 mt-4 rounded-md bg-background">
-        <UsersTable />
+        <UsersTable ShouldRefresh={shouldRefresh}/>
       </div>
     </div>
   );

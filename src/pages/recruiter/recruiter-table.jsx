@@ -6,7 +6,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import RecruiterTableActions from "./recruiter-table-actions";
 
-export const columns = [
+const RecruiterTable = ({ShouldRefresh}) => {
+ const columns = [
   {
     id: "name",
     header: "Name",
@@ -33,16 +34,18 @@ export const columns = [
     id: "actions",
     header: "",
     cell: ({ row }) => {
-      return <RecruiterTableActions rowData={row} />;
+      return <RecruiterTableActions rowData={row} refresh={setShouldRefresh}/>;
     },
   },
 ];
 
-const RecruiterTable = () => {
+
   const [filterTerm, setFilterTerm] = useState("second");
   const [page, setPage] = useState(1);
   const [recruiterList, setRecruiterList] = useState([]);
   const [recruiterData, setRecruiterData] = useState([]);
+  const [shouldRefresh, setShouldRefresh]=useState(true);
+  const [filterData, setFilterData]=useState([]);
 
   const { mutate, isLoading } = useMutation(fetchRecruiters,{
     onSuccess : ({data}) => {
@@ -52,13 +55,22 @@ const RecruiterTable = () => {
   });
 
   useEffect(() => {
+    if(shouldRefresh){
+      setShouldRefresh(false);
     const id = JSON.parse(localStorage.getItem('userdata')).id;
     const reqbody = {
       pageno : page,
       recruiterId : id
     }
     mutate(reqbody);
-  }, []);
+    }
+  }, [shouldRefresh]);
+
+  useEffect(()=>{
+    if (ShouldRefresh){
+      setShouldRefresh(true);
+    }
+  },[ShouldRefresh])
 
   return (
     <div className="w-full">
@@ -67,7 +79,7 @@ const RecruiterTable = () => {
           className=""
           onChange={(e) => {
             if(e.length){
-              setRecruiterData(recruiterList.filter((rec) => rec.recruiter_name?.toLowerCase().startsWith(e)))
+              setRecruiterData(recruiterList.filter((rec) => {return (rec.recruiter_name?.toLowerCase().startsWith(e) || rec.recruiter_email?.toLowerCase().startsWith(e))}))
             }else{
               setRecruiterData(recruiterList);
             }
