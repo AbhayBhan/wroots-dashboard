@@ -17,7 +17,12 @@ import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { fetchActiveJobs } from "@/services/jobs";
-import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
+import {
+  getFirstDayOfYear,
+  getCurrentDate,
+  formatDateForInput,
+  formatDateOnlyString,
+} from "@/utils/dateTime";
 import { Card1, Card2, Card3 } from "./cards/cards";
 import {
   getSuperAdminDashboard,
@@ -25,20 +30,18 @@ import {
 } from "@/services/dashboard";
 import Spinner from "@/components/organism/spinner";
 import MyResponsiveFunnel from "./cards/funnel";
+import { DateRange } from "@/components/ui/date-range";
+import { setDate } from "date-fns";
 
 const Dashboard = () => {
   const userdata = JSON.parse(localStorage.getItem("userdata"));
   const [funnelData, setFunnelData] = useState([
     { id: 1, label: "test", value: 2000 },
   ]);
-  const form = useForm({
-    // resolver: zodResolver(profileFormSchema),
-    defaultValues: {
-      category: "",
-      startDate: getFirstDayOfYear(),
-      endDate: getCurrentDate(),
-    },
-    mode: "onChange",
+
+  const [dateValues, setDateValues] = useState({
+    startDate: getFirstDayOfYear(),
+    endDate: getCurrentDate(),
   });
 
   const { data: categoryData, isLoading } = useQuery({
@@ -65,10 +68,6 @@ const Dashboard = () => {
     }
   );
 
-  function onSubmit(data) {
-    console.log(data);
-  }
-
   const jobOptions = categoryData?.data?.roles?.records?.map((job) => ({
     label: job?.name,
     value: job?.id,
@@ -76,99 +75,47 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userdata?.isSuperAdmin) {
-      mutate(form.getValues());
+      mutate({
+        startDate: formatDateOnlyString(dateValues.startDate),
+        endDate: formatDateOnlyString(dateValues.endDate),
+      });
     } else {
-      mutate({ ...form.getValues(), recruiterId: userdata?.id });
+      mutate({
+        startDate: formatDateOnlyString(dateValues.startDate),
+        endDate: formatDateOnlyString(dateValues.endDate),
+        recruiterId: userdata?.id,
+      });
     }
-  }, []);
+  }, [dateValues]);
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-2 h-[1000px]"
-      >
-        <div className="flex justify-between mb-5">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
-            <h4>Here is the summary of the overall data</h4>
-          </div>
-          <div className="flex justify-between mt-2 gap-3">
-            {/* <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(e) => field.onChange(Number(e))}
-                    value={field.value}
-                    placeholder="Select Category"
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="w-[227px]">
-                      {jobOptions?.map((option) => (
-                        <SelectItem value={option.value} key={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      type="date"
-                      value={field.value}
-                      onChange={(e) => field.onChange(e)}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      type="date"
-                      value={field.value}
-                      onChange={(e) => field.onChange(e)}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+    <div className="space-y-2 h-[1000px]">
+      <div className="flex justify-between mb-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
+          <h4>Here is the summary of the overall data</h4>
         </div>
-        {dashboardLoading ? (
-          <div className="flex justify-center items-center">
-            <Spinner />
+        <DateRange
+          from={dateValues.startDate}
+          to={dateValues.endDate}
+          onChange={setDateValues}
+        />
+      </div>
+      {dashboardLoading ? (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
+          <div className="flex justify-between w-full">
+            <Card1 isLoading={isLoading} />
+            <Card2 />
+            <Card3 />
           </div>
-        ) : (
-          <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
-            <div className="flex justify-between w-full">
-              <Card1 isLoading={isLoading} />
-              <Card2 />
-              <Card3 />
-            </div>
-            <MyResponsiveFunnel data={funnelData} />
-          </div>
-        )}
-      </form>
-    </Form>
+          <MyResponsiveFunnel data={funnelData} />
+        </div>
+      )}
+    </div>
   );
 };
 

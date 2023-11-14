@@ -9,7 +9,7 @@ const Noteslist = ({notesList}) => {
     <ScrollArea className=" w-full mt-3 ">
       <h4 className="mb-4 text-sm font-medium leading-none">Previous Notes</h4>
       <div className="space-y-2">
-        {notesList.map((note) => (
+        {notesList?.map((note) => (
           <NoteCard key={note.id} note={note} />
         ))}
       </div>

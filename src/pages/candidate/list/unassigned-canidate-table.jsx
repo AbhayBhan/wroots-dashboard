@@ -26,6 +26,7 @@ import ReactSelect from "react-select";
 import { toast } from "react-toastify";
 import RecruiterListModal from "./actions/recruiterListModal";
 import UnassignedCandidateAction from "./actions/unassigned-candidate-action";
+import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
   {
@@ -255,11 +256,7 @@ const UnassignedCanidateTable = () => {
           )
         )}
       </div>
-      <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-200 text-md">
-          Total Candidates : {data?.data?.totalRows}
-        </Badge>
-      </div>
+      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
       <SimpleTable
         columns={columns}
         data={candidateList}

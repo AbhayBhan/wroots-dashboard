@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import AllCandidateAction from "./actions/all-candidate-action";
+import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
   {
@@ -142,11 +143,7 @@ const CandidateTable = () => {
           />
         </div>
       </div>
-      <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-400 text-md">
-          Total Candidates : {data?.data?.totalRows}
-        </Badge>
-      </div>
+      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
       <SimpleTable
         columns={columns}
         data={data?.data?.candidates}

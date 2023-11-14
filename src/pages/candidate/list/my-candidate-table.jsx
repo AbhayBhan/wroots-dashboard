@@ -10,6 +10,7 @@ import MyCandidateAction from "./actions/mycandidate-action";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
 import { useSearchParams } from "react-router-dom";
+import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
   {
@@ -128,11 +129,7 @@ const MyCanidateTable = () => {
           placeholder="Select Status"
         />
       </div>
-      <div className="flex flex-row justify-center mb-2">
-        <Badge className="bg-blue-400 text-md">
-          Total Candidates : {data?.data?.totalRows}
-        </Badge>
-      </div>
+      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
       <SimpleTable
         columns={columns}
         data={candidateList}
