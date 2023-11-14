@@ -15,14 +15,30 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { createRecruiter } from "@/services/recruiter";
 import ReactSelect from "react-select";
 import { categoryOptions } from "@/utils/contants";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { DialogClose } from "@radix-ui/react-dialog";
 
-export function AddRecruiterForm() {
+export function AddRecruiterForm({refresh}) {
   const form = useForm({
     mode: "onChange",
   });
 
+  useEffect(()=>{
+    form.setValue("isSuperAdmin", false);
+    form.setValue("isManager", false);
+  },[])
+
   const { mutate } = useMutation(createRecruiter, {
-    onSuccess: ({ data }) => console.log(data),
+    onSuccess: ({ data }) =>{
+      console.log(data)
+      toast("Successfully Added", {autoClose:2000});
+      refresh(true);
+    },
+    onError:(data)=>{
+      console.log(data.config.data);
+      toast("Something Happened", {autoClose:2000});
+    }
   });
 
   function onSubmit(data) {
@@ -140,9 +156,11 @@ export function AddRecruiterForm() {
           )}
         />
 
+<DialogClose>
         <Button type="submit" className="w-full mt-4">
           Create Recruiter
         </Button>
+</DialogClose>
       </form>
     </Form>
   );

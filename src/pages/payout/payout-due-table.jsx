@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { approveAPayout, getPayouts } from "@/services/Payouts";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-export const columns = [
+const PayoutDueTable = () => {
+ const columns = [
   {
     id: "payout_to",
     header: "Payout to",
@@ -66,6 +68,7 @@ export const columns = [
       return (
         <div className="gap-2 flex_end">
           <IssuePayout
+            refresh={setShouldRefresh}
             cphId={getValue("cphId")}
             phoneNumber={getValue("phoneNumber")}
             email={getValue("email")}
@@ -79,11 +82,12 @@ export const columns = [
   },
 ];
 
-const PayoutDueTable = () => {
+
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
   const [data, setData]=useState([]);
   const [isLoading, setIsLoading]=useState(true);
+  const [shouldRefresh, setShouldRefresh]=useState(false);
 
   // const { data, isLoading } = useQuery({
   //   queryFn: () => getPayouts(page, "due"),
@@ -108,7 +112,7 @@ const PayoutDueTable = () => {
   useEffect(()=>{
     setIsLoading(true);
     mutate({page:page,paymentType:"due"});
-  },[])
+  },[shouldRefresh])
 
   const totalPages = Math.ceil(data?.data?.data?.totalItems / 30) || 1;
 
@@ -132,7 +136,13 @@ const PayoutDueTable = () => {
 };
 
 const IssuePayout = (data) => {
-  const { mutate, isLoading } = useMutation(approveAPayout);
+  const { mutate, isLoading } = useMutation(approveAPayout,{
+    onSuccess: ({dataa})=>{
+      console.log(dataa);
+      toast("Completed Payout",{autoClose:2000})
+      data.refresh(true);
+    }
+  });
 
   const handleClick = () => {
     mutate({
