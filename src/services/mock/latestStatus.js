@@ -15,7 +15,9 @@ export const latestStatus = [
   { label: "Period_Complete", value: "Period_Complete" },
   { label: "Interviewed", value: "Interviewed" },
   { label: "Shortlisted", value: "Shortlisted" },
-  { label: "Archived", value: "Archived" },
+  { label: "Screening Pending", value: "Screening Pending" },
+  { label: "No Response", value: "No Response" },
+  
   
   
 ];

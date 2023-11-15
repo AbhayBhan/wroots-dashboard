@@ -190,6 +190,28 @@ export function getProcessingStatesDropdown() {
       "active": true,
       "positive": false,
       "positivity_rank": 0
+    },
+     {
+      "id": 16,
+      "name": "No Response",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "created_date": "2022-06-26 05:56:27",
+      "updated_date": "2022-06-26 05:56:27",
+      "active": true,
+      "positive": false,
+      "positivity_rank": 0
+    },
+     {
+      "id": 17,
+      "name": "Screening Pending",
+      "created_by": "admin",
+      "updated_by": "admin",
+      "created_date": "2022-06-26 05:56:27",
+      "updated_date": "2022-06-26 05:56:27",
+      "active": true,
+      "positive": false,
+      "positivity_rank": 0
     }
    ]
    return processingStates;   
