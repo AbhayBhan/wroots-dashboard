@@ -14,6 +14,7 @@ import CandidateTable from "./all-candidate-table";
 import MyCanidateTable from "./my-candidate-table";
 import UnassignedCanidateTable from "./unassigned-canidate-table";
 import { useSearchParams } from "react-router-dom";
+import ArchivedTable from "./archived-candidate-table";
 
 const CandidateList = () => {
   const isSuperAdmin = JSON.parse(
@@ -68,6 +69,7 @@ const CandidateList = () => {
             "Unassigned Candidates",
             "My Candidates",
             isManager && "All Candidates",
+            "Archived Candidates"
           ]
             .filter((item) => item !== false)
             .map((item) => (
@@ -89,6 +91,9 @@ const CandidateList = () => {
           </TabsContent>
           <TabsContent value="All Candidates" className="m-0">
             <CandidateTable />
+          </TabsContent>
+          <TabsContent value="Archived Candidates" className="m-0">
+            <ArchivedTable />
           </TabsContent>
         </div>
       </Tabs>

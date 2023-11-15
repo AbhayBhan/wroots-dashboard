@@ -98,7 +98,7 @@ const MyCandidateAction = ({ rowData }) => {
       </Dialog>
       <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
         <DialogTrigger asChild>
-          <FaTimes className="mt-0.5" color="red" size={28} />
+          <button><FaTimes className="mt-0.5" color="red" size={28} /></button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
