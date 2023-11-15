@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
@@ -17,43 +17,49 @@ export const columns = [
     id: "name",
     header: "Details",
     cell: ({ getValue }) => (
-      <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">{getValue("name")}</span>
-        <span className="text-xs text-muted-foreground">
-          {getValue("phoneNumber")}
-        </span>
-      </div>
+      <Link to={`/candidate/${getValue("id")}/details`}>
+        <div className="flex flex-col whitespace-nowrap">
+          <span className="capitalize">{getValue("name")}</span>
+          <span className="text-xs text-muted-foreground">
+            {getValue("phoneNumber")}
+          </span>
+        </div>
+      </Link>
     ),
   },
   {
     id: "referrer",
     header: () => <div>Referred by</div>,
     cell: ({ row }) => (
-      <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">
-          {row.self ? "Self Applied" : `${row.referror["name"]}`}
-        </span>
-        {!row.self && (
-          <span className="text-xs text-muted-foreground">
-            {row.referror["phoneNumber"]}
+      <Link to={`/candidate/${row.id}/details`}>
+        <div className="flex flex-col whitespace-nowrap">
+          <span className="capitalize">
+            {row.self ? "Self Applied" : `${row.referror["name"]}`}
           </span>
-        )}
-        <span className="text-xs text-muted-foreground">
-          {formatTimestamp(row.createdDate)}
-        </span>
-      </div>
+          {!row.self && (
+            <span className="text-xs text-muted-foreground">
+              {row.referror["phoneNumber"]}
+            </span>
+          )}
+          <span className="text-xs text-muted-foreground">
+            {formatTimestamp(row.createdDate)}
+          </span>
+        </div>
+      </Link>
     ),
   },
   {
     id: "job",
     header: "Category & Role",
     cell: ({ row }) => (
-      <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">{row.role["name"]}</span>
-        <span className="text-xs text-muted-foreground">
-          {row.category["name"]}
-        </span>
-      </div>
+      <Link to={`/candidate/${row.id}/details`}>
+        <div className="flex flex-col whitespace-nowrap">
+          <span className="capitalize">{row.role["name"]}</span>
+          <span className="text-xs text-muted-foreground">
+            {row.category["name"]}
+          </span>
+        </div>
+      </Link>
     ),
   },
   {
@@ -61,14 +67,16 @@ export const columns = [
     header: "Latest Status",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="inline-block">
-            <Badge>{row.latestStatus}</Badge>
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {formatTimestamp(row.updatedDate)}
-          </span>
-        </div>
+        <Link to={`/candidate/${row.id}/details`}>
+          <div className="flex flex-col whitespace-nowrap">
+            <span className="inline-block">
+              <Badge>{row.latestStatus}</Badge>
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {formatTimestamp(row.updatedDate)}
+            </span>
+          </div>
+        </Link>
       );
     },
   },
@@ -129,7 +137,11 @@ const MyCanidateTable = () => {
           placeholder="Select Status"
         />
       </div>
-      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
+      <CountBadge
+        title={"Candidates"}
+        data={data?.data?.totalRows}
+        isLoading={isLoading}
+      />
       <SimpleTable
         columns={columns}
         data={candidateList}

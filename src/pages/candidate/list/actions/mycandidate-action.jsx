@@ -1,5 +1,5 @@
 import Spinner from "@/components/organism/spinner";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,20 +8,25 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { fetchSingleCandidate } from "@/services/candidate";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { FaTimes, FaWhatsapp } from "react-icons/fa";
+import {
+  fetchSingleCandidate,
+  deactivateCandidate,
+} from "@/services/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Processinglist from "../../detail/processing-section/processing-list";
 import ProcessingForm from "../processing-form";
 import useScroll from "@/hooks/useScroll";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@radix-ui/react-dropdown-menu";
 
 const MyCandidateAction = ({ rowData }) => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
   const [queryFlag, setQueryFlag] = useState(false);
+  const [notes, setNotes] = useState("");
   const [processingList, setProcessingList] = useState([]);
 
   const currentDivId = `mycandidate-${rowData.id}`;
@@ -32,6 +37,13 @@ const MyCandidateAction = ({ rowData }) => {
       setLoading(false);
       console.log(data);
       setProcessingList(data[0].candidateProcessingHistory);
+    },
+  });
+
+  const { mutate: deactiveMutate , isLoading} = useMutation(deactivateCandidate, {
+    onSuccess: () => {
+      setIsRejectOpen(false);
+      setNotes("");
     },
   });
 
@@ -46,18 +58,6 @@ const MyCandidateAction = ({ rowData }) => {
 
   return (
     <div className="flex justify-end gap-2" id={currentDivId}>
-      <Link
-        to={`/candidate/${rowData.id}/details`}
-        // className="hidden h-8 ml-auto lg:flex"
-        className={cn(
-          buttonVariants({ variant: "ghost", size: "icon" }),
-          "hover:bg-muted "
-        )}
-        onClick={saveRowPosition}
-        title="Detail View"
-      >
-        <EyeOpenIcon className="w-5 h-5 text-slate-500" />
-      </Link>
       <Dialog
         open={isOpen}
         onOpenChange={(e) => {
@@ -96,6 +96,44 @@ const MyCandidateAction = ({ rowData }) => {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+      <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
+        <DialogTrigger asChild>
+          <FaTimes className="mt-0.5" color="red" size={28} />
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="mb-3">Deactivate Candidate</DialogTitle>
+            <Label>Note</Label>
+            <Textarea
+              placeholder="Write note here..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                const recruiterId = JSON.parse(
+                  localStorage.getItem("userdata")
+                ).id;
+                deactiveMutate({
+                  note: notes,
+                  candidateId: rowData.id,
+                  recruiterId,
+                });
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner /> : "Deactivate Candidate"}
+            </Button>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <a
+        href={`https://wa.me/+91${rowData.phoneNumber}`}
+        target="_blank"
+        className="mt-0.5"
+      >
+        <FaWhatsapp size={28} color="green" />
+      </a>
     </div>
   );
 };

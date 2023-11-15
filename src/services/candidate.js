@@ -56,5 +56,8 @@ export const createCandidate = (payload) =>
 export const deleteCandidate = (payload) =>
   axiosInstance.post("/location/deletelocation", payload);
 
+export const deactivateCandidate = (payload) => 
+  axiosInstance.post("/candidate/deactivateCandidate", payload);
+
 export const createProcessing = (payload) =>
   axiosInstance.post("/newcp/newCP", payload);
