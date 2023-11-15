@@ -28,6 +28,8 @@ const routes = [
   getItem("Recruiters", "/recruiter", "recruiter", MdPersonSearch),
 ];
 
+const allowedRecruiter = ["Candidates","Dashboard","Jobs","Jobs Categories","App Users","Companies","Skills","Locations"]
+
 const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
   const location = useLocation();
   const { pathname } = location;
@@ -52,7 +54,7 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
         {routes.map((route) => {
           const Icon = route?.icon;
           if (!isSuperAdmin) {
-            if (route.label === "Candidates") {
+            if (allowedRecruiter.includes(route.label)) {
               return (
                 <Link
                   key={route.key}
