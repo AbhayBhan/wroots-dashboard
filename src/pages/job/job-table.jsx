@@ -64,7 +64,7 @@ export const columns = [
   },
   {
     id: "salary",
-    header: "Salary",
+    header: "Salary (lpa)",
     cell: ({ row }) => (
       <div className="capitalize whitespace-nowrap">
         {formatNumberWithKM(row.original["min_salary"])} {" - "}

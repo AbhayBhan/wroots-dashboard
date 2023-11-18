@@ -1,17 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
-import JobTable from "./job-table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { PlusIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import { AddForm } from "@/components/organism/add-form";
+import { PlusIcon } from "@radix-ui/react-icons";
+import JobTable from "./job-table";
 
 const Job = () => {
   return (
@@ -30,9 +19,15 @@ const Job = () => {
               Add job form will be there.
             </DialogHeader>
           </DialogContent>
-        </Dialog> */} 
+        </Dialog> */}
         {/* Instead of Creating a job in app, we are redirecting to deployed form */}
-        <Button onClick={() => window.location.href = "https://wroots-form.netlify.app/"} variant="default" className="ml-auto">
+        <Button
+          onClick={() =>
+            window.open("https://wroots-form.netlify.app/", "_blank")
+          }
+          variant="default"
+          className="ml-auto"
+        >
           <PlusIcon className="w-4 h-4 mr-1" /> Add new Job
         </Button>
       </div>

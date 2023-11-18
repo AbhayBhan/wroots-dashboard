@@ -10,12 +10,11 @@ export const fetchArchivedJobs = () => {
 export const addAjob = (payload) =>
   axiosInstance.post("/roleRouter/getActiveRoles", payload);
 
-export const archiveSingleJob = (jobId) => {
-  let payload = {
-    roleId: jobId,
-  };
-  return axiosInstance.post("/roleRouter/archiveAJob", payload);
-};
+export const deleteJob = (payload) =>
+  axiosInstance.post("/roleRouter/deleteRole", payload);
+
+export const archiveSingleJob = (payload) =>
+  axiosInstance.post("/roleRouter/archiveAJob", payload);
 
 export const edtiAjob = (payload) =>
   axiosInstance.post("/roleRouter/getActiveRoles", payload);
