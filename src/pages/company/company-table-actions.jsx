@@ -1,12 +1,3 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,22 +9,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { JobCategoryForm } from "./job-category-form";
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCategory } from "@/services/JobCategories";
-import { toast } from "react-toastify";
-import { useRef, useState } from "react";
-import Spinner from "@/components/organism/spinner";
 
-const JobCategoryActions = ({ row }) => {
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import { useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { deleteCompany } from "@/services/companies";
+import CompanyForm from "./company-form";
+
+const CompanyTableActions = ({ row }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const toastId = useRef(null);
   const queryClient = useQueryClient();
 
-  const deleteCategoryMutation = useMutation({
-    mutationFn: deleteCategory,
+  const deleteCompanyMutation = useMutation({
+    mutationFn: deleteCompany,
     onSuccess: ({ data }) => {
       toast.update(toastId.current, {
         render: "Category deleted successfully!!",
@@ -42,7 +42,7 @@ const JobCategoryActions = ({ row }) => {
         autoClose: 2000,
       });
 
-      queryClient.invalidateQueries({ queryKey: ["All-Categories"] });
+      queryClient.invalidateQueries({ queryKey: ["All-Company"] });
     },
     onError: () => {
       toast.update(toastId.current, {
@@ -55,12 +55,23 @@ const JobCategoryActions = ({ row }) => {
   });
 
   const handleDeleteClick = () => {
-    deleteCategoryMutation.mutate({ id: row?.id });
+    deleteCompanyMutation.mutate({ id: row?.id });
     toastId.current = toast.loading("Deleting...");
   };
 
   return (
     <div className="flex justify-end gap-2">
+      {/* <Link
+        to={"/company/details"}
+        // className="hidden h-8 ml-auto lg:flex"
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon" }),
+          "hover:bg-muted "
+        )}
+        title="Detail View"
+      >
+        <EyeOpenIcon className="w-5 h-5 text-slate-500" />
+      </Link> */}
       <Dialog open={editModal} onOpenChange={setEditModal}>
         <DialogTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -69,15 +80,14 @@ const JobCategoryActions = ({ row }) => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="mb-3">Edit Job Categories</DialogTitle>
-            <JobCategoryForm
+            <DialogTitle className="mb-3">Edit Company</DialogTitle>
+            <CompanyForm
               initialData={row}
               onSuccessAction={() => setEditModal(false)}
             />
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
       <AlertDialog open={deleteModal} onOpenChange={setDeleteModal}>
         <AlertDialogTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -107,4 +117,4 @@ const JobCategoryActions = ({ row }) => {
   );
 };
 
-export default JobCategoryActions;
+export default CompanyTableActions;

@@ -30,12 +30,7 @@ const JobCategories = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Add new Category</DialogTitle>
-              <JobCategoryForm
-                onSuccessAction={() => {
-                  setIsModalOpen(false);
-                  window.location.reload();
-                }}
-              />
+              <JobCategoryForm onSuccessAction={() => setIsModalOpen(false)} />
             </DialogHeader>
           </DialogContent>
         </Dialog>

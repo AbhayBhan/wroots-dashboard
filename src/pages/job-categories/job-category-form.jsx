@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import useFirebaseImageUpload from "@/hooks/useFirebaseImageUpload";
 import { addCategory, updateCategory } from "@/services/JobCategories";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export function JobCategoryForm({ initialData, onSuccessAction }) {
   const isEditMode = typeof initialData === "object";
+  const queryClient = useQueryClient();
   const defaultValues = {
     name: initialData?.name || "",
   };
@@ -33,6 +34,7 @@ export function JobCategoryForm({ initialData, onSuccessAction }) {
         ? toast.success("Category edited successfully!!")
         : toast.success("Category added successfully!!");
 
+      queryClient.invalidateQueries({ queryKey: ["All-Categories"] });
       if (onSuccessAction) onSuccessAction();
     },
     onError: () => {
