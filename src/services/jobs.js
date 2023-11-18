@@ -75,3 +75,13 @@ export const getCandidatesPeroidComplete = (jobId, page) => {
 
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
+
+export const sendPush = (roleId) => {
+  const params = {
+    roleId: roleId || null,
+  };
+
+  return axiosInstance.get("/roleRouter/sendPush", {
+    params,
+  });
+};

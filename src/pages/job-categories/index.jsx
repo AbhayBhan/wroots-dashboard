@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
+import React, { useState } from "react";
 import JobTable from "./job-table";
 import {
   Dialog,
@@ -15,11 +15,13 @@ import { AddForm } from "@/components/organism/add-form";
 import { JobCategoryForm } from "./job-category-form";
 
 const JobCategories = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div>
       <div className="flex mb-5">
         <h2 className="text-2xl font-bold tracking-tight">Jobs Categories</h2>
-        <Dialog>
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
             <Button variant="default" className="ml-auto">
               <PlusIcon className="w-4 h-4 mr-1" /> Add new Category
@@ -28,7 +30,12 @@ const JobCategories = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-3">Add new Category</DialogTitle>
-              <JobCategoryForm />
+              <JobCategoryForm
+                onSuccessAction={() => {
+                  setIsModalOpen(false);
+                  window.location.reload();
+                }}
+              />
             </DialogHeader>
           </DialogContent>
         </Dialog>

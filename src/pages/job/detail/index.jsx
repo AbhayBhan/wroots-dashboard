@@ -8,6 +8,10 @@ import { useLocation, useParams } from "react-router-dom";
 import Alert from "@/components/ui/alert";
 import PeriodCompleteTable from "./period-complete-table";
 import { toast } from "react-toastify";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import Spinner from "@/components/organism/spinner";
+import { sendPush } from "@/services/jobs";
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -21,11 +25,18 @@ const JobDetail = () => {
           Job Detail
         </h2>
         <div className="space-x-2">
-          <Button onClick={() => {
-            navigator.clipboard.writeText(`https://jobs.wraeglobal.com/jobs?id=${id}`);
-            toast.success("Copied Link to Clipboard")
-          }} variant="outline">Copy link</Button>
-          <Button>Send push</Button>
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `https://jobs.wraeglobal.com/jobs?id=${id}`
+              );
+              toast.success("Copied Link to Clipboard");
+            }}
+            variant="outline"
+          >
+            Copy link
+          </Button>
+          <SendPushButton roleId={jobDetails?.id} />
         </div>
       </div>
       <Tabs defaultValue="Details">
@@ -83,6 +94,27 @@ const JobDetail = () => {
         </div>
       </Tabs>
     </section>
+  );
+};
+
+const SendPushButton = ({ roleId }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnChange = async () => {
+    try {
+      setIsLoading(true);
+      const response = await sendPush(roleId);
+      toast.success("Successfully sent push!!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return (
+    <Button onClick={handleOnChange} disabled={isLoading}>
+      {isLoading ? <Spinner className="text-white" /> : "Send push"}
+    </Button>
   );
 };
 

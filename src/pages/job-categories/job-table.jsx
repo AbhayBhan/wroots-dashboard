@@ -1,35 +1,14 @@
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
-import * as React from "react";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import Spinner from "@/components/organism/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { fetchAllCategories } from "@/services/JobCategories";
 import { useMutation } from "@tanstack/react-query";
-import { JobCategoryForm } from "./job-category-form";
+import * as React from "react";
+
 import { processName } from "@/utils/helper";
+import JobCategoryActions from "./job-category-actions";
 
 export const columns = [
   {
@@ -49,46 +28,7 @@ export const columns = [
     id: "actions",
     header: "",
     cell: ({ row }) => {
-      return (
-        <div className="flex justify-end gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Pencil1Icon className="w-5 h-5 text-slate-500" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="mb-3">Edit Job Categories</DialogTitle>
-                <JobCategoryForm />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <TrashIcon className="w-5 h-5 text-red-500" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction variant="destructive">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      );
+      return <JobCategoryActions row={row} />;
     },
   },
 ];
@@ -99,7 +39,8 @@ const JobTable = () => {
 
   const [categoryData, setCategoryData] = React.useState([]);
 
-  const { mutate, isLoading } = useMutation(fetchAllCategories, {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: fetchAllCategories,
     onSuccess: ({ data }) => {
       setCategoryData(data.category.records);
       console.log(data.category.records);
