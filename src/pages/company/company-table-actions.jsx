@@ -36,7 +36,7 @@ const CompanyTableActions = ({ row }) => {
     mutationFn: deleteCompany,
     onSuccess: ({ data }) => {
       toast.update(toastId.current, {
-        render: "Category deleted successfully!!",
+        render: "Company deleted successfully!!",
         type: "success",
         isLoading: false,
         autoClose: 2000,
@@ -46,7 +46,7 @@ const CompanyTableActions = ({ row }) => {
     },
     onError: () => {
       toast.update(toastId.current, {
-        render: "Failed to delete category!!",
+        render: "Failed to delete company!!",
         type: "error",
         isLoading: false,
         autoClose: 2000,
