@@ -30,7 +30,7 @@ const LazyAppUserDetail = lazy(() => import("./pages/app-users/details"));
 const LazyCandidateDetail = lazy(() => import("./pages/candidate/detail"));
 const LazyCandidateList = lazy(() => import("./pages/candidate/list"));
 const LazyCompany = lazy(() => import("./pages/company"));
-const LazyCompanyDetails = lazy(() => import("./pages/company/details"));
+// const LazyCompanyDetails = lazy(() => import("./pages/company/details"));
 const LazyDashboard = lazy(() => import("./pages/dashboard"));
 const LazyJob = lazy(() => import("./pages/job"));
 const LazyJobCategories = lazy(() => import("./pages/job-categories"));
@@ -69,7 +69,7 @@ function App() {
                 }
               />
               <Route path="company" element={<LazyCompany />} />
-              <Route path="company/details" element={<LazyCompanyDetails />} />
+              {/* <Route path="company/details" element={<LazyCompanyDetails />} /> */}
               <Route path="recruiter" element={<LazyRecruiter />} />
               <Route
                 path="recruiter/:id/details"

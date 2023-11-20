@@ -1,37 +1,19 @@
-import React, { useEffect, useState } from "react";
+import Spinner from "@/components/organism/spinner";
+import { DateRange } from "@/components/ui/date-range";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+  getRecruiterDashboard,
+  getSuperAdminDashboard,
+} from "@/services/dashboard";
 import { fetchActiveJobs } from "@/services/jobs";
 import {
-  getFirstDayOfYear,
-  getCurrentDate,
-  formatDateForInput,
   formatDateOnlyString,
+  getCurrentDate,
+  getFirstDayOfYear
 } from "@/utils/dateTime";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { Card1, Card2, Card3 } from "./cards/cards";
-import {
-  getSuperAdminDashboard,
-  getRecruiterDashboard,
-} from "@/services/dashboard";
-import Spinner from "@/components/organism/spinner";
 import MyResponsiveFunnel from "./cards/funnel";
-import { DateRange } from "@/components/ui/date-range";
-import { setDate } from "date-fns";
 
 const Dashboard = () => {
   const userdata = JSON.parse(localStorage.getItem("userdata"));

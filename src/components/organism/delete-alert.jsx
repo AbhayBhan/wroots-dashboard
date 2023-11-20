@@ -1,5 +1,3 @@
-import React from "react";
-import { Button } from "../ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,29 +8,47 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
+import PropTypes from "prop-types";
+import { Button } from "../ui/button";
+import { TrashIcon } from "@radix-ui/react-icons";
 
-const DeleteAlert = () => {
+const DeleteAlert = ({
+  isModalOpen,
+  setIsModalOpen,
+  title = "Are you absolutely sure?",
+  description = "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
+  onDeleteClick,
+}) => {
   return (
-    <AlertDialog>
+    <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="ghost" size="icon">
+          <TrashIcon className="w-5 h-5 text-red-500" />
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction variant="destructive" onClick={onDeleteClick}>
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
+};
+
+DeleteAlert.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
+  onDeleteClick: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default DeleteAlert;
