@@ -41,6 +41,14 @@ export const fetchUnassignCandidates = (category, page, filterTerm, isManager) =
   return axiosInstance.get("/nc/getUnassignedCandidates", { params });
 };
 
+export const fetchArchivedCandidate = (pageno, categoryId) => {
+  const params = {
+    categoryId,
+    pageno
+  }
+  return axiosInstance.get("/nc/getArchivedCandidates", {params});
+}
+
 export const assignCandidate = (payload) =>
   axiosInstance.post("/candidate/assignStatus", payload);
   

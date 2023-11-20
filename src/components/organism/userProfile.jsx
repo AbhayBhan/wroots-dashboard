@@ -13,7 +13,7 @@ import { auth } from "@/services/firebaseConfig";
 import { signOut } from 'firebase/auth';
 
 const UserProfile = () => {
-  const {name, email} = JSON.parse(localStorage.getItem('userdata'));
+  const {name = "user", email = "usermail"} = JSON.parse(localStorage.getItem('userdata'));
   const navigate = useNavigate();
   const signout = () => {
     signOut(auth).then(() => {
