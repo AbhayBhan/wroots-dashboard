@@ -78,7 +78,7 @@ const CandidateDetail = () => {
               />
             </div>
             {/* <ExperienceCard /> */}
-            <ExtraInfoCard />
+            <ExtraInfoCard candidateData={candidateData} />
           </div>
           <Tabs defaultValue="Processing History" className="col-span-8">
             <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">

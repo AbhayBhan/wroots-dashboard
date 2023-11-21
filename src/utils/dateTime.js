@@ -17,18 +17,33 @@ export const dayDifference = (from, to) => {
 export function getFirstDayOfYear() {
   const currentYear = new Date().getFullYear();
   const firstDayOfYear = new Date(Date.UTC(currentYear, 0, 1, 0, 0, 0));
-  // const formattedDate = firstDayOfYear.toISOString().split('T')[0]; 
+  // const formattedDate = firstDayOfYear.toISOString().split('T')[0];
   return firstDayOfYear;
 }
 
 export function getCurrentDate() {
   const currentDate = new Date();
-  // const formattedDate = currentDate.toISOString().split('T')[0]; 
+  // const formattedDate = currentDate.toISOString().split('T')[0];
   return currentDate;
 }
 
-export function formatDateOnlyString(dateValue){
-  const formattedDate = dateValue.toISOString().split('T')[0];
+export function formatDateOnlyString(dateValue) {
+  const formattedDate = dateValue.toISOString().split("T")[0];
   return formattedDate;
 }
 
+export function formatDateString(dateValue) {
+  const date = new Date(dateValue);
+
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZoneName: "short",
+  };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+  return formattedDate;
+}

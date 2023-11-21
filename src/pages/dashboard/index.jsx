@@ -8,15 +8,18 @@ import { fetchActiveJobs } from "@/services/jobs";
 import {
   formatDateOnlyString,
   getCurrentDate,
-  getFirstDayOfYear
+  getFirstDayOfYear,
 } from "@/utils/dateTime";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Card1, Card2, Card3 } from "./cards/cards";
+import { Card1, Card2, Card3, Card4 } from "./cards/cards";
 import MyResponsiveFunnel from "./cards/funnel";
 
 const Dashboard = () => {
   const userdata = JSON.parse(localStorage.getItem("userdata"));
+  const [rawFunnelData, setRawFunnelData] = useState([]);
+  const [referData, setReferData] = useState({});
+  const [categoryCountData, setCategoryCountData] = useState({});
   const [funnelData, setFunnelData] = useState([
     { id: 1, label: "test", value: 2000 },
   ]);
@@ -35,6 +38,9 @@ const Dashboard = () => {
     userdata?.isSuperAdmin ? getSuperAdminDashboard : getRecruiterDashboard,
     {
       onSuccess: ({ data }) => {
+        setCategoryCountData(data.categoryWiseCount);
+        setReferData(data?.candidatesReferred);
+        setRawFunnelData(data?.funnelData);
         const allowedLabels = ["In_Process", "Joined", "Selected", "Quit"];
         const filteredData = data?.funnelData
           .filter((item) => allowedLabels.includes(item.name))
@@ -89,10 +95,15 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
-          <div className="flex justify-between w-full">
-            <Card1 isLoading={isLoading} />
-            <Card2 />
-            <Card3 />
+          <div className="flex gap-2 w-full">
+            <div className="flex flex-col gap-2">
+              <Card1 isLoading={isLoading} />
+              <Card3 referData={referData} />
+            </div>
+            <Card2 funnelData={rawFunnelData} />
+            {(userdata.isSuperAdmin || userdata.isManager) && (
+              <Card4 categoryData={categoryCountData} />
+            )}
           </div>
           <MyResponsiveFunnel data={funnelData} />
         </div>
