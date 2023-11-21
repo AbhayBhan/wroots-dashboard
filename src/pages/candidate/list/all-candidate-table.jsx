@@ -2,18 +2,18 @@ import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { categoryOptions } from "@/utils/contants";
-import { fetchAllCategories } from "@/services/JobCategories";
 import { Button } from "@/components/ui/button";
 import { exportAllCandidates, fetchAllCandidates } from "@/services/candidate";
 import { latestStatus } from "@/services/mock/latestStatus";
 import { formatTimestamp } from "@/utils/dateTime";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import AllCandidateAction from "./actions/all-candidate-action";
 import CountBadge from "@/components/organism/countbadge";
+import { fetchRecruiters } from "@/services/recruiter";
 
 export const columns = [
   {
@@ -87,7 +87,8 @@ export const columns = [
 const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedRecruiter, setSelectedRecruiter] = useState(1);
+  const [selectedRecruiter, setSelectedRecruiter] = useState(null);
+  const [recruiterList, setRecruiterList] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -105,9 +106,28 @@ const CandidateTable = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["Candidates", "All", page, selectedCategory, selectedStatus, filterTerm],
-    queryFn: () => fetchAllCandidates(page, filterTerm, selectedStatus, selectedCategory),
+    queryKey: [
+      "Candidates",
+      "All",
+      page,
+      selectedCategory,
+      selectedStatus,
+      selectedRecruiter,
+      filterTerm,
+    ],
+    queryFn: () =>
+      fetchAllCandidates(page, filterTerm, selectedStatus, selectedCategory, selectedRecruiter),
     // keepPreviousData: true,
+  });
+
+  const { mutate } = useMutation(fetchRecruiters, {
+    onSuccess: ({ data }) => {
+      setRecruiterList(
+        data.recruiters.map((it) => {
+          return { label: it.recruiter_name, value: it.id };
+        })
+      );
+    },
   });
 
   useEffect(() => {
@@ -115,6 +135,15 @@ const CandidateTable = () => {
       handlePageChange(1);
     }
   }, [filterTerm]);
+
+  useEffect(() => {
+    const id = JSON.parse(localStorage.getItem("userdata")).id;
+    const reqbody = {
+      pageno: page,
+      recruiterId: id,
+    };
+    mutate(reqbody);
+  }, []);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
 
@@ -126,7 +155,7 @@ const CandidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <div className="flex flex-row justify-between gap-2 w-1/3">
+        <div className="flex flex-row justify-between gap-2 w-2/4">
           <ReactSelect
             options={categoryOptions}
             className="w-full text-sm"
@@ -143,12 +172,33 @@ const CandidateTable = () => {
             onChange={(data) => setSelectedStatus(data.value)}
             placeholder="Select Status"
           />
-          <Button onClick={() => exportAllCandidates(selectedCategory,selectedRecruiter,selectedStatus)} variant="outline" className="mr-2">
+          <ReactSelect
+            options={recruiterList}
+            className="w-full text-sm"
+            value={selectedRecruiter?.label}
+            onChange={(data) => setSelectedRecruiter(data.value)}
+            placeholder="Select Recruiter"
+          />
+          <Button
+            onClick={() =>
+              exportAllCandidates(
+                selectedCategory,
+                selectedRecruiter,
+                selectedStatus
+              )
+            }
+            variant="outline"
+            className="mr-2"
+          >
             Export
           </Button>
         </div>
       </div>
-      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
+      <CountBadge
+        title={"Candidates"}
+        data={data?.data?.totalRows}
+        isLoading={isLoading}
+      />
       <SimpleTable
         columns={columns}
         data={data?.data?.candidates}
