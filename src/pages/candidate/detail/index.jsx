@@ -26,9 +26,18 @@ const CandidateDetail = () => {
     },
   });
 
+  
+
   const addProcess = (newList) => {
     setProcessingList(newList);
   }
+
+  const deleteProcess = (id) => {
+    setProcessingList(prevList => {
+      const updatedList = prevList.filter(process => process.id !== id);
+      return updatedList;
+    });
+  };
   
   useEffect(() => {
     mutate(parseInt(id));
@@ -106,6 +115,7 @@ const CandidateDetail = () => {
                 addProcess={addProcess}
                 processingData={processingList}
                 candidateId={parseInt(id)}
+                removeProcess={deleteProcess}
               />
             </TabsContent>
             <TabsContent

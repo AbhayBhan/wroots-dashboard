@@ -84,6 +84,10 @@ export const deactivateCandidate = (payload) =>
 export const createProcessing = (payload) =>
   axiosInstance.post("/newcp/newCP", payload);
 
+export const deleteProcessing = (payload) => 
+  axiosInstance.post("/newcp/deleteCandidatehistory", payload);
+
+
 // Data Export API Functions
 
 export const exportMyCandidates = (categoryId, recruiterId) => {
