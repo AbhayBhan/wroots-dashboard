@@ -43,10 +43,7 @@ const CandidateList = () => {
     <div>
       <div className="mb-5 flex_between">
         <h2 className="text-2xl font-bold tracking-tight">Candidate List</h2>
-        <div className="flex items-center">
-          <Button variant="outline" className="mr-2">
-            Export
-          </Button>
+        <div className="flex items-center">         
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant="default" className="ml-auto">

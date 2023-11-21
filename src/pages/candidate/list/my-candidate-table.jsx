@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { fetchMyCandidates } from "@/services/candidate";
+import { exportMyCandidates, fetchMyCandidates } from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { useQuery } from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
@@ -90,7 +91,7 @@ export const columns = [
 ];
 
 const MyCanidateTable = () => {
-  const recruiterId = JSON.parse(localStorage.getItem("userdata")).id;
+  const {id : recruiterId, categoryId} = JSON.parse(localStorage.getItem("userdata"));
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -129,13 +130,18 @@ const MyCanidateTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <ReactSelect
-          options={latestStatus}
-          className="w-1/6 text-sm"
-          value={selectedStatus?.label}
-          onChange={(data) => setSelectedStatus(data.value)}
-          placeholder="Select Status"
-        />
+        <div className="flex flex-row justify-between gap-2 w-1/3">
+          <ReactSelect
+            options={latestStatus}
+            className="w-full text-sm"
+            value={selectedStatus?.label}
+            onChange={(data) => setSelectedStatus(data.value)}
+            placeholder="Select Status"
+          />
+          <Button onClick={() => exportMyCandidates(categoryId,recruiterId)} variant="outline" className="mr-2">
+            Export
+          </Button>
+        </div>
       </div>
       <CountBadge
         title={"Candidates"}

@@ -1,10 +1,11 @@
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { categoryOptions } from "@/utils/contants";
-import { fetchArchivedCandidate } from "@/services/candidate";
+import { exportArchivedCandidates, fetchArchivedCandidate } from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -82,13 +83,13 @@ export const columns = [
 ];
 
 const ArchivedTable = () => {
-  const {categoryId} = JSON.parse(localStorage.getItem('userdata'));
+  const {categoryId, id : recruiterId} = JSON.parse(localStorage.getItem('userdata'));
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams({});
 
-  const page = Number(searchParams.get("page"));
+  const page = Number(searchParams.get("page")) || 1;
 
   const handlePageChange = (page) => {
     setSearchParams(
@@ -102,7 +103,7 @@ const ArchivedTable = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["Candidates", "Archive", page, selectedCategory, filterTerm],
-    queryFn: () => fetchArchivedCandidate(page, categoryId)
+    queryFn: () => fetchArchivedCandidate(page, selectedCategory ? selectedCategory : categoryId)
   });
 
   useEffect(() => {
@@ -121,16 +122,20 @@ const ArchivedTable = () => {
           onChange={setFilterTerm}
           placeholder="Filter by name..."
         />
-        <div className="flex flex-row-reverse gap-2 w-1/3">
+        <div className="flex flex-row justify-between gap-2 w-1/3">
           <ReactSelect
             options={categoryOptions}
-            className="w-1/3 text-sm"
+            className="w-full text-sm"
+            placeholder="Select Category"
             isSearchable={false}
             value={categoryOptions.find(
               (option) => option.value === selectedCategory
             )}
             onChange={(e) => setSelectedCategory(e.value)}
           />
+          <Button onClick={() => exportArchivedCandidates(selectedCategory ? selectedCategory : categoryId,recruiterId)} variant="outline" className="mr-2">
+            Export
+          </Button>
         </div>
       </div>
       <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />

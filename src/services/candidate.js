@@ -1,11 +1,17 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const fetchAllCandidates = (page, filterTerm, latestStatus, categoryId) => {
+// Data Fetch API Functions
+export const fetchAllCandidates = (
+  page,
+  filterTerm,
+  latestStatus,
+  categoryId
+) => {
   const params = {
     pageno: page || 1,
     q: filterTerm || null,
     latestStatus,
-    categoryId : categoryId || null
+    categoryId: categoryId || null,
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
@@ -32,7 +38,12 @@ export const fetchMyCandidates = (
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };
 
-export const fetchUnassignCandidates = (category, page, filterTerm, isManager) => {
+export const fetchUnassignCandidates = (
+  category,
+  page,
+  filterTerm,
+  isManager
+) => {
   const params = {
     categoryId: isManager ? null : category,
     pageno: page || 1,
@@ -44,14 +55,15 @@ export const fetchUnassignCandidates = (category, page, filterTerm, isManager) =
 export const fetchArchivedCandidate = (pageno, categoryId) => {
   const params = {
     categoryId,
-    pageno
-  }
-  return axiosInstance.get("/nc/getArchivedCandidates", {params});
-}
+    pageno,
+  };
+  return axiosInstance.get("/nc/getArchivedCandidates", { params });
+};
 
+// Data Manipulation API Functions
 export const assignCandidate = (payload) =>
   axiosInstance.post("/candidate/assignStatus", payload);
-  
+
 export const assignCandidateInBulk = (payload) =>
   axiosInstance.post("/candidate/assignStatusinBulk", payload);
 
@@ -64,8 +76,39 @@ export const createCandidate = (payload) =>
 export const deleteCandidate = (payload) =>
   axiosInstance.post("/location/deletelocation", payload);
 
-export const deactivateCandidate = (payload) => 
+export const deactivateCandidate = (payload) =>
   axiosInstance.post("/candidate/deactivateCandidate", payload);
 
 export const createProcessing = (payload) =>
   axiosInstance.post("/newcp/newCP", payload);
+
+// Data Export API Functions
+
+export const exportMyCandidates = (categoryId, recruiterId) => {
+  const url = `https://wroots-backend.onrender.com/candidate/getCandidateExporter?categoryId=${categoryId}&recruiterId=${recruiterId}`;
+  window.open(url, "_blank");
+};
+
+export const exportArchivedCandidates = (categoryId, recruiterId) => {
+  const url = `https://wroots-backend.onrender.com/candidate/getArchivedExporter?categoryId=${categoryId}&recruiterId=${recruiterId}`;
+  window.open(url, "_blank");
+};
+
+export const exportAllCandidates = (categoryId, recruiterId, latestStatus) => {
+  const queryParams = [];
+  if (categoryId) {
+    queryParams.push(`categoryId=${categoryId}`);
+  }
+  if (recruiterId) {
+    queryParams.push(`recruiterId=${recruiterId}`);
+  }
+  if (latestStatus) {
+    queryParams.push(`latestStatus=${latestStatus}`);
+  }
+
+  const url = `https://wroots-backend.onrender.com/candidate/getCandidateExporter${
+    queryParams.length > 0 ? "?" + queryParams.join("&") : ""
+  }`;
+
+  window.open(url, "_blank");
+};
