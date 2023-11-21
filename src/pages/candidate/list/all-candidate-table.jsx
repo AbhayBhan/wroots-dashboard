@@ -69,6 +69,9 @@ export const columns = [
             <Badge>{row.latestStatus}</Badge>
           </span>
           <span className="text-xs text-muted-foreground">
+            {row.recruiter?.name ? row.recruiter.name : "NA"}
+          </span>
+          <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
           </span>
         </div>
@@ -145,7 +148,7 @@ const CandidateTable = () => {
     mutate(reqbody);
   }, []);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">
