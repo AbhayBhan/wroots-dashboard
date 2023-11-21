@@ -73,7 +73,7 @@ export const updateCandidate = (payload) =>
   axiosInstance.post("/location/updatelocation", payload);
 
 export const createCandidate = (payload) =>
-  axiosInstance.post("/candidate/addcandidate", payload);
+  axiosInstance.post("/candidate/insertCandidate", payload);
 
 export const deleteCandidate = (payload) =>
   axiosInstance.post("/location/deletelocation", payload);

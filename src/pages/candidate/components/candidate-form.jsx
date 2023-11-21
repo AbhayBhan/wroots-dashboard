@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,20 +9,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { categoryOptions } from "@/utils/contants";
+import ReactSelect from "react-select";
 import { createCandidate } from "@/services/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import Spinner from "@/components/organism/spinner";
 
 export function CandidateForm({ onSuccessAction, initialData }) {
   const isEditing = !!initialData; // Determine if it's editing or adding
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const defaultValues = {
-    name: isEditing ? initialData.name : "",
+    candiddateName: isEditing ? initialData.name : "",
     email: isEditing ? initialData.email : "",
-    phoneNumber: isEditing ? initialData.phoneNumber : "",
+    candidiatePhoneNumber: isEditing ? initialData.phoneNumber : "",
     referrorName: isEditing ? initialData.referrorName : "",
     referrorPhoneNumber: isEditing ? initialData.referrorPhoneNumber : "",
-    recruiterId: isEditing ? initialData.recruiterId : "",
   };
 
   const form = useForm({
@@ -37,8 +42,9 @@ export function CandidateForm({ onSuccessAction, initialData }) {
   });
 
   function onSubmit(data) {
-    // candidateMuatation.mutate(data);
-    console.log(data);
+    const recruiterId = JSON.parse(localStorage.getItem('userdata')).id;
+    const reqbody = { ...data, categoryId: selectedCategory, recruiterId };
+    candidateMuatation.mutate(reqbody);
   }
 
   return (
@@ -46,12 +52,12 @@ export function CandidateForm({ onSuccessAction, initialData }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
           control={form.control}
-          name="name"
+          name="candiddateName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Candidate nsame..." {...field} />
+                <Input placeholder="Candidate name..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +78,7 @@ export function CandidateForm({ onSuccessAction, initialData }) {
         />
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="candidiatePhoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
@@ -111,22 +117,22 @@ export function CandidateForm({ onSuccessAction, initialData }) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="recruiterId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Recruiter</FormLabel>
-              <FormControl>
-                <Input placeholder="Recruiter..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        <Button type="submit" className="w-full mt-4">
-          Create
+        <div className="space-y-2">
+          <FormLabel>Category</FormLabel>
+          <ReactSelect
+            options={categoryOptions}
+            className="w-full text-sm"
+            isSearchable={false}
+            value={categoryOptions.find(
+              (option) => option.value === selectedCategory
+            )}
+            onChange={(e) => setSelectedCategory(e.value)}
+          />
+        </div>
+
+        <Button disabled={candidateMuatation.isLoading} type="submit" className="w-full mt-4">
+          {candidateMuatation.isLoading ? <Spinner /> : "Create"}
         </Button>
       </form>
     </Form>
