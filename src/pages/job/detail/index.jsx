@@ -8,16 +8,35 @@ import { useLocation, useParams } from "react-router-dom";
 import Alert from "@/components/ui/alert";
 import PeriodCompleteTable from "./period-complete-table";
 import { toast } from "react-toastify";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import Spinner from "@/components/organism/spinner";
-import { sendPush } from "@/services/jobs";
+import { getSingleJob, sendPush } from "@/services/jobs";
 
 const JobDetail = () => {
   const { id } = useParams();
-  const { state } = useLocation();
+  // const { state } = useLocation();
 
-  const jobDetails = state.jobDetails;
+  const jobMutation = useMutation({
+    mutationFn: getSingleJob,
+  });
+
+  useEffect(() => {
+    jobMutation.mutate(id);
+  }, []);
+
+  if (jobMutation.isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  // const jobDetails = state.jobDetails;
+  const jobDetails = jobMutation?.data?.data?.Job?.[0];
+  // console.log(jobDetails);
+
   return (
     <section>
       <div className="mb-5 flex_between">

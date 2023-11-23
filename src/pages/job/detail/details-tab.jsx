@@ -91,9 +91,7 @@ const DetailsTab = ({ jobDetails }) => {
             </p>
             <p>
               Expired on :{" "}
-              <strong>{formatTimestamp(jobDetails?.end_date)}</strong> (
-              {dayDifference(jobDetails?.start_date, jobDetails?.end_date)} days
-              left)
+              <strong>{formatTimestamp(jobDetails?.end_date)}</strong>
             </p>
           </div>
         </div>
@@ -185,3 +183,6 @@ const DetailsTab = ({ jobDetails }) => {
 };
 
 export default DetailsTab;
+//  (
+//               {dayDifference(jobDetails?.start_date, jobDetails?.end_date)} days
+//               left)

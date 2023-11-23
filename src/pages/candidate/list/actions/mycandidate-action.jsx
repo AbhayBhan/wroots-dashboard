@@ -40,12 +40,15 @@ const MyCandidateAction = ({ rowData }) => {
     },
   });
 
-  const { mutate: deactiveMutate , isLoading} = useMutation(deactivateCandidate, {
-    onSuccess: () => {
-      setIsRejectOpen(false);
-      setNotes("");
-    },
-  });
+  const { mutate: deactiveMutate, isLoading } = useMutation(
+    deactivateCandidate,
+    {
+      onSuccess: () => {
+        setIsRejectOpen(false);
+        setNotes("");
+      },
+    }
+  );
 
   const addProcess = (data) => {
     //In Case there is a need to update the processing list in future
@@ -103,7 +106,9 @@ const MyCandidateAction = ({ rowData }) => {
       </Dialog>
       <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
         <DialogTrigger asChild>
-          <button><FaTimes className="mt-0.5" color="red" size={28} /></button>
+          <button>
+            <FaTimes className="mt-0.5" color="red" size={28} />
+          </button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
