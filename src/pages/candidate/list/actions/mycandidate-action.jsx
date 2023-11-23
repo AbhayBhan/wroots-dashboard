@@ -47,6 +47,10 @@ const MyCandidateAction = ({ rowData }) => {
     },
   });
 
+  const addProcess = (data) => {
+    //In Case there is a need to update the processing list in future
+  }
+
   useEffect(() => {
     if (queryFlag) {
       mutate(rowData.id);
@@ -81,6 +85,7 @@ const MyCandidateAction = ({ rowData }) => {
             <ProcessingForm
               onSuccessAction={() => setIsOpen(false)}
               candidateId={rowData.id}
+              addProcess={addProcess}
             />
             <ScrollArea className="w-full mt-3 border rounded-md h-72">
               <div className="p-4">
