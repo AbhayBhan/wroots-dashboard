@@ -19,7 +19,6 @@ import React from "react";
 import { categoryOptions } from "@/utils/contants";
 
 export function EditRecruiterForm({ rowData , refresh}) {
-  console.log(rowData);
   const form = useForm({
     mode: "onChange",
     values: rowData,
@@ -30,13 +29,25 @@ export function EditRecruiterForm({ rowData , refresh}) {
   const { mutate } = useMutation(updateRecruiter, {
     onSuccess: ({ data }) => {
       console.log(data);
+      toast("Successfully Updated", { autoClose: 2000 });
+      refresh(true);
     },
   });
 
   function onSubmit(data) {
-    mutate(data);
-    toast("Successfully Updated", { autoClose: 2000 });
-    refresh(true);
+    console.log(data)
+    let obj={
+      id: data.id,
+      domain_id: data.domain_id,
+      recruiter_name: data.recruiter_name,
+      recruiter_email: data.recruiter_email,
+      recruiter_status: data.recruiter_status,
+      isSuperAdmin: data.isSuperAdmin,
+      categoryId: data.categoryId,
+      isManager: data.isManager
+    }
+    console.log(obj)
+    mutate(obj);
   }
 
   return (
@@ -72,25 +83,6 @@ export function EditRecruiterForm({ rowData , refresh}) {
                 onChange={(e) => field.onChange(e.target.value)}
                 id="email"
               />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="recruiter_password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Password"
-                  type="password"
-                  value={field.value}
-                  onChange={(e) => field.onChange(e.target.value)}
-                  id="password"
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
