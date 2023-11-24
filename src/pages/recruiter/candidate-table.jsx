@@ -38,19 +38,25 @@ export const columns = [
 
 const CandidateTable = ({ id }) => {
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages]=useState(0);
+  const [candidatesList, setCandidatesList]=useState([]);
   const [filterTerm, setFilterTerm] = useState("");
   const { data, mutate, isLoading } = useMutation({
     mutationKey: ["Recuiter", "Candidates", page],
     mutationFn: fetchCandidatesHandled,
+    onSuccess: (data)=>{
+      console.log(data)
+      setCandidatesList(data?.data?.candidates);
+      setTotalPages(Math.ceil(data.data.totalCount/30));
+    }
   });
 
   useEffect(() => {
     mutate({
       recruiterId: id,
+      pageno: page
     });
-  }, [id]);
-
-  const candidatesList = data?.data?.candidates;
+  }, [page]);
 
   return (
     <div className="w-full">
@@ -64,7 +70,7 @@ const CandidateTable = ({ id }) => {
         data={candidatesList}
         isLoading={isLoading}
       />
-      <Pagination page={page} setPage={setPage} totalPages={1000} />
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );
 };
