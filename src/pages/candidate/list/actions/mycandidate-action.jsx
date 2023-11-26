@@ -13,7 +13,7 @@ import {
   fetchSingleCandidate,
   deactivateCandidate,
 } from "@/services/candidate";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Processinglist from "../../detail/processing-section/processing-list";
 import ProcessingForm from "../processing-form";
@@ -27,6 +27,7 @@ const MyCandidateAction = ({ rowData }) => {
   const [isRejectOpen, setIsRejectOpen] = useState(false);
   const [queryFlag, setQueryFlag] = useState(false);
   const [notes, setNotes] = useState("");
+  const queryClient = useQueryClient();
   const [processingList, setProcessingList] = useState([]);
 
   const currentDivId = `mycandidate-${rowData.id}`;
@@ -52,6 +53,12 @@ const MyCandidateAction = ({ rowData }) => {
 
   const addProcess = (data) => {
     //In Case there is a need to update the processing list in future
+    
+  }
+
+  const handleProcessingSuccess = () => {
+    setIsOpen(false);
+    queryClient.invalidateQueries({queryKey : ["Candidate","My"]});
   }
 
   useEffect(() => {
@@ -86,7 +93,7 @@ const MyCandidateAction = ({ rowData }) => {
             <DialogTitle className="mb-3">Create Processing</DialogTitle>
 
             <ProcessingForm
-              onSuccessAction={() => setIsOpen(false)}
+              onSuccessAction={handleProcessingSuccess}
               candidateId={rowData.id}
               addProcess={addProcess}
             />

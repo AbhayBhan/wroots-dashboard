@@ -55,10 +55,13 @@ export const columns = [
     cell: ({ row }) => (
       <Link to={`/candidate/${row.id}/details`}>
         <div className="flex flex-col whitespace-nowrap">
-          <span className="capitalize">{row.role["name"]}</span>
           <span className="text-xs text-muted-foreground">
-            {row.category["name"]}
+            {row.role?.name ? row.role.name : "NA"}
           </span>
+          <span className="text-xs text-muted-foreground">
+            {row.company?.name ? row.company.name : "NA"}
+          </span>
+          <span className="inline-block">{row.category.name}</span>
         </div>
       </Link>
     ),
@@ -91,7 +94,9 @@ export const columns = [
 ];
 
 const MyCanidateTable = () => {
-  const {id : recruiterId, categoryId} = JSON.parse(localStorage.getItem("userdata"));
+  const { id: recruiterId, categoryId } = JSON.parse(
+    localStorage.getItem("userdata")
+  );
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -138,7 +143,11 @@ const MyCanidateTable = () => {
             onChange={(data) => setSelectedStatus(data.value)}
             placeholder="Select Status"
           />
-          <Button onClick={() => exportMyCandidates(categoryId,recruiterId)} variant="outline" className="mr-2">
+          <Button
+            onClick={() => exportMyCandidates(categoryId, recruiterId)}
+            variant="outline"
+            className="mr-2"
+          >
             Export
           </Button>
         </div>
