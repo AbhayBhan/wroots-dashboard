@@ -66,15 +66,39 @@ export const columns = [
     cell: ({ row, getValue }) => {
       return (
         <div className="gap-2 flex_end">
+          {getValue("candidate")[0].processingStatus[0].event=='INITIATED'?
           <span
             className={cn(
               buttonVariants({ variant: "ghost", size: "icon" }),
-              `w-full hover:bg-muted ${getValue("candidate")[0].processingStatus[0].status=='Joined'?"bg-green-500":"bg-red-400"}`
+              `w-full hover:bg-muted bg-green-500`
             )}
             title="Detail View"
           >
-            {getValue("candidate")[0].processingStatus[0].status}
+            {"SENT"}
           </span>
+          :""}
+          {getValue("candidate")[0].processingStatus[0].event=='CASHGRAM_REDEEMED'?
+          <span
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              `w-full hover:bg-muted bg-yellow-500`
+            )}
+            title="Detail View"
+          >
+            {"WITHDRWAN"}
+          </span>
+          :""}
+          {getValue("candidate")[0].processingStatus[0].event=='EXPIRED'?
+          <span
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              `w-full hover:bg-muted bg-red-500`
+            )}
+            title="Detail View"
+          >
+            {"EXPIRED"}
+          </span>
+          :""}
         </div>
       );
     },

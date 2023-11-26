@@ -29,15 +29,13 @@ const RecruiterDetails = () => {
             </h4>
           </div>
 
-          <Numberscard />
+          {/* <Numberscard /> */}
 
           <hr className="mx-4 my-4" />
           <InfoCard
-            hide={["skills", "resume"]}
+            hide={["skills", "resume", "expected_salary", "notice_period", "experience", "selected_date", "offered_date", "joined_date", "completion_date"]}
             email={recruiterDetails?.recruiter_email}
-            status={recruiterDetails?.recruiter_status}
             phone={recruiterDetails?.recruiter_phone}
-            country={"India"}
           />
         </div>
       </div>
