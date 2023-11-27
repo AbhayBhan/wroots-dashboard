@@ -1,4 +1,17 @@
 import * as React from "react";
+import { useState, useRef } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import {
   getCoreRowModel,
@@ -8,13 +21,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { TrashIcon } from "@radix-ui/react-icons";
 import AdvanceTable from "@/components/organism/advance-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { getCompanies } from "@/services/companies";
-import { useQuery } from "@tanstack/react-query";
+import { deleteBulkCompany, getCompanies } from "@/services/companies";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CompanyTableActions from "./company-table-actions";
+import { toast } from "react-toastify";
 
 export const columns = [
   {
@@ -56,6 +71,8 @@ const CompanyTable = () => {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [shouldRefresh, setShouldRefresh]=useState(false);
 
   const companyQuery = useQuery({
     queryKey: ["All-Company"],
@@ -81,9 +98,50 @@ const CompanyTable = () => {
     },
   });
 
+  const toastId=useRef(null)
+
+  const {mutate}=useMutation(deleteBulkCompany,{
+    onSuccess: (data)=>{
+      console.log(data.data)
+      if (data.data.status==1){
+        toast.update(toastId.current, {
+          render: "Company deleted successfully!!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        })
+        companyQuery.refetch();
+      }
+    },
+    onError: (data)=>{
+      console.log(data);
+      toast.update(toastId.current, {
+        render: "Something Happened!!",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      })
+    }
+  })
+
+  function handleDeleteClick(){
+    let arr=Object.keys(rowSelection);
+    console.log(arr)
+    let ids=[]
+    arr.forEach((element)=>{
+      ids.push(companyQuery?.data?.data?.companies[element].id);
+    })
+    console.log(ids)
+    let obj={
+      companyIds: ids
+    }
+    mutate(obj);
+    toastId.current=toast.loading("Deleting...")
+  }
+
   return (
     <div className="w-full">
-      <div className="flex items-center pb-4">
+      <div className="flex items-center justify-between pb-4">
         <Input
           placeholder="Filter name..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
@@ -92,6 +150,33 @@ const CompanyTable = () => {
           }
           className="max-w-sm"
         />
+
+        <AlertDialog open={deleteModal} onOpenChange={setDeleteModal}>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="icon" disabled={JSON.stringify(rowSelection)==="{}"?true:false}>
+              <TrashIcon className="w-5 h-5 text-red-500" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                variant="destructive"
+                onClick={handleDeleteClick}
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        
       </div>
       <AdvanceTable
         table={table}
