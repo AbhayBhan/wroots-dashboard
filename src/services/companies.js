@@ -18,3 +18,6 @@ export const getActiveJobsForCompany = (companyId) => {
   };
   return axiosInstance.post("/hiringcompany/getActiveJobs", { params });
 };
+export const deleteBulkCompany = (payload) => {
+  return axiosInstance.post("/hiringcompany/bulkdeleteCompany", payload);
+};

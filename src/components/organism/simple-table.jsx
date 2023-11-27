@@ -70,8 +70,9 @@ function SimpleTable({
                       {typeof column.cell === "function"
                         ? column.cell({
                             row,
-                            toggleRowSelection,
-                            getIsRowSelected,
+                            rowIndex,
+                            toggleRowSelection: toggleRowSelection,
+                            getIsRowSelected: typeof getIsRowSelected==Array || Object?getIsRowSelected[rowIndex]:getIsRowSelected,
                             table: { data, columns },
                             getValue: (accessorKey) =>
                               getValueFromRow(row, accessorKey),
