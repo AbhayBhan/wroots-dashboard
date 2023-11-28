@@ -6,14 +6,14 @@ export const fetchAllCandidates = (
   filterTerm,
   latestStatus,
   categoryId,
-  recruiterId
+  recruiterIds
 ) => {
   const params = {
     pageno: page || 1,
     q: filterTerm || null,
     latestStatus,
     categoryId: categoryId || null,
-    recruiterId : recruiterId || null
+    recruiterIds : recruiterIds || null
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };

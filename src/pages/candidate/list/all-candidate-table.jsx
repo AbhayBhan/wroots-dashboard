@@ -95,6 +95,7 @@ const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRecruiter, setSelectedRecruiter] = useState(null);
+  const [recruiterArray, setRecruiterArray] = useState(null)
   const [recruiterList, setRecruiterList] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(null);
 
@@ -123,7 +124,7 @@ const CandidateTable = () => {
       filterTerm,
     ],
     queryFn: () =>
-      fetchAllCandidates(page, filterTerm, selectedStatus, selectedCategory, selectedRecruiter),
+      fetchAllCandidates(page, filterTerm, selectedStatus, selectedCategory, recruiterArray),
     // keepPreviousData: true,
   });
 
@@ -156,13 +157,13 @@ const CandidateTable = () => {
 
   return (
     <div className="w-full">
-      <div className="pb-4 flex_between">
+      <div className="pb-4 flex flex-col gap-4">
         <SearchFilter
           className=""
           onChange={setFilterTerm}
           placeholder="Search by name..."
         />
-        <div className="flex flex-row justify-between gap-2 w-2/4">
+        <div className="flex flex-row justify-between gap-2 w-full">
           <ReactSelect
             options={categoryOptions}
             className="w-full text-sm"
@@ -182,9 +183,15 @@ const CandidateTable = () => {
           <ReactSelect
             options={recruiterList}
             className="w-full text-sm"
-            value={selectedRecruiter?.label}
-            onChange={(data) => setSelectedRecruiter(data.value)}
+            value={selectedRecruiter}
+            onChange={(data) => {
+              const selectedValues = data.map((option) => option.value);
+              setSelectedRecruiter(data);
+              setRecruiterArray(selectedValues);
+            }}
             placeholder="Select Recruiter"
+            isSearchable
+            isMulti
           />
           <Button
             onClick={() =>
