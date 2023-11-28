@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { categoryOptions } from "@/utils/contants";
-import { exportArchivedCandidates, fetchArchivedCandidate } from "@/services/candidate";
+import {
+  exportArchivedCandidates,
+  fetchArchivedCandidate,
+} from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -49,10 +52,13 @@ export const columns = [
     header: "Category & Role",
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
-          {row.category["name"]}
+          {row.role?.name ? row.role.name : "NA"}
         </span>
+        <span className="text-xs text-muted-foreground">
+          {row.company?.name ? row.company.name : "NA"}
+        </span>
+        <span className="inline-block">{row.category.name}</span>
       </div>
     ),
   },
@@ -66,24 +72,21 @@ export const columns = [
             <Badge>{row.latestStatus}</Badge>
           </span>
           <span className="text-xs text-muted-foreground">
+            {row.recruiter?.name ? row.recruiter.name : "NA"}
+          </span>
+          <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
           </span>
         </div>
       );
     },
   },
-  {
-    id: "action",
-    header: "",
-    cell: ({ row }) => {
-      // return <AllCandidateAction row={row} />;
-      return <h1>Hello</h1>;
-    },
-  },
 ];
 
 const ArchivedTable = () => {
-  const {categoryId, id : recruiterId} = JSON.parse(localStorage.getItem('userdata'));
+  const { categoryId, id: recruiterId } = JSON.parse(
+    localStorage.getItem("userdata")
+  );
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -103,7 +106,11 @@ const ArchivedTable = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["Candidates", "Archive", page, selectedCategory, filterTerm],
-    queryFn: () => fetchArchivedCandidate(page, selectedCategory ? selectedCategory : categoryId)
+    queryFn: () =>
+      fetchArchivedCandidate(
+        page,
+        selectedCategory ? selectedCategory : categoryId
+      ),
   });
 
   useEffect(() => {
@@ -113,6 +120,8 @@ const ArchivedTable = () => {
   }, [filterTerm]);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+
+  console.log(data?.data);
 
   return (
     <div className="w-full">
@@ -133,12 +142,25 @@ const ArchivedTable = () => {
             )}
             onChange={(e) => setSelectedCategory(e.value)}
           />
-          <Button onClick={() => exportArchivedCandidates(selectedCategory ? selectedCategory : categoryId,recruiterId)} variant="outline" className="mr-2">
+          <Button
+            onClick={() =>
+              exportArchivedCandidates(
+                selectedCategory ? selectedCategory : categoryId,
+                recruiterId
+              )
+            }
+            variant="outline"
+            className="mr-2"
+          >
             Export
           </Button>
         </div>
       </div>
-      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
+      <CountBadge
+        title={"Candidates"}
+        data={data?.data?.totalRows}
+        isLoading={isLoading}
+      />
       <SimpleTable
         columns={columns}
         data={data?.data?.candidates}

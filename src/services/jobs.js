@@ -16,8 +16,11 @@ export const deleteJob = (payload) =>
 export const archiveSingleJob = (payload) =>
   axiosInstance.post("/roleRouter/archiveAJob", payload);
 
-export const edtiAjob = (payload) =>
-  axiosInstance.post("/roleRouter/getActiveRoles", payload);
+export const editJob = (payload) =>
+  axiosInstance.post("/roleRouter/editRole", payload);
+
+export const getSingleJob = (id) =>
+  axiosInstance.post(`/roleRouter/getAjob/${id}`);
 
 export const getCanddiatesReferred = (jobId) => {
   const params = {

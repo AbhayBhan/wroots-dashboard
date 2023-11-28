@@ -77,10 +77,13 @@ export const columns = [
     header: "Category & Role",
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
-          {row.category["name"]}
+          {row.role?.name ? row.role.name : "NA"}
         </span>
+        <span className="text-xs text-muted-foreground">
+          {row.company?.name ? row.company.name : "NA"}
+        </span>
+        <span className="inline-block">{row.category.name}</span>
       </div>
     ),
   },
@@ -256,7 +259,11 @@ const UnassignedCanidateTable = () => {
           )
         )}
       </div>
-      <CountBadge title={"Candidates"} data={data?.data?.totalRows} isLoading={isLoading} />
+      <CountBadge
+        title={"Candidates"}
+        data={data?.data?.totalRows}
+        isLoading={isLoading}
+      />
       <SimpleTable
         columns={columns}
         data={candidateList}

@@ -101,7 +101,7 @@ const Dashboard = () => {
               <Card3 referData={referData} />
             </div>
             <Card2 funnelData={rawFunnelData} />
-            {(userdata.isSuperAdmin || userdata.isManager) && (
+            {(userdata?.isSuperAdmin || userdata?.isManager) && (
               <Card4 categoryData={categoryCountData} />
             )}
           </div>

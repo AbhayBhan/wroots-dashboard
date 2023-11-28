@@ -13,7 +13,7 @@ import { AddRecruiterForm } from "@/pages/recruiter/add-recruiter-form";
 import { useState } from "react";
 
 const Recruiter = () => {
-  const [shouldRefresh, setShouldRefresh]=useState(false);
+  const [shouldRefresh, setShouldRefresh]=useState(true);
   return (
     <div>
       <div className="flex mb-5">
@@ -33,7 +33,7 @@ const Recruiter = () => {
         </Dialog>
       </div>
       <div className="p-4 mt-4 rounded-md bg-background">
-        <UsersTable ShouldRefresh={shouldRefresh}/>
+        <UsersTable ShouldRefresh={shouldRefresh} SetShouldRefresh={setShouldRefresh}/>
       </div>
     </div>
   );

@@ -52,10 +52,13 @@ export const columns = [
     header: "Category & Role",
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
-        <span className="capitalize">{row.role["name"]}</span>
         <span className="text-xs text-muted-foreground">
-          {row.category["name"]}
+          {row.role?.name ? row.role.name : "NA"}
         </span>
+        <span className="text-xs text-muted-foreground">
+          {row.company?.name ? row.company.name : "NA"}
+        </span>
+        <span className="inline-block">{row.category.name}</span>
       </div>
     ),
   },
@@ -67,6 +70,9 @@ export const columns = [
         <div className="flex flex-col whitespace-nowrap">
           <span className="inline-block">
             <Badge>{row.latestStatus}</Badge>
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {row.recruiter?.name ? row.recruiter.name : "NA"}
           </span>
           <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
@@ -148,7 +154,7 @@ const CandidateTable = () => {
     mutate(reqbody);
   }, []);
 
-  const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
+  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">

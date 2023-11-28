@@ -73,7 +73,7 @@ export const updateCandidate = (payload) =>
   axiosInstance.post("/location/updatelocation", payload);
 
 export const createCandidate = (payload) =>
-  axiosInstance.post("/candidate/addcandidate", payload);
+  axiosInstance.post("/candidate/insertCandidate", payload);
 
 export const deleteCandidate = (payload) =>
   axiosInstance.post("/location/deletelocation", payload);
@@ -83,6 +83,10 @@ export const deactivateCandidate = (payload) =>
 
 export const createProcessing = (payload) =>
   axiosInstance.post("/newcp/newCP", payload);
+
+export const deleteProcessing = (payload) => 
+  axiosInstance.post("/newcp/deleteCandidatehistory", payload);
+
 
 // Data Export API Functions
 

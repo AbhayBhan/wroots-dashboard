@@ -1,16 +1,9 @@
+import Spinner from "@/components/organism/spinner";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { processingData } from "@/data/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
 import { FaTrash } from "react-icons/fa";
-// import { getAllProcessing } from "@/services/mock/candidate";
-// import { useQuery } from "@tanstack/react-query";
 
-const Processinglist = ({ data }) => {
-  // const { data, isLoading } = useQuery({
-  //     queryFn: getAllProcessing,
-  //     queryKey: ["All-Processing"],
-  //     keepPreviousData: true,
-  //   });
+const Processinglist = ({ data , deleteProcess }) => {
   return (
     <ScrollArea className=" w-full mt-3 ">
       <h4 className="mb-4 text-sm font-medium leading-none">
@@ -18,14 +11,14 @@ const Processinglist = ({ data }) => {
       </h4>
       <div className="space-y-2">
         {data?.map((process) => (
-          <Card key={process.id} data={process} />
+          <Card key={process.id} data={process} deleteProcess={deleteProcess} />
         ))}
       </div>
     </ScrollArea>
   );
 };
 
-const Card = ({ data }) => (
+const Card = ({ data,deleteProcess }) => (
   <article className="p-3  text-sm gap-2 border rounded-lg text-muted-foreground">
     <div className="flex_between">
       <div className="flex flex-col">
@@ -41,7 +34,7 @@ const Card = ({ data }) => (
       <p className="text-xs">Updated on {formatTimestamp(data?.updatedAt)}</p>
     </div>
     <div className="mt-2">
-      <button>
+      <button onClick={() => deleteProcess(data.id)}>
         <FaTrash color="red" />
       </button>
     </div>
