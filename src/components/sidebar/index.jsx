@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { AiFillAlert } from "react-icons/ai";
-import { FaBuilding, FaUserTie } from "react-icons/fa";
-import { MdPersonSearch, MdWork } from "react-icons/md";
+import { MdPersonSearch, MdWork, MdApartment,MdAutoAwesome,MdOutlineApps,MdGrading,MdGroupAdd, MdInstallMobile, MdCurrencyRupee, MdEmergencyShare } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import LogoHalf from "../../assets/placeholder-logo-half.png";
@@ -11,20 +10,20 @@ import { cn } from "@/lib/utils";
 const getItem = (label, link, key, icon) => ({ label, link, key, icon });
 
 const routes = [
-  getItem("Dashboard", "/", "dashboard", AiFillAlert),
+  getItem("Dashboard", "/", "dashboard", MdOutlineApps),
   getItem(
     "Candidates",
     "/candidate?currentTab=Unassigned+Candidates",
     "candidate",
-    FaUserTie
+    MdGroupAdd
   ),
   getItem("Jobs", "/job", "job", MdWork),
-  getItem("Jobs Categories", "/job-categories", "job-categories", MdWork),
-  getItem("App Users", "/app-users", "app-users", MdWork),
-  getItem("Companies", "/company", "company", FaBuilding),
-  getItem("Skills", "/skill", "skill", FaBuilding),
-  getItem("Locations", "/location", "location", FaBuilding),
-  getItem("Payouts", "/payout", "payout", MdWork),
+  getItem("Jobs Categories", "/job-categories", "job-categories", MdGrading),
+  getItem("App Users", "/app-users", "app-users", MdInstallMobile),
+  getItem("Companies", "/company", "company", MdApartment),
+  getItem("Skills", "/skill", "skill", MdAutoAwesome),
+  getItem("Locations", "/location", "location", MdEmergencyShare),
+  getItem("Payouts", "/payout", "payout", MdCurrencyRupee),
   getItem("Recruiters", "/recruiter", "recruiter", MdPersonSearch),
 ];
 
@@ -84,6 +83,7 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen, className }) => {
                   "justify-start"
                 )}
               >
+               <Icon size={18} color="#4287f5" className="shrink-0" />
                 {route.label}
               </Link>
             );

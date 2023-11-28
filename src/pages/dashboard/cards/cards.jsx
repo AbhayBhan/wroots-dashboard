@@ -76,15 +76,17 @@ const Card2 = ({ funnelData }) => {
 
 const Card3 = ({ referData }) => {
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200 h-40">
+    <div className="flex flex-col col-span-full sm:col-span-4 xl:col-span-3 bg-white shadow-lg rounded-sm border border-slate-200 h-40">
       <header className="px-5 py-4 border-b border-slate-100 flex justify-between gap-6 items-center">
         <h2 className="font-semibold text-slate-800">Total Referrals</h2>
       </header>
       <div className="flex justify-center items-center w-full h-full">
         <div className="space-x-2">
+        <h1>selected Date Range : {referData?.dateRnge?.dateRangeCount}</h1>
           <h1>Monthly : {referData?.monthly?.count}</h1>
           <h1>Weekly : {referData?.weekly?.count}</h1>
           <h1>Daily : {referData?.daily?.count}</h1>
+         
         </div>
       </div>
     </div>

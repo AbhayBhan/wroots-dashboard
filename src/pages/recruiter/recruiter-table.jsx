@@ -59,9 +59,16 @@ const RecruiterTable = ({ ShouldRefresh, SetShouldRefresh }) => {
     },
     {
       id: "type",
-      header: "Type",
+      header: "Super Admin",
       cell: ({ getValue }) => (
         <div>{getValue("isSuperAdmin") ? "Super admin" : "-"}</div>
+      ),
+    },
+    {
+      id: "mantype",
+      header: "Manager",
+      cell: ({ getValue }) => (
+        <div>{getValue("isManager") ? "Manager" : "-"}</div>
       ),
     },
 

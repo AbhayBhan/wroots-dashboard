@@ -97,14 +97,17 @@ const Dashboard = () => {
         <div className="p-4 mt-4 rounded-md bg-background h-[450px]">
           <div className="flex gap-2 w-full">
             <div className="flex flex-col gap-2">
-              <Card1 isLoading={isLoading} />
+              {/* <Card1 isLoading={isLoading} /> */}
               <Card3 referData={referData} />
             </div>
             <Card2 funnelData={rawFunnelData} />
-            {(userdata?.isSuperAdmin || userdata?.isManager) && (
+            <br />
+           
+          </div>
+
+          {(userdata?.isSuperAdmin || userdata?.isManager) && (
               <Card4 categoryData={categoryCountData} />
             )}
-          </div>
           <MyResponsiveFunnel data={funnelData} />
         </div>
       )}
