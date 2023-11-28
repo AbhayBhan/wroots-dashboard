@@ -72,7 +72,7 @@ function SimpleTable({
                             row,
                             rowIndex,
                             toggleRowSelection: toggleRowSelection,
-                            getIsRowSelected: typeof getIsRowSelected==Array || Object?getIsRowSelected[rowIndex]:getIsRowSelected,
+                            getIsRowSelected: typeof getIsRowSelected==="object"?getIsRowSelected[rowIndex]:getIsRowSelected,
                             table: { data, columns },
                             getValue: (accessorKey) =>
                               getValueFromRow(row, accessorKey),
