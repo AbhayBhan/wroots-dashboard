@@ -209,7 +209,7 @@ const UnassignedCanidateTable = () => {
         <SearchFilter
           className=""
           onChange={setFilterTerm}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
         {selectedRows.length > 0 ? (
           <div>

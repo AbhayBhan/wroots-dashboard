@@ -85,7 +85,7 @@ const PeriodCompleteTable = ({ roleId }) => {
       <SearchFilter
         className="pb-4"
         onChange={setFilterTerm}
-        placeholder="Filter by name..."
+        placeholder="Search by Name"
       />
 
       <SimpleTable

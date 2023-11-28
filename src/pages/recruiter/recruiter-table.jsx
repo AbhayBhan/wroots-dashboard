@@ -202,7 +202,7 @@ const RecruiterTable = ({ ShouldRefresh, SetShouldRefresh }) => {
               setIsAllRowSelected(false)
             }
           }}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
 
         <AlertDialog open={deleteModal} onOpenChange={setDeleteModal}>

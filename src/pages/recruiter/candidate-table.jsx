@@ -63,7 +63,7 @@ const CandidateTable = ({ id }) => {
       <SearchFilter
         className="pb-4"
         onChange={setFilterTerm}
-        placeholder="Filter by name..."
+        placeholder="Search by Name"
       />
       <SimpleTable
         columns={columns}

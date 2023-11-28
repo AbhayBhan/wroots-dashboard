@@ -133,7 +133,7 @@ const MyCanidateTable = () => {
       <div className="pb-4 flex_between">
         <SearchFilter
           onChange={setFilterTerm}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
         <div className="flex flex-row justify-between gap-2 w-1/3">
           <ReactSelect

@@ -129,7 +129,7 @@ const ArchivedTable = () => {
         <SearchFilter
           className=""
           onChange={setFilterTerm}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
         <div className="flex flex-row justify-between gap-2 w-1/3">
           <ReactSelect

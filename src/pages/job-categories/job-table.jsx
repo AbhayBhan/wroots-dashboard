@@ -48,7 +48,7 @@ const JobTable = () => {
       <div className=" pb-4">
         <SearchFilter
           onChange={setFilterTerm}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
       </div>
 

@@ -141,7 +141,7 @@ const PayoutCompletedTable = () => {
         <SearchFilter
           className=""
           onChange={setFilterTerm}
-          placeholder="Filter by name..."
+          placeholder="Search by Name"
         />
       </div>
       <SimpleTable
