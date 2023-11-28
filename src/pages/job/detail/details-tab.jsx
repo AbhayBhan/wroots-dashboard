@@ -50,7 +50,7 @@ const DetailsTab = ({ jobDetails }) => {
 
         <div className="flex gap-4 mt-4">
           <Avatar className="h-[80px] w-[80px] rounded-full mb-3">
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/wraeapp.appspot.com/o/user%20(1).png?alt=media&token=aaa47440-c97b-4ad8-bf3c-1f0aacb777f6" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>

@@ -40,7 +40,7 @@ const AppUserDetail = () => {
         <div className="border rounded-md bg-background text-muted-foreground">
           <div className="flex flex-col items-center justify-center px-6 pt-10 pb-6">
             <Avatar className="h-[100px] w-[100px] rounded-md mb-3">
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/wraeapp.appspot.com/o/user%20(1).png?alt=media&token=aaa47440-c97b-4ad8-bf3c-1f0aacb777f6" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <h4 className="text-2xl font-medium space-x-1">
