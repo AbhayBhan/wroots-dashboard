@@ -23,7 +23,7 @@ const AppUsers = () => {
         
       </div>
       <div className="p-4 mt-4 rounded-md bg-background">
-        <UsersTable />``
+        <UsersTable />
       </div>
     </div>
   );

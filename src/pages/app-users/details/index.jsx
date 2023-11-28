@@ -50,7 +50,7 @@ const AppUserDetail = () => {
             </h4>
           </div>
 
-          <Numberscard />
+          {/* <Numberscard /> */}
 
           <hr className="mx-4 my-4" />
           <AppUsersInfoCard userData={userData}/>
@@ -60,7 +60,7 @@ const AppUserDetail = () => {
       </div>
       <Tabs defaultValue="Candidate Referred" className="col-span-8">
         <TabsList className="flex justify-start h-auto p-0 bg-transparent border-b rounded-none w-fill">
-          {["Candidate Referred", "Job Applied", "Payouts"].map((item) => (
+          {["Candidate Referred", "Job Applied"].map((item) => (
             <TabsTrigger
               key={item}
               value={item}
@@ -88,9 +88,9 @@ const AppUserDetail = () => {
         >
           <JobAppliedTable id={id}/>
         </TabsContent>
-        <TabsContent value="Payouts" className="p-4 rounded-md bg-background">
+        {/* <TabsContent value="Payouts" className="p-4 rounded-md bg-background">
           <PayoutTable />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );

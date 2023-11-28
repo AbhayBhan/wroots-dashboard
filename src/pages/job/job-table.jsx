@@ -15,7 +15,7 @@ import AdvancePagination from "@/components/organism/advance-pagination";
 import AdvanceTable from "@/components/organism/advance-table";
 import SearchFilter from "@/components/organism/search-filter";
 import { fetchActiveJobs } from "@/services/jobs";
-import { formatNumberWithKM, processName } from "@/utils/helper";
+import { processName, salaryText} from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 import { Link } from "react-router-dom";
@@ -67,8 +67,8 @@ export const columns = [
     header: "Salary (lpa)",
     cell: ({ row }) => (
       <div className="capitalize whitespace-nowrap">
-        {formatNumberWithKM(row.original["min_salary"])} {" - "}
-        {formatNumberWithKM(row.original["max_salary"])}
+        {salaryText(row.original["min_salary"])} {" - "}
+        {salaryText(row.original["max_salary"])}
       </div>
     ),
   },

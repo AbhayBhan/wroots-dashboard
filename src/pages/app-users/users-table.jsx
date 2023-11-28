@@ -28,7 +28,7 @@ export const columns = [
   {
     id: "referrals",
     header: "Total Referrals",
-    cell: ({ getValue }) => <div className="lowercase">{0}</div>,
+    cell: ({ getValue }) => <div className="lowercase">{getValue("totalReferrals")}</div>,
   },
   {
     id: "mobile",
