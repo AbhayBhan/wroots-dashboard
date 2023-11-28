@@ -20,7 +20,7 @@ export const editJob = (payload) =>
   axiosInstance.post("/roleRouter/editRole", payload);
 
 export const getSingleJob = (id) =>
-  axiosInstance.post(`/roleRouter/getAjob/${id}`);
+  axiosInstance.get(`/roleRouter/getAjob/${id}`);
 
 export const getCanddiatesReferred = (jobId) => {
   const params = {
