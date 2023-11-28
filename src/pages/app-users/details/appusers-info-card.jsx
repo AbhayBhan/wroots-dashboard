@@ -20,12 +20,7 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
               <Pencil1Icon className="w-5 h-5 text-slate-500" />
             </Button>
           </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="mb-3">Edit details</DialogTitle>
-              // Edit form will be here
-            </DialogHeader>
-          </DialogContent>
+         
         </Dialog>
       </div>
       <ul className="pt-4 space-y-2 text-sm">
@@ -43,7 +38,7 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
             </span>
           </li>
         )}
-        {!hide.includes("language") && (
+        {/* {!hide.includes("language") && (
           <li>
             <span className="font-medium">Language:</span>{" "}
             <span className="text-muted-foreground">{userData.languages}</span>
@@ -56,7 +51,7 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
               {userData.location_id}
             </span>
           </li>
-        )}
+        )} */}
         {!hide.includes("status") && (
           <li>
             <span className="font-medium">Status:</span>{" "}
@@ -85,7 +80,7 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
             <span className="text-muted-foreground">{userData.experience}</span>
           </li>
         )}
-        {!hide.includes("resume") && (
+        {/* {!hide.includes("resume") && (
           <li className="flex">
             <span className="font-medium">Resume:</span>
             <p className="flex_between w-full">
@@ -110,13 +105,13 @@ const AppUsersInfoCard = ({hide=[], userData}) => {
               </Dialog>
             </p>
           </li>
-        )}
-        {!hide.includes("skills") && (
+        )} */}
+        {/* {!hide.includes("skills") && (
           <li>
             <span className="font-medium">Skills:</span>{" "}
             <span className="text-muted-foreground">{userData.skills}</span>
           </li>
-        )}
+        )} */}
         {/* {!hide.includes("selected_date") && (
           <li>
             <span className="font-medium">Selected Date:</span>{" "}

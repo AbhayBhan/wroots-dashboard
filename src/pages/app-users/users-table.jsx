@@ -11,6 +11,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { searchReferror } from "@/services/Appusers";
+import { formatTimestamp } from "@/utils/dateTime";
+
 
 export const columns = [
   {
@@ -28,20 +30,25 @@ export const columns = [
   {
     id: "referrals",
     header: "Total Referrals",
-    cell: ({ getValue }) => <div className="lowercase">{getValue("totalReferrals")}</div>,
+    cell: ({ getValue }) => <div className="lowercase">{getValue("totalReferrals")?getValue("totalReferrals"):0}</div>,
+  },
+  {
+    id: "referrals",
+    header: "Payout Earned",
+    cell: ({ getValue }) => <div className="lowercase">{getValue("CashWithdrawnAmount")?getValue("CashWithdrawnAmount"):0}</div>,
   },
   {
     id: "mobile",
-    header: "Contect info",
+    header: "Phone",
     cell: ({ getValue }) => (
       <div className="lowercase">{getValue("phone_number")}</div>
     ),
   },
   {
     id: "join_date",
-    header: "Last login at",
+    header: "Last Update",
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue("updated_date")}</div>
+      <div className="capitalize">{formatTimestamp(getValue("updated_date"))}</div>
     ),
   },
   {
@@ -126,7 +133,7 @@ const UsersTable = () => {
       <SearchFilter
         className="pb-4"
         onChange={setFilterTerm}
-        placeholder="Filter by name..."
+        placeholder="Search by name..."
       />
       <SimpleTable
         columns={columns}

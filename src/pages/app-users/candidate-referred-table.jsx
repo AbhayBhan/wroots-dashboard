@@ -64,7 +64,7 @@ const CandidateReferredTable = ({id}) => {
       <SearchFilter
         className="pb-4"
         onChange={setFilterTerm}
-        placeholder="Filter by name..."
+        placeholder="Search by name..."
       />
       <SimpleTable columns={columns} data={data?.slice((page*10)-10,page*10)} isLoading={isLoading}/>
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
