@@ -71,6 +71,9 @@ export const columns = [
           <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
           </span>
+          <span className="text-xs text-muted-foreground">
+            {row.recruiter?.name?row.recruiter.name: "NA"}
+          </span>
         </div>
       );
     },
