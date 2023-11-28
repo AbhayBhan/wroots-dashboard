@@ -84,7 +84,7 @@ export const columns = [
 ];
 
 const ArchivedTable = () => {
-  const { categoryId, id: recruiterId } = JSON.parse(
+  const { id: recruiterId } = JSON.parse(
     localStorage.getItem("userdata")
   );
   const [filterTerm, setFilterTerm] = useState("");
@@ -109,7 +109,7 @@ const ArchivedTable = () => {
     queryFn: () =>
       fetchArchivedCandidate(
         page,
-        selectedCategory ? selectedCategory : categoryId
+        selectedCategory ? selectedCategory : null
       ),
   });
 
@@ -145,7 +145,7 @@ const ArchivedTable = () => {
           <Button
             onClick={() =>
               exportArchivedCandidates(
-                selectedCategory ? selectedCategory : categoryId,
+                selectedCategory ? selectedCategory : null,
                 recruiterId
               )
             }

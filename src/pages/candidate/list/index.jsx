@@ -17,10 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import ArchivedTable from "./archived-candidate-table";
 
 const CandidateList = () => {
-  const isSuperAdmin = JSON.parse(
-    localStorage.getItem("userdata")
-  ).isSuperAdmin;
-  const isManager = JSON.parse(localStorage.getItem("userdata")).isManager;
+  const {isManager} = JSON.parse(localStorage.getItem("userdata"));
 
   const [searchParams, setSearchParams] = useSearchParams({
     currentTab: "Unassigned Candidate",
@@ -66,7 +63,7 @@ const CandidateList = () => {
             "Unassigned Candidates",
             "My Candidates",
             isManager && "All Candidates",
-            "Archived Candidates"
+            isManager && "Archived Candidates"
           ]
             .filter((item) => item !== false)
             .map((item) => (

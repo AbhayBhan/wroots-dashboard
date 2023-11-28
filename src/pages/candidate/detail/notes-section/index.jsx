@@ -9,7 +9,7 @@ const NotesSection = ({ candidateId }) => {
   const recruiterId = JSON.parse(localStorage.getItem("userdata")).id;
   const [notesList, setNotesList] = useState([]);
   const { mutate, isLoading } = useMutation(getAllNotes, {
-    onSuccess: ({ data }) => setNotesList(data?.newNote?.records),
+    onSuccess: ({ data }) => setNotesList(data?.notes),
   });
 
   const {mutate : addMutate, isLoading : submitLoading} = useMutation(addNote, {
