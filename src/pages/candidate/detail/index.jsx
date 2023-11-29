@@ -18,6 +18,7 @@ const CandidateDetail = () => {
   const ref = useRef();
   const [candidateData, setCandidateData] = useState();
   const [processingList, setProcessingList] = useState([]);
+  const [shouldRefresh, setShouldRefresh]=useState(true);
 
   const { data, mutate, isLoading } = useMutation(fetchSingleCandidate, {
     onSuccess: ({ data }) => {
@@ -40,11 +41,14 @@ const CandidateDetail = () => {
   };
   
   useEffect(() => {
-    mutate(parseInt(id));
-    ref.current.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, []);
+    if (shouldRefresh){
+      mutate(parseInt(id));
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+      });
+      setShouldRefresh(false);
+    }
+  }, [shouldRefresh]);
 
   return (
     <div ref={ref} className="grid grid-cols-12 gap-4">
@@ -84,6 +88,9 @@ const CandidateDetail = () => {
                 email={candidateData?.email}
                 phone={candidateData?.phoneNumber}
                 status={candidateData?.status}
+                id={candidateData?.id}
+                name={candidateData?.name}
+                refresh={setShouldRefresh}
               />
             </div>
             {/* <ExperienceCard /> */}

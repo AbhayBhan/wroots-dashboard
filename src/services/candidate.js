@@ -91,6 +91,9 @@ export const createProcessing = (payload) =>
 export const deleteProcessing = (payload) => 
   axiosInstance.post("/newcp/deleteCandidatehistory", payload);
 
+export const editCandidateDetails = (payload) =>
+  axiosInstance.post("/candidate/editCandidates", payload);
+
 
 // Data Export API Functions
 
