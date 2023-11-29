@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { InfoCardEditForm } from "./info-card-edit-form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const InfoCard = ({
   hide = [],
@@ -18,6 +19,9 @@ const InfoCard = ({
   country,
   status,
   skills,
+  id,
+  name,
+  refresh
 }) => {
   return (
     <div className="p-5">
@@ -29,10 +33,14 @@ const InfoCard = ({
               <Pencil1Icon className="w-5 h-5 text-slate-500" />
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="w-full lg:max-w-2xl">
             <DialogHeader>
               <DialogTitle className="mb-3">Edit details</DialogTitle>
-              <InfoCardEditForm />
+              <ScrollArea className="w-full h-[80vh]">
+                <div className="px-1">
+                  <InfoCardEditForm name={name} email={email} id={id} phoneNumber={phone} refresh={refresh}/>
+                </div>
+              </ScrollArea>
             </DialogHeader>
           </DialogContent>
         </Dialog>

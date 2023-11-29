@@ -11,37 +11,49 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import { createRecruiter } from "@/services/recruiter";
+import { editCandidateDetails } from "@/services/candidate";
 import { useState } from "react";
 import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
 
 
-export function InfoCardEditForm() {
+export function InfoCardEditForm({name, id, email, phoneNumber, refresh}) {
     const form = useForm({
         mode: "onChange",
+        defaultValues: {
+            name: name, 
+            candidateId: id, 
+            email: email, 
+            phoneNumber: phoneNumber, 
+            resumePath:"", 
+            latest_experience:"", 
+            noticePeriod:"", 
+            selectedDate: "", 
+            offeredDate:"", 
+            joinedDate:"", 
+            periodCompletedDate:""
+        }
     });
 
-    const [skills, setSkills]=useState([]);
+    const [skills, setSkills] = useState([]);
 
-    // const { mutate } = useMutation(createRecruiter, {
-    //     onSuccess: ({ data }) => console.log(data)
-    // });
+    const { mutate } = useMutation(editCandidateDetails, {
+        onSuccess: ({ data }) => console.log(data)
+    });
 
     function onSubmit(data) {
-        // mutate(data);
-        data.skills=data.skills.split(",") // String is parsed into array
         console.log(data);
+        mutate(data);
+        refresh(true)
     }
 
     return (
         <Form {...form} className="">
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <ScrollArea><ScrollBar></ScrollBar></ScrollArea>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid h-[80vh] grid-cols-2 gap-2 lg:grid-cols-12">
                 <FormField
                     control={form.control}
-                    name="recruiter_name"
+                    name="name"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="col-span-2 space-y-1 lg:col-span-12 ">
                             <FormLabel>Name</FormLabel>
                             <FormControl>
                                 <Input
@@ -57,9 +69,9 @@ export function InfoCardEditForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="recruiter_email"
+                    name="email"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="col-span-2 space-y-1 lg:col-span-12">
                             <FormLabel>Email</FormLabel>
                             <Input
                                 placeholder="email"
@@ -73,9 +85,9 @@ export function InfoCardEditForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="phone"
+                    name="phoneNumber"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-12 col-span-2">
                             <FormLabel>Phone</FormLabel>
                             <FormControl>
                                 <Input
@@ -90,48 +102,28 @@ export function InfoCardEditForm() {
                         </FormItem>
                     )}
                 />
-                <div className="flex">
-                    <FormField
-                        control={form.control}
-                        name="salary"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Expected Salary</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Salary $"
-                                        type="number"
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(e.target.value)}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="notice_period"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Notice Period</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Notice period"
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(e.target.value)}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
                 <FormField
                     control={form.control}
-                    name="experience"
+                    name="noticePeriod"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-6">
+                            <FormLabel>Notice Period</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Notice period"
+                                    value={field.value}
+                                    onChange={(e) => field.onChange(e.target.value)}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="latest_experience"
+                    render={({ field }) => (
+                        <FormItem className="space-y-1 lg:col-span-6">
                             <FormLabel>Experience</FormLabel>
                             <FormControl>
                                 <Input
@@ -146,27 +138,9 @@ export function InfoCardEditForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="skills"
+                    name="selectedDate"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Skills</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="skills"
-                                    value={field.value}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="flex">
-                <FormField
-                    control={form.control}
-                    name="selected_date"
-                    render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-3">
                             <FormLabel>Selected Date</FormLabel>
                             <FormControl>
                                 <Input
@@ -181,9 +155,9 @@ export function InfoCardEditForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="offered_date"
+                    name="offeredDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-3">
                             <FormLabel>Offered Date</FormLabel>
                             <FormControl>
                                 <Input
@@ -196,13 +170,11 @@ export function InfoCardEditForm() {
                         </FormItem>
                     )}
                 />
-                </div>
-                <div className="flex">
                 <FormField
                     control={form.control}
-                    name="joined_date"
+                    name="joinedDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-3">
                             <FormLabel>Joined Date</FormLabel>
                             <FormControl>
                                 <Input
@@ -217,9 +189,9 @@ export function InfoCardEditForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="copmletion_date"
+                    name="periodCompletedDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-1 lg:col-span-3">
                             <FormLabel>Completion date</FormLabel>
                             <FormControl>
                                 <Input
@@ -232,11 +204,12 @@ export function InfoCardEditForm() {
                         </FormItem>
                     )}
                 />
-                </div>
 
-                <Button type="submit" className="w-full">
-                    Create
-                </Button>
+                <div className="col-span-full flex_end">
+                    <Button type="submit" className="w-full">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     );
