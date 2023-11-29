@@ -61,7 +61,7 @@ export const columns = [
           {row.latestCompanyName?row.latestCompanyName
 : (row.company?.name ? row.company.name : "NA")}
         </span>
-        <span className="inline-block">{row.category.name}</span>
+        <span className="text-xs text-muted-foreground">{row.category.name}</span>
       </div>
     ),
   },

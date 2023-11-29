@@ -29,12 +29,10 @@ export function JobDetailsEditForm({ initialData, onSuccessAction }) {
       name: initialData?.name || "",
       no_of_positions: initialData?.no_of_positions || "",
       end_date: formatDateForInput(initialData?.end_date) || "",
-      min_experience: initialData?.min_experience || "",
+      min_experience: initialData?.min_experience || 0,
       max_experience: initialData?.max_experience || "",
       min_salary: initialData?.min_salary || "",
       max_salary: initialData?.max_salary || "",
-      skills: "",
-      location: "",
       referral_amount: initialData?.referral_amount || "",
       category_id: { label: "", value: initialData?.category_id } || "",
       company_id:
@@ -198,7 +196,7 @@ export function JobDetailsEditForm({ initialData, onSuccessAction }) {
               <FormControl>
                 <Input
                   type="number"
-                  min={0}
+                 
                   placeholder="min experience"
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
