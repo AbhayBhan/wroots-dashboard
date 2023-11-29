@@ -55,10 +55,11 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
         <span className="text-xs text-muted-foreground">
-          {row.role?.name ? row.role.name : "NA"}
+          {row.latestRoleName?row.latestRoleName: (row.role?.name? row.role.name: "NA")}
         </span>
         <span className="text-xs text-muted-foreground">
-          {row.company?.name ? row.company.name : "NA"}
+          {row.latestCompanyName?row.latestCompanyName
+: (row.company?.name ? row.company.name : "NA")}
         </span>
         <span className="inline-block">{row.category.name}</span>
       </div>

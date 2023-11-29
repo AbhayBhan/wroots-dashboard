@@ -50,12 +50,14 @@ export const columns = [
     accessorKey: "job_role",
     header: () => <div>Category & Role</div>,
     cell: ({ row }) => (
+      <Link to={`/candidate/${row.id}/details`}>
       <div className="flex flex-col">
         <span className="capitalize">{row.getValue("job_role")}</span>
         <span className="text-xs text-muted-foreground">
           {row.original["job_category"]}
         </span>
       </div>
+      </Link>
     ),
   },
   {

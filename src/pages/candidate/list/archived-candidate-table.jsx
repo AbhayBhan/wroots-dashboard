@@ -52,14 +52,15 @@ export const columns = [
     header: "Category & Role",
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
-        <span className="text-xs text-muted-foreground">
-          {row.role?.name ? row.role.name : "NA"}
-        </span>
-        <span className="text-xs text-muted-foreground">
-          {row.company?.name ? row.company.name : "NA"}
-        </span>
-        <span className="inline-block">{row.category.name}</span>
-      </div>
+      <span className="text-xs">
+      {row.latestRoleName?row.latestRoleName: (row.role?.name? row.role.name: "NA")}
+      </span>
+      <span className="text-xs text-muted-foreground">
+      {row.latestCompanyName?row.latestCompanyName
+: (row.company?.name ? row.company.name : "NA")}
+      </span>
+      <span className="text-xs text-muted-foreground">{row.category.name}</span>
+    </div>
     ),
   },
   {
