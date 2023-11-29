@@ -2,7 +2,7 @@ export const latestStatus = [
   { label: "All", value: null },
   { label: "New", value: "New" },
   { label: "In_Process", value: "In_Process" },
-
+  { label: "Self Applied", value: "Self Applied" },
   { label: "Recruiter Assigned", value:"Recruiter Assigned" },
   { label: "Rejected", value: "Rejected" },
   { label: "Dropped", value: "Dropped" },

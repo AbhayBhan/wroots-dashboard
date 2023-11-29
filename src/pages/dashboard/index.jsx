@@ -41,7 +41,7 @@ const Dashboard = () => {
         setCategoryCountData(data.categoryWiseCount);
         setReferData(data?.candidatesReferred);
         setRawFunnelData(data?.funnelData);
-        const allowedLabels = ["In_Process", "Joined", "Selected", "Quit"];
+        const allowedLabels = ["In_Process", "Joined", "Period_Complete"];
         const filteredData = data?.funnelData
           .filter((item) => allowedLabels.includes(item.name))
           .map((item) => ({
