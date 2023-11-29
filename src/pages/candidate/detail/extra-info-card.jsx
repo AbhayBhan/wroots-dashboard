@@ -3,6 +3,7 @@ import React from "react";
 import { formatDateString } from "@/utils/dateTime";
 
 const ExtraInfoCard = ({candidateData}) => {
+  console.log(candidateData);
   return (
     <div className="p-5 border rounded-md bg-background text-muted-foreground">
       <h4 className="mb-4 font-medium text-slate-400">Referral Against </h4>
@@ -15,6 +16,18 @@ const ExtraInfoCard = ({candidateData}) => {
         <li>
           <span className="font-medium">Category:</span>{" "}
           <span className="text-muted-foreground">{candidateData?.category?.name}</span>{" "}
+        </li>
+        <li>
+          <span className="font-medium">Company:</span>{" "}
+          <span className="text-muted-foreground">{candidateData?.company?.name}</span>{" "}
+        </li>
+        <li>
+          <span className="font-medium">Latest Role:</span>{" "}
+          <span className="text-muted-foreground">{candidateData?.company?.name}</span>{" "}
+        </li>
+        <li>
+          <span className="font-medium">Latest Company:</span>{" "}
+          <span className="text-muted-foreground">{candidateData?.company?.name}</span>{" "}
         </li>
       </ul>
       <Separator className="my-3" />

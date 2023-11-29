@@ -121,8 +121,6 @@ const ArchivedTable = () => {
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
 
-  console.log(data?.data);
-
   return (
     <div className="w-full">
       <div className="pb-4 flex_between">

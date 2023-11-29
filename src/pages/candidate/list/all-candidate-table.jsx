@@ -1,19 +1,21 @@
+import React, { useEffect, useState } from "react";
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
-import React, { useEffect, useState } from "react";
+import { DateRange } from "@/components/ui/date-range";
 import { categoryOptions } from "@/utils/contants";
 import { Button } from "@/components/ui/button";
 import { exportAllCandidates, fetchAllCandidates } from "@/services/candidate";
 import { latestStatus } from "@/services/mock/latestStatus";
-import { formatTimestamp } from "@/utils/dateTime";
+import { formatDateOnlyString, formatTimestamp } from "@/utils/dateTime";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import AllCandidateAction from "./actions/all-candidate-action";
 import CountBadge from "@/components/organism/countbadge";
 import { fetchRecruiters } from "@/services/recruiter";
+import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
 
 export const columns = [
   {
@@ -77,7 +79,6 @@ export const columns = [
           <span className="text-xs text-muted-foreground">
             {formatTimestamp(row.updatedDate)}
           </span>
-          
         </div>
       );
     },
@@ -95,9 +96,14 @@ const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRecruiter, setSelectedRecruiter] = useState(null);
-  const [recruiterArray, setRecruiterArray] = useState(null)
+  const [recruiterArray, setRecruiterArray] = useState(null);
   const [recruiterList, setRecruiterList] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(null);
+
+  const [dateValues, setDateValues] = useState({
+    startDate: getFirstDayOfYear(),
+    endDate: getCurrentDate(),
+  });
 
   const [searchParams, setSearchParams] = useSearchParams({});
 
@@ -122,9 +128,18 @@ const CandidateTable = () => {
       selectedStatus,
       selectedRecruiter,
       filterTerm,
+      dateValues,
     ],
     queryFn: () =>
-      fetchAllCandidates(page, filterTerm, selectedStatus, selectedCategory, recruiterArray),
+      fetchAllCandidates(
+        page,
+        filterTerm,
+        selectedStatus,
+        selectedCategory,
+        recruiterArray,
+        formatDateOnlyString(dateValues.startDate),
+        formatDateOnlyString(dateValues.endDate)
+      ),
     // keepPreviousData: true,
   });
 
@@ -158,11 +173,18 @@ const CandidateTable = () => {
   return (
     <div className="w-full">
       <div className="pb-4 flex flex-col gap-4">
-        <SearchFilter
-          className=""
-          onChange={setFilterTerm}
-          placeholder="Search by name..."
-        />
+        <div className="flex flex-row justify-between gap-2 w-full">
+          <SearchFilter
+            className=""
+            onChange={setFilterTerm}
+            placeholder="Search by name..."
+          />
+          <DateRange
+            from={dateValues.startDate}
+            to={dateValues.endDate}
+            onChange={setDateValues}
+          />
+        </div>
         <div className="flex flex-row justify-between gap-2 w-full">
           <ReactSelect
             options={categoryOptions}
