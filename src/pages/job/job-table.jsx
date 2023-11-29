@@ -15,7 +15,7 @@ import AdvancePagination from "@/components/organism/advance-pagination";
 import AdvanceTable from "@/components/organism/advance-table";
 import SearchFilter from "@/components/organism/search-filter";
 import { fetchActiveJobs } from "@/services/jobs";
-import { processName, salaryText} from "@/utils/helper";
+import { processName, salaryText } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 import { Link } from "react-router-dom";
@@ -41,6 +41,7 @@ export const columns = [
     enableHiding: false,
   },
   {
+    id: "details",
     accessorKey: "name",
     header: "Job Name",
     cell: ({ row }) => (
@@ -94,7 +95,7 @@ export const columns = [
   },
 ];
 
-const JobTable = () => {
+const JobTable = ({ isInDetails = false }) => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -106,7 +107,9 @@ const JobTable = () => {
 
   const table = useReactTable({
     data: data?.data?.roles || [],
-    columns,
+    columns: isInDetails
+      ? columns.filter((column) => column.id !== "actions")
+      : columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

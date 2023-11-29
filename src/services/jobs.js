@@ -26,16 +26,14 @@ export const getCanddiatesReferred = (jobId) => {
   const params = {
     roleId: jobId,
   };
-
-  return axiosInstance.get("/nc/getAllCandidates", { params });
+  return axiosInstance.get("/nc/getCandiatesForJobSubdetails", { params });
 };
 
-export const getCandidatesApplied = (jobId, page) => {
+export const getCandidatesApplied = (jobId) => {
   const params = {
     roleId: jobId,
-    pageno: page || 1,
   };
-  return axiosInstance.get("/nc/getAllCandidates", { params });
+  return axiosInstance.get("/nc/getCandiatesForJobSubdetails", { params });
 };
 
 export const getCandidatesSelected = (jobId, page) => {
@@ -51,31 +49,28 @@ export const getCandidatesSelected = (jobId, page) => {
 export const getCandidatesOffered = (jobId, page) => {
   const params = {
     roleId: jobId,
-    statusId: 7,
-    pageno: page || 1,
+    latestStatus : "Offered"
   };
 
-  return axiosInstance.get("/nc/getAllCandidates", { params });
+  return axiosInstance.get("/nc/getCandiatesForJobSubdetails", { params });
 };
 
-export const getCanddiatesJoined = (jobId, page) => {
+export const getCanddiatesJoined = (jobId) => {
   const params = {
     roleId: jobId,
-    statusId: 9,
-    pageno: page || 1,
+    latestStatus : "Joined"
   };
 
-  return axiosInstance.get("/nc/getAllCandidates", { params });
+  return axiosInstance.get("/nc/getCandiatesForJobSubdetails", { params });
 };
 
-export const getCandidatesPeroidComplete = (jobId, page) => {
+export const getCandidatesPeroidComplete = (jobId) => {
   const params = {
     roleId: jobId,
-    statusId: 10,
-    pageno: page || 1,
+    latestStatus : "Period_complete"
   };
 
-  return axiosInstance.get("/nc/getAllCandidates", { params });
+  return axiosInstance.get("/nc/getCandiatesForJobSubdetails", { params });
 };
 
 export const sendPush = (roleId) => {

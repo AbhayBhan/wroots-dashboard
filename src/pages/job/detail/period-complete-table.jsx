@@ -4,62 +4,40 @@ import SimpleTable from "@/components/organism/simple-table";
 import { getCandidatesPeroidComplete } from "@/services/jobs";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { columns } from "./applicants-table";
 
-const columns1 = [
+const columns = [
   {
     id: "name",
     header: "Name",
     cell: ({ getValue }) => (
-      <div className="capitalize whitespace-nowrap min-h-[36px]">
-        <p>{getValue("name")}</p>
+      <div className="capitalize whitespace-nowrap flex items-center min-h-[36px]">
+        {getValue("latest_name") || "-"}
+      </div>
+    ),
+  },
+  {
+    id: "contact",
+    header: "Contact",
+    cell: ({ getValue }) => (
+      <div className="whitespace-nowrap">
+        <p>{getValue("latest_phone_number")}</p>
         <p className="text-xs lowercase text-muted-foreground">
-          {getValue("email")}
+          {getValue("latest_email") || "-"}
         </p>
       </div>
     ),
   },
   {
-    id: "referrer",
-    header: "Referrer",
-    cell: ({ getValue }) => (
-      <div className=" whitespace-nowrap">
-        <p>{getValue("referrer")}</p>
-        <p className="text-xs text-muted-foreground">
-          {getValue("referrer_contact")}
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: "applied_date",
-    header: "Refer on",
-    cell: ({ getValue }) => (
-      <div className="lowercase whitespace-nowrap">
-        {new Date(getValue("applied_date")).toLocaleString()}
-      </div>
-    ),
-  },
-  {
-    id: "recruiter",
-    header: "Handle by",
-    cell: ({ getValue }) => (
-      <div className=" whitespace-nowrap">
-        <p>{getValue("recruiter_name")}</p>
-        <p className="text-xs text-muted-foreground">
-          {getValue("recruiter_contact")}
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: "update",
-    header: "Update on",
-    cell: ({ getValue }) => (
-      <div className=" whitespace-nowrap">
-        {new Date(getValue("applied_date")).toLocaleString()}
-      </div>
-    ),
+    accessorKey: "applied_date",
+    header: "Last Updated On",
+    cell: ({ getValue }) => {
+      const appliedDate = getValue("updated_date");
+      return (
+        <div className="lowercase whitespace-nowrap">
+          {appliedDate ? new Date(appliedDate).toLocaleString() : "-"}
+        </div>
+      );
+    },
   },
 ];
 
@@ -67,18 +45,14 @@ const PeriodCompleteTable = ({ roleId }) => {
   const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const statusId = 10;
-
   const { data, isLoading } = useQuery({
-    queryKey: ["Job", "CandidatePeroidComplete", roleId, page],
-    queryFn: () => getCandidatesPeroidComplete(roleId, page),
+    queryKey: ["Job", "CandidatePeroidComplete", roleId],
+    queryFn: () => getCandidatesPeroidComplete(roleId),
   });
 
   useEffect(() => {
     setPage(1);
   }, [filterTerm]);
-
-  const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
     <div className="w-full">
@@ -93,8 +67,6 @@ const PeriodCompleteTable = ({ roleId }) => {
         data={data?.data?.candidates}
         isLoading={isLoading}
       />
-
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
   );
 };
