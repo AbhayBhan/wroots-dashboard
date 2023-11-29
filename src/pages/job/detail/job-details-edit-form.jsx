@@ -279,7 +279,7 @@ export function JobDetailsEditForm({ initialData, onSuccessAction }) {
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="skills"
           render={({ field }) => (
@@ -298,9 +298,9 @@ export function JobDetailsEditForm({ initialData, onSuccessAction }) {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="location"
           render={({ field }) => (
@@ -321,7 +321,7 @@ export function JobDetailsEditForm({ initialData, onSuccessAction }) {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <FormField
           control={form.control}

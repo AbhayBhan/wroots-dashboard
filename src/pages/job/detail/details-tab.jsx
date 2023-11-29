@@ -13,7 +13,7 @@ import { dayDifference, formatTimestamp } from "@/utils/dateTime";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import parse from "html-react-parser";
-import { formatNumberWithKM } from "@/utils/helper";
+import { salaryText } from "@/utils/helper";
 import { JobDetailsEditForm } from "./job-details-edit-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
@@ -153,9 +153,9 @@ const DetailsTab = ({ jobDetails }) => {
             <p className="">Salary</p>
             <h3 className="font-medium ">
               {" "}
-              {formatNumberWithKM(jobDetails?.min_salary)}
+              {salaryText(jobDetails?.min_salary)}
               {" - "}
-              {formatNumberWithKM(jobDetails?.max_salary)} lpa
+              {salaryText(jobDetails?.max_salary)} LPA
             </h3>
           </div>
           <div className="p-4 rounded bg-secondary">
