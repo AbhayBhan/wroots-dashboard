@@ -15,9 +15,9 @@ export const fetchAllCandidates = (
     q: filterTerm || null,
     latestStatus,
     categoryId: categoryId || null,
-    recruiterIds : recruiterIds || null
-    // startDate,
-    // endDate
+    recruiterIds : recruiterIds || null,
+    startDate,
+    endDate
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
