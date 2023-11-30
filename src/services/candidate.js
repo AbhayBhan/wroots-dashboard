@@ -15,7 +15,7 @@ export const fetchAllCandidates = (
     q: filterTerm || null,
     latestStatus,
     categoryId: categoryId || null,
-    recruiterIds : recruiterIds || null
+    recruiterIds: recruiterIds || null,
     // startDate,
     // endDate
   };
@@ -66,6 +66,13 @@ export const fetchArchivedCandidate = (pageno, categoryId) => {
   return axiosInstance.get("/nc/getArchivedCandidates", { params });
 };
 
+export const fetchAppliedJobs = (candidateId) => {
+  const params = {
+    candidateId,
+  };
+  axiosInstance.get("/candidate/getJobsApplied", { params });
+};
+
 // Data Manipulation API Functions
 export const assignCandidate = (payload) =>
   axiosInstance.post("/candidate/assignStatus", payload);
@@ -88,12 +95,11 @@ export const deactivateCandidate = (payload) =>
 export const createProcessing = (payload) =>
   axiosInstance.post("/newcp/newCP", payload);
 
-export const deleteProcessing = (payload) => 
+export const deleteProcessing = (payload) =>
   axiosInstance.post("/newcp/deleteCandidatehistory", payload);
 
 export const editCandidateDetails = (payload) =>
   axiosInstance.post("/candidate/editCandidates", payload);
-
 
 // Data Export API Functions
 

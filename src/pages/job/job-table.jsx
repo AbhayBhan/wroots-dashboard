@@ -14,11 +14,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import AdvancePagination from "@/components/organism/advance-pagination";
 import AdvanceTable from "@/components/organism/advance-table";
 import SearchFilter from "@/components/organism/search-filter";
-import { fetchActiveJobs } from "@/services/jobs";
 import { processName, salaryText } from "@/utils/helper";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 import { Link } from "react-router-dom";
+import { fetchAppliedJobs } from "@/services/candidate";
+import { fetchActiveJobs } from "@/services/jobs";
 
 export const columns = [
   {
@@ -95,15 +96,12 @@ export const columns = [
   },
 ];
 
-const JobTable = ({ isInDetails = false }) => {
+const JobTable = ({ isInDetails = false, candidateId = null }) => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["Jobs", "Active"],
-    queryFn: fetchActiveJobs,
-  });
+  const { data, mutate, isLoading } = useMutation(isInDetails ? fetchAppliedJobs : fetchActiveJobs);
 
   const table = useReactTable({
     data: data?.data?.roles || [],
@@ -123,6 +121,14 @@ const JobTable = ({ isInDetails = false }) => {
       rowSelection,
     },
   });
+
+  React.useEffect(() => {
+    if(isInDetails){
+      mutate(candidateId);
+    }else{
+      mutate();
+    }
+  },[])
 
   return (
     <div className="w-full">

@@ -129,7 +129,7 @@ const CandidateDetail = () => {
               value="Job Applied"
               className="p-4 rounded-md bg-background"
             >
-              <JobTable isInDetails={true} />
+              <JobTable isInDetails={true} candidateId={parseInt(id)} />
             </TabsContent>
             <TabsContent value="Notes" className="p-4 rounded-md bg-background">
               <NotesSection candidateId={parseInt(id)} />
