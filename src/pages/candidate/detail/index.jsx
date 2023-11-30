@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JobTable from "@/pages/job/job-table";
 import { fetchSingleCandidate } from "@/services/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -12,6 +11,7 @@ import NotesSection from "./notes-section";
 import Numberscard from "./numbers-card";
 import ProcessingSection from "./processing-section";
 import Spinner from "@/components/organism/spinner";
+import AppliedJobs from "./appliedJobs";
 
 const CandidateDetail = () => {
   const { id } = useParams();
@@ -129,7 +129,7 @@ const CandidateDetail = () => {
               value="Job Applied"
               className="p-4 rounded-md bg-background"
             >
-              <JobTable isInDetails={true} candidateId={parseInt(id)} />
+              <AppliedJobs candidateId={parseInt(id)} />
             </TabsContent>
             <TabsContent value="Notes" className="p-4 rounded-md bg-background">
               <NotesSection candidateId={parseInt(id)} />

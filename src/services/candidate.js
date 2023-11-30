@@ -70,7 +70,7 @@ export const fetchAppliedJobs = (candidateId) => {
   const params = {
     candidateId,
   };
-  axiosInstance.get("/candidate/getJobsApplied", { params });
+  return axiosInstance.get("/candidate/getJobsApplied", { params });
 };
 
 // Data Manipulation API Functions

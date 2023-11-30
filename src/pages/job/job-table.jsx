@@ -18,7 +18,6 @@ import { processName, salaryText } from "@/utils/helper";
 import { useMutation } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 import { Link } from "react-router-dom";
-import { fetchAppliedJobs } from "@/services/candidate";
 import { fetchActiveJobs } from "@/services/jobs";
 
 export const columns = [
@@ -96,18 +95,16 @@ export const columns = [
   },
 ];
 
-const JobTable = ({ isInDetails = false, candidateId = null }) => {
+const JobTable = () => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data, mutate, isLoading } = useMutation(isInDetails ? fetchAppliedJobs : fetchActiveJobs);
+  const { data, mutate, isLoading } = useMutation(fetchActiveJobs);
 
   const table = useReactTable({
     data: data?.data?.roles || [],
-    columns: isInDetails
-      ? columns.filter((column) => column.id !== "actions")
-      : columns,
+    columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -123,12 +120,8 @@ const JobTable = ({ isInDetails = false, candidateId = null }) => {
   });
 
   React.useEffect(() => {
-    if(isInDetails){
-      mutate(candidateId);
-    }else{
-      mutate();
-    }
-  },[])
+    mutate();
+  }, []);
 
   return (
     <div className="w-full">
