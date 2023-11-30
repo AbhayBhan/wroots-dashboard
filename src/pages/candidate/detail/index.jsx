@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JobTable from "@/pages/job/job-table";
 import { fetchSingleCandidate } from "@/services/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -12,13 +11,27 @@ import NotesSection from "./notes-section";
 import Numberscard from "./numbers-card";
 import ProcessingSection from "./processing-section";
 import Spinner from "@/components/organism/spinner";
+import AppliedJobs from "./appliedJobs";
+import { Button } from "@/components/ui/button";
+import { assignCandidateInBulk } from "@/services/candidate";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose
+} from "@/components/ui/dialog";
+import RecruiterListModal from "../list/actions/recruiterListModal";
+import { toast } from "react-toastify";
 
 const CandidateDetail = () => {
   const { id } = useParams();
   const ref = useRef();
   const [candidateData, setCandidateData] = useState();
   const [processingList, setProcessingList] = useState([]);
-  const [shouldRefresh, setShouldRefresh]=useState(true);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { data, mutate, isLoading } = useMutation(fetchSingleCandidate, {
     onSuccess: ({ data }) => {
@@ -27,7 +40,24 @@ const CandidateDetail = () => {
     },
   });
 
-  
+  const assignCandidate = useMutation(assignCandidateInBulk, {
+    onSuccess: (data) => {
+      console.log(data);
+      setShouldRefresh(true);
+      toast("Successfully Assigned", {autoClose:2000})
+    }
+  })
+
+  function handleClick(id) {
+    console.log(candidateData)
+    const payload = {
+      candidateIDs: [candidateData.id],
+      recruiterId: id,
+    };
+    console.log(payload)
+    assignCandidate.mutate(payload);
+    setIsOpen(false)
+  }
 
   const addProcess = (newList) => {
     setProcessingList(newList);
@@ -39,9 +69,9 @@ const CandidateDetail = () => {
       return updatedList;
     });
   };
-  
+
   useEffect(() => {
-    if (shouldRefresh){
+    if (shouldRefresh) {
       mutate(parseInt(id));
       ref.current.scrollIntoView({
         behavior: "smooth",
@@ -81,6 +111,27 @@ const CandidateDetail = () => {
               ) : (
                 <Numberscard />
               )}
+
+              <div className="flex">
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="default" size="sm" className="mx-auto">
+                      Assign To Recruiter
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
+                      <RecruiterListModal
+                        isLoading={assignCandidate.isLoading}
+                        handleAssignToRecruiterAction={
+                          handleClick
+                        }
+                      />
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
               <hr className="mx-4 mt-2" />
               {/* <Separator className="mx-4 mt-2"/> */}
@@ -129,7 +180,7 @@ const CandidateDetail = () => {
               value="Job Applied"
               className="p-4 rounded-md bg-background"
             >
-              <JobTable isInDetails={true} />
+              <AppliedJobs candidateId={parseInt(id)} />
             </TabsContent>
             <TabsContent value="Notes" className="p-4 rounded-md bg-background">
               <NotesSection candidateId={parseInt(id)} />

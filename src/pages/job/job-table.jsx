@@ -14,11 +14,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import AdvancePagination from "@/components/organism/advance-pagination";
 import AdvanceTable from "@/components/organism/advance-table";
 import SearchFilter from "@/components/organism/search-filter";
-import { fetchActiveJobs } from "@/services/jobs";
 import { processName, salaryText } from "@/utils/helper";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import JobTableActions from "./job-table-actions";
 import { Link } from "react-router-dom";
+import { fetchActiveJobs } from "@/services/jobs";
 
 export const columns = [
   {
@@ -95,21 +95,16 @@ export const columns = [
   },
 ];
 
-const JobTable = ({ isInDetails = false }) => {
+const JobTable = () => {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["Jobs", "Active"],
-    queryFn: fetchActiveJobs,
-  });
+  const { data, mutate, isLoading } = useMutation(fetchActiveJobs);
 
   const table = useReactTable({
     data: data?.data?.roles || [],
-    columns: isInDetails
-      ? columns.filter((column) => column.id !== "actions")
-      : columns,
+    columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -123,6 +118,10 @@ const JobTable = ({ isInDetails = false }) => {
       rowSelection,
     },
   });
+
+  React.useEffect(() => {
+    mutate();
+  }, []);
 
   return (
     <div className="w-full">

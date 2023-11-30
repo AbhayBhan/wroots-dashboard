@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import CountBadge from "@/components/organism/countbadge";
+import ArchivedCandidateAction from "./actions/archived-candidate-action";
 
 export const columns = [
   {
@@ -80,6 +81,13 @@ export const columns = [
           </span>
         </div>
       );
+    },
+  },
+  {
+    id: "action",
+    header: "",
+    cell: ({ row }) => {
+      return <ArchivedCandidateAction row={row} />;
     },
   },
 ];

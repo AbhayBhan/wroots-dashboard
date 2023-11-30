@@ -14,30 +14,34 @@ import { useMutation } from "@tanstack/react-query";
 import { editCandidateDetails } from "@/services/candidate";
 import { useState } from "react";
 import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "react-toastify";
 
 
 export function InfoCardEditForm({name, id, email, phoneNumber, refresh}) {
     const form = useForm({
         mode: "onChange",
         defaultValues: {
-            name: name, 
-            candidateId: id, 
-            email: email, 
-            phoneNumber: phoneNumber, 
-            resumePath:"", 
-            latest_experience:"", 
-            noticePeriod:"", 
-            selectedDate: "", 
-            offeredDate:"", 
-            joinedDate:"", 
-            periodCompletedDate:""
+            name: name || null, 
+            candidateId: id || null, 
+            email: email || null, 
+            phoneNumber: phoneNumber || null, 
+            resumePath: null, 
+            latest_experience: null, 
+            noticePeriod: null, 
+            selectedDate: null, 
+            offeredDate: null, 
+            joinedDate: null, 
+            periodCompletedDate:null
         }
     });
 
     const [skills, setSkills] = useState([]);
 
     const { mutate } = useMutation(editCandidateDetails, {
-        onSuccess: ({ data }) => console.log(data)
+        onSuccess: ({ data }) => {
+            console.log(data)
+            toast("Successfully Updated", {autoClose:2000})
+        }
     });
 
     function onSubmit(data) {
@@ -207,7 +211,7 @@ export function InfoCardEditForm({name, id, email, phoneNumber, refresh}) {
 
                 <div className="col-span-full flex_end">
                     <Button type="submit" className="w-full">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>
