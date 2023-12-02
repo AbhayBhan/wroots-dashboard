@@ -4,16 +4,30 @@ import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { exportMyCandidates, fetchMyCandidates } from "@/services/candidate";
+import { Checkbox } from "@/components/ui/checkbox";
+import { exportMyCandidates, fetchMyCandidates ,assignCandidateInBulk } from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery , useMutation} from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
 import { Link, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
+  {
+    id: "selection",
+    header: ({ selectAllRows, getIsAllRowSelected }) => (
+      <Checkbox checked={getIsAllRowSelected} onCheckedChange={selectAllRows} />
+    ),
+    cell: ({ row, getIsRowSelected, toggleRowSelection }) => (
+      <Checkbox
+        checked={getIsRowSelected(row.id)}
+        onCheckedChange={() => toggleRowSelection(row.id)}
+      />
+    ),
+  },
   {
     id: "name",
     header: "Details",
@@ -56,13 +70,22 @@ export const columns = [
       <Link to={`/candidate/${row.id}/details`}>
         <div className="flex flex-col whitespace-nowrap">
           <span className="text-xs">
-          {row.latestRoleName?row.latestRoleName: (row.role?.name? row.role.name: "NA")}
+            {row.latestRoleName
+              ? row.latestRoleName
+              : row.role?.name
+              ? row.role.name
+              : "NA"}
           </span>
           <span className="text-xs text-muted-foreground">
-          {row.latestCompanyName?row.latestCompanyName
-: (row.company?.name ? row.company.name : "NA")}
+            {row.latestCompanyName
+              ? row.latestCompanyName
+              : row.company?.name
+              ? row.company.name
+              : "NA"}
           </span>
-          <span className="text-xs text-muted-foreground">{row.category.name}</span>
+          <span className="text-xs text-muted-foreground">
+            {row.category.name}
+          </span>
         </div>
       </Link>
     ),
@@ -100,6 +123,7 @@ const MyCanidateTable = () => {
   );
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({});
 
   const page = Number(searchParams.get("page"));
@@ -120,6 +144,41 @@ const MyCanidateTable = () => {
       fetchMyCandidates(recruiterId, page, filterTerm, selectedStatus),
   });
 
+  const assignMutation = useMutation({
+    mutationFn: assignCandidateInBulk,
+    onSuccess: () => {
+      toast.success("Candidates Assigned");
+      window.location.reload();
+    },
+  });
+
+  
+  const selectAllRows = (e) => {
+    if (e) {
+      const allRowIds = candidateList?.map((candidate) => candidate.id);
+      setSelectedRows(allRowIds);
+    } else {
+      setSelectedRows([]);
+    }
+  };
+  
+  const toggleRowSelection = (rowId) => {
+    if (selectedRows.includes(rowId)) {
+      setSelectedRows(selectedRows.filter((id) => id !== rowId));
+    } else {
+      setSelectedRows([...selectedRows, rowId]);
+    }
+  };
+
+  const handleAssignAction = () => {
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: userdata?.id,
+    };
+    assignMutation.mutate(payload);
+  }
+  
   useEffect(() => {
     if (filterTerm) {
       handlePageChange(1);
@@ -132,26 +191,39 @@ const MyCanidateTable = () => {
   return (
     <div className="w-full">
       <div className="pb-4 flex_between">
-        <SearchFilter
-          onChange={setFilterTerm}
-          placeholder="Search by Name"
-        />
-        <div className="flex flex-row justify-between gap-2 w-1/3">
-          <ReactSelect
-            options={latestStatus}
-            className="w-full text-sm"
-            value={selectedStatus?.label}
-            onChange={(data) => setSelectedStatus(data.value)}
-            placeholder="Select Status"
-          />
-          <Button
-            onClick={() => exportMyCandidates(categoryId, recruiterId)}
-            variant="outline"
-            className="mr-2"
-          >
-            Export
-          </Button>
-        </div>
+        <SearchFilter onChange={setFilterTerm} placeholder="Search by Name" />
+        {selectedRows.length > 0 ? (
+          <div>
+            <Button
+                size="sm"
+                disabled={isLoading}
+                onClick={handleAssignAction}
+              >
+                {isLoading ? (
+                  <Spinner className="text-white" />
+                ) : (
+                  "Assign Selected"
+                )}
+              </Button>
+          </div>
+        ) : (
+          <div className="flex flex-row justify-between gap-2 w-1/3">
+            <ReactSelect
+              options={latestStatus}
+              className="w-full text-sm"
+              value={selectedStatus?.label}
+              onChange={(data) => setSelectedStatus(data.value)}
+              placeholder="Select Status"
+            />
+            <Button
+              onClick={() => exportMyCandidates(categoryId, recruiterId)}
+              variant="outline"
+              className="mr-2"
+            >
+              Export
+            </Button>
+          </div>
+        )}
       </div>
       <CountBadge
         title={"Candidates"}
@@ -162,6 +234,10 @@ const MyCanidateTable = () => {
         columns={columns}
         data={candidateList}
         isLoading={isLoading}
+        selectAllRows={selectAllRows}
+        toggleRowSelection={toggleRowSelection}
+        getIsRowSelected={(id) => selectedRows.includes(id)}
+        getIsAllRowSelected={selectedRows.length === candidateList?.length}
       />
       <Pagination
         page={page || 1}

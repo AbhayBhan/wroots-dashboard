@@ -6,7 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { DateRange } from "@/components/ui/date-range";
 import { categoryOptions } from "@/utils/contants";
 import { Button } from "@/components/ui/button";
-import { exportAllCandidates, fetchAllCandidates } from "@/services/candidate";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  exportAllCandidates,
+  fetchAllCandidates,
+  assignCandidateInBulk,
+} from "@/services/candidate";
 import { latestStatus } from "@/services/mock/latestStatus";
 import { formatDateOnlyString, formatTimestamp } from "@/utils/dateTime";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -18,6 +23,18 @@ import { fetchRecruiters } from "@/services/recruiter";
 import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
 
 export const columns = [
+  {
+    id: "selection",
+    header: ({ selectAllRows, getIsAllRowSelected }) => (
+      <Checkbox checked={getIsAllRowSelected} onCheckedChange={selectAllRows} />
+    ),
+    cell: ({ row, getIsRowSelected, toggleRowSelection }) => (
+      <Checkbox
+        checked={getIsRowSelected(row.id)}
+        onCheckedChange={() => toggleRowSelection(row.id)}
+      />
+    ),
+  },
   {
     id: "name",
     header: "Details",
@@ -55,13 +72,22 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
         <span className="text-xs text-muted-foreground">
-          {row.latestRoleName?row.latestRoleName: (row.role?.name? row.role.name: "NA")}
+          {row.latestRoleName
+            ? row.latestRoleName
+            : row.role?.name
+            ? row.role.name
+            : "NA"}
         </span>
         <span className="text-xs text-muted-foreground">
-          {row.latestCompanyName?row.latestCompanyName
-: (row.company?.name ? row.company.name : "NA")}
+          {row.latestCompanyName
+            ? row.latestCompanyName
+            : row.company?.name
+            ? row.company.name
+            : "NA"}
         </span>
-        <span className="text-xs text-muted-foreground">{row.category.name}</span>
+        <span className="text-xs text-muted-foreground">
+          {row.category.name}
+        </span>
       </div>
     ),
   },
@@ -97,6 +123,7 @@ const CandidateTable = () => {
   const [filterTerm, setFilterTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRecruiter, setSelectedRecruiter] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [recruiterArray, setRecruiterArray] = useState(null);
   const [recruiterList, setRecruiterList] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -154,6 +181,40 @@ const CandidateTable = () => {
     },
   });
 
+  const assignMutation = useMutation({
+    mutationFn: assignCandidateInBulk,
+    onSuccess: () => {
+      toast.success("Candidates Assigned");
+      window.location.reload();
+    },
+  });
+
+  const selectAllRows = (e) => {
+    if (e) {
+      const allRowIds = candidateList?.map((candidate) => candidate.id);
+      setSelectedRows(allRowIds);
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
+  const toggleRowSelection = (rowId) => {
+    if (selectedRows.includes(rowId)) {
+      setSelectedRows(selectedRows.filter((id) => id !== rowId));
+    } else {
+      setSelectedRows([...selectedRows, rowId]);
+    }
+  };
+
+  const handleAssignAction = () => {
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: userdata?.id,
+    };
+    assignMutation.mutate(payload);
+  };
+
   useEffect(() => {
     if (filterTerm) {
       handlePageChange(1);
@@ -170,67 +231,76 @@ const CandidateTable = () => {
   }, []);
 
   const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
+  const candidateList = data?.data?.candidates;
 
   return (
     <div className="w-full">
-      <div className="pb-4 flex flex-col gap-4">
-        <div className="flex flex-row justify-between gap-2 w-full">
-          <SearchFilter
-            className=""
-            onChange={setFilterTerm}
-            placeholder="Search by name..."
-          />
-          <DateRange
-            from={dateValues.startDate}
-            to={dateValues.endDate}
-            onChange={setDateValues}
-          />
-        </div>
-        <div className="flex flex-row justify-between gap-2 w-full">
-          <ReactSelect
-            options={categoryOptions}
-            className="w-full text-sm"
-            isSearchable={false}
-            value={categoryOptions.find(
-              (option) => option.value === selectedCategory
-            )}
-            onChange={(e) => setSelectedCategory(e.value)}
-          />
-          <ReactSelect
-            options={latestStatus}
-            className="w-full text-sm"
-            value={selectedStatus?.label}
-            onChange={(data) => setSelectedStatus(data.value)}
-            placeholder="Select Status"
-          />
-          <ReactSelect
-            options={recruiterList}
-            className="w-full text-sm"
-            value={selectedRecruiter}
-            onChange={(data) => {
-              const selectedValues = data.map((option) => option.value);
-              setSelectedRecruiter(data);
-              setRecruiterArray(selectedValues);
-            }}
-            placeholder="Select Recruiter"
-            isSearchable
-            isMulti
-          />
-          <Button
-            onClick={() =>
-              exportAllCandidates(
-                selectedCategory,
-                selectedRecruiter,
-                selectedStatus
-              )
-            }
-            variant="outline"
-            className="mr-2"
-          >
-            Export
+      {selectedRows.length > 0 ? (
+        <div>
+          <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
+            {isLoading ? <Spinner className="text-white" /> : "Assign Selected"}
           </Button>
         </div>
-      </div>
+      ) : (
+        <div className="pb-4 flex flex-col gap-4">
+          <div className="flex flex-row justify-between gap-2 w-full">
+            <SearchFilter
+              className=""
+              onChange={setFilterTerm}
+              placeholder="Search by name..."
+            />
+            <DateRange
+              from={dateValues.startDate}
+              to={dateValues.endDate}
+              onChange={setDateValues}
+            />
+          </div>
+          <div className="flex flex-row justify-between gap-2 w-full">
+            <ReactSelect
+              options={categoryOptions}
+              className="w-full text-sm"
+              isSearchable={false}
+              value={categoryOptions.find(
+                (option) => option.value === selectedCategory
+              )}
+              onChange={(e) => setSelectedCategory(e.value)}
+            />
+            <ReactSelect
+              options={latestStatus}
+              className="w-full text-sm"
+              value={selectedStatus?.label}
+              onChange={(data) => setSelectedStatus(data.value)}
+              placeholder="Select Status"
+            />
+            <ReactSelect
+              options={recruiterList}
+              className="w-full text-sm"
+              value={selectedRecruiter}
+              onChange={(data) => {
+                const selectedValues = data.map((option) => option.value);
+                setSelectedRecruiter(data);
+                setRecruiterArray(selectedValues);
+              }}
+              placeholder="Select Recruiter"
+              isSearchable
+              isMulti
+            />
+            <Button
+              onClick={() =>
+                exportAllCandidates(
+                  selectedCategory,
+                  selectedRecruiter,
+                  selectedStatus
+                )
+              }
+              variant="outline"
+              className="mr-2"
+            >
+              Export
+            </Button>
+          </div>
+        </div>
+      )}
       <CountBadge
         title={"Candidates"}
         data={data?.data?.totalRows}
@@ -240,6 +310,10 @@ const CandidateTable = () => {
         columns={columns}
         data={data?.data?.candidates}
         isLoading={isLoading}
+        selectAllRows={selectAllRows}
+        toggleRowSelection={toggleRowSelection}
+        getIsRowSelected={(id) => selectedRows.includes(id)}
+        getIsAllRowSelected={selectedRows.length === candidateList?.length}
       />
       <Pagination
         page={page || 1}

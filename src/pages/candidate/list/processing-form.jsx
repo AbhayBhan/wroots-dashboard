@@ -24,6 +24,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 
 const generateOptions = (list) =>
   list?.map((option) => ({
@@ -33,6 +34,7 @@ const generateOptions = (list) =>
 
 const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
   const [processLoading, setProcessLoading] = useState(false);
+  const [statusId, setStatusId] = useState(-1);
 
   const form = useForm({
     // resolver: zodResolver(profileFormSchema),
@@ -57,7 +59,7 @@ const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
     setProcessLoading(true);
     const selectedJob = jobOptions.find((option) => option.id === data.roleId);
     const userdata = JSON.parse(localStorage.getItem("userdata"));
-    const reqBody = {
+    const payload = {
       ...data,
       recruiterId: userdata.id,
       recruiterEmail: userdata.email,
@@ -69,10 +71,12 @@ const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
       referralAmount: selectedJob ? selectedJob.referral_amount : null,
       hiringCompanyId: selectedJob ? selectedJob.company_id : null,
     };
-    mutate(reqBody);
+    mutate(payload);
   }
 
   const jobOptions = data?.data?.roles;
+
+  const datePickerStatus = [5, 9, 7, 10];
 
   return (
     <Form {...form}>
@@ -106,7 +110,10 @@ const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
             <FormItem className="w-full">
               <FormLabel>Status</FormLabel>
               <Select
-                onValueChange={(e) => field.onChange(Number(e))}
+                onValueChange={(e) => {
+                  field.onChange(Number(e));
+                  setStatusId(Number(e));
+                }}
                 value={field.value}
                 placeholder="Select a status"
               >
@@ -129,6 +136,22 @@ const ProcessingForm = ({ candidateId, onSuccessAction, addProcess }) => {
             </FormItem>
           )}
         />
+
+        {datePickerStatus.includes(statusId) && (
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date Assigned</FormLabel>
+                <FormControl>
+                  <Input  type="date" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="candidateNotes"
