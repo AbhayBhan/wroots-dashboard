@@ -83,7 +83,9 @@ export const columns = [
         <span className="text-xs text-muted-foreground">
           {row.company?.name ? row.company.name : "NA"}
         </span>
-        <span className="text-xs text-muted-foreground">{row.category.name}</span>
+        <span className="text-xs text-muted-foreground">
+          {row.category.name}
+        </span>
       </div>
     ),
   },
@@ -117,23 +119,21 @@ export const columns = [
 ];
 
 const UnassignedCanidateTable = () => {
-  const [filterTerm, setFilterTerm] = useState("");
   const { categoryId, isManager, isSuperAdmin } = JSON.parse(
     localStorage.getItem("userdata")
   );
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const navigate = useNavigate();
 
+  const [selectedRows, setSelectedRows] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({});
 
-  const page = Number(searchParams.get("page"));
+  const page = Number(searchParams.get("page")) || 1;
+  const filterTerm = searchParams.get("filterTerm");
+  const category = Number(searchParams.get("category")) || null;
 
-  const handlePageChange = (page) => {
+  const handleParamChange = (key, value) => {
     setSearchParams(
       (pre) => {
-        pre.set("page", `${page}`);
+        pre.set(`${key}`, `${value}`);
         return pre;
       },
       { replace: true }
@@ -141,28 +141,19 @@ const UnassignedCanidateTable = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["Canidate", "Unassign", page, selectedCategory, filterTerm],
+    queryKey: ["Canidate", "Unassign", page, category, filterTerm],
     queryFn: () =>
       fetchUnassignCandidates(
-        isManager ? selectedCategory : categoryId,
+        isManager ? category : categoryId,
         page,
         filterTerm
       ),
   });
 
-  const assignMutation = useMutation({
-    mutationFn: assignCandidateInBulk,
-    onSuccess: () => {
-      toast.success("Candidates Assigned");
-      navigate(`/candidate?currentTab=My+Candidates`);
-      setIsOpen(false);
-    },
-  });
-
   const candidateList = data?.data?.candidates || [];
 
-  const selectAllRows = (e) => {
-    if (e) {
+  const selectAllRows = (isAllChecked) => {
+    if (isAllChecked) {
       const allRowIds = candidateList?.map((candidate) => candidate.id);
       setSelectedRows(allRowIds);
     } else {
@@ -178,29 +169,6 @@ const UnassignedCanidateTable = () => {
     }
   };
 
-  const handleAssignAction = () => {
-    const userdata = JSON.parse(localStorage.getItem("userdata"));
-    const payload = {
-      candidateIDs: selectedRows,
-      recruiterId: userdata?.id,
-    };
-    assignMutation.mutate(payload);
-  };
-
-  const handleAssignToRecruiterAction = (id) => {
-    const payload = {
-      candidateIDs: selectedRows,
-      recruiterId: id,
-    };
-    assignMutation.mutate(payload);
-  };
-
-  useEffect(() => {
-    if (filterTerm) {
-      handlePageChange(1);
-    }
-  }, [filterTerm]);
-
   const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
 
   return (
@@ -208,43 +176,12 @@ const UnassignedCanidateTable = () => {
       <div className="pb-4 flex_between">
         <SearchFilter
           className=""
-          onChange={setFilterTerm}
-          placeholder="Search by Name"
+          initialValue={filterTerm}
+          onChange={(value) => handleParamChange("filterTerm", value)}
+          placeholder="Search by Name..."
         />
         {selectedRows.length > 0 ? (
-          <div>
-            <div className="flex gap-2">
-              <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="default" size="sm">
-                    Assign To Recruiter
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
-                    <RecruiterListModal
-                      isLoading={assignMutation.isLoading}
-                      handleAssignToRecruiterAction={
-                        handleAssignToRecruiterAction
-                      }
-                    />
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-              <Button
-                size="sm"
-                disabled={isLoading}
-                onClick={handleAssignAction}
-              >
-                {isLoading ? (
-                  <Spinner className="text-white" />
-                ) : (
-                  "Assign Selected"
-                )}
-              </Button>
-            </div>
-          </div>
+          <AssignRecruiter selectedRows={selectedRows} />
         ) : (
           isManager && (
             <ReactSelect
@@ -252,9 +189,9 @@ const UnassignedCanidateTable = () => {
               className="w-1/6 text-sm"
               isSearchable={false}
               value={categoryOptions.find(
-                (option) => option.value === selectedCategory
+                (option) => option.value === category
               )}
-              onChange={(e) => setSelectedCategory(e.value)}
+              onChange={(e) => handleParamChange("category", e.value)}
             />
           )
         )}
@@ -275,10 +212,72 @@ const UnassignedCanidateTable = () => {
       />
       <Pagination
         page={page || 1}
-        setPage={handlePageChange}
+        setPage={(value) => handleParamChange("page", value)}
         // onPageChange={setPage}
         totalPages={totalPages}
       />
+    </div>
+  );
+};
+
+const AssignRecruiter = ({ selectedRows }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const assignMutation = useMutation({
+    mutationFn: assignCandidateInBulk,
+    onSuccess: () => {
+      toast.success("Candidates Assigned");
+      navigate(`/candidate?currentTab=My+Candidates`);
+      setIsOpen(false);
+    },
+  });
+
+  const handleAssignAction = () => {
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: userdata?.id,
+    };
+    assignMutation.mutate(payload);
+  };
+
+  const handleAssignToRecruiterAction = (id) => {
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: id,
+    };
+    assignMutation.mutate(payload);
+  };
+
+  return (
+    <div className="flex gap-2">
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button variant="default" size="sm">
+            Assign To Recruiter
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
+            <RecruiterListModal
+              isLoading={assignMutation.isLoading}
+              handleAssignToRecruiterAction={handleAssignToRecruiterAction}
+            />
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <Button
+        size="sm"
+        disabled={assignMutation.isLoading}
+        onClick={handleAssignAction}
+      >
+        {assignMutation.isLoading ? (
+          <Spinner className="text-white" />
+        ) : (
+          "Assign Selected"
+        )}
+      </Button>
     </div>
   );
 };

@@ -2,8 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const SearchFilter = ({ onChange, className, placeholder = "" }) => {
-  const [value, setValue] = useState("");
+const SearchFilter = ({
+  onChange,
+  className,
+  initialValue,
+  placeholder = "",
+}) => {
+  const [value, setValue] = useState(initialValue || "");
   const lastValue = useDebounce(value);
   const searchRef = useRef();
 
@@ -22,6 +27,7 @@ const SearchFilter = ({ onChange, className, placeholder = "" }) => {
         ref={searchRef}
         onChange={(e) => setValue(e.target.value)}
         className="w-full"
+        value={value}
         placeholder={placeholder}
       />
     </div>

@@ -5,11 +5,11 @@ import { fetchRecruiters } from "@/services/recruiter";
 import ReactSelect from "react-select";
 import { Button } from "@/components/ui/button";
 
-const RecruiterListModal = ({ isLoading , handleAssignToRecruiterAction }) => {
+const RecruiterListModal = ({ isLoading, handleAssignToRecruiterAction }) => {
   const [recruiterList, setRecruiterList] = useState([]);
   const [selectedRecruiter, setSelectedRecruiter] = useState({});
 
-  const { mutate, isLoading : fetchLoading } = useMutation(fetchRecruiters, {
+  const { mutate, isLoading: fetchLoading } = useMutation(fetchRecruiters, {
     onSuccess: ({ data }) =>
       setRecruiterList(
         data?.recruiters.map((rec) => {
@@ -32,7 +32,9 @@ const RecruiterListModal = ({ isLoading , handleAssignToRecruiterAction }) => {
   return (
     <div>
       {fetchLoading ? (
-        <Spinner />
+        <div className="flex w-full items-center justify-center h-10">
+          <Spinner />
+        </div>
       ) : (
         <div className="flex flex-col gap-4">
           <div>
