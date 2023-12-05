@@ -41,7 +41,7 @@ export const columns = [
     enableHiding: false,
   },
   {
-    id: "details",
+    id: "jobDetails",
     accessorKey: "name",
     header: "Job Name",
     cell: ({ row }) => (
@@ -128,7 +128,7 @@ const JobTable = () => {
       <div className="flex items-center pb-4">
         <SearchFilter
           placeholder="Filter position..."
-          onChange={(value) => table.getColumn("name")?.setFilterValue(value)}
+          onChange={(value) => table.getColumn("jobDetails")?.setFilterValue(value)}
         />
       </div>
       <AdvanceTable
