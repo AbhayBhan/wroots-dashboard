@@ -13,11 +13,11 @@ export const fetchAllCandidates = (
   const params = {
     pageno: page || 1,
     q: filterTerm || null,
-    latestStatus,
+    latestStatus: latestStatus || null,
     categoryId: categoryId || null,
     recruiterIds: recruiterIds || null,
     startDate,
-    endDate
+    endDate,
   };
   return axiosInstance.get("/nc/getAllCandidates", { params });
 };
@@ -39,7 +39,7 @@ export const fetchMyCandidates = (
     recruiterId: recruiterId || null,
     pageno: page || 1,
     q: filterTerm || null,
-    latestStatus,
+    latestStatus: latestStatus || null,
   };
   return axiosInstance.get("/nc/getMyCandidiates", { params });
 };

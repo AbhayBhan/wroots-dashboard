@@ -1,5 +1,5 @@
 export const latestStatus = [
-  { label: "All", value: null },
+  { label: "All", value: "" },
   { label: "New", value: "New" },
   { label: "In_Process", value: "In_Process" },
   { label: "Self Applied", value: "Self Applied" },

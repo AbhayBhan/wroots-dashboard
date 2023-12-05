@@ -53,15 +53,24 @@ export const columns = [
     header: "Category & Role",
     cell: ({ row }) => (
       <div className="flex flex-col whitespace-nowrap">
-      <span className="text-xs">
-      {row.latestRoleName?row.latestRoleName: (row.role?.name? row.role.name: "NA")}
-      </span>
-      <span className="text-xs text-muted-foreground">
-      {row.latestCompanyName?row.latestCompanyName
-: (row.company?.name ? row.company.name : "NA")}
-      </span>
-      <span className="text-xs text-muted-foreground">{row.category.name}</span>
-    </div>
+        <span className="text-xs">
+          {row.latestRoleName
+            ? row.latestRoleName
+            : row.role?.name
+            ? row.role.name
+            : "NA"}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {row.latestCompanyName
+            ? row.latestCompanyName
+            : row.company?.name
+            ? row.company.name
+            : "NA"}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {row.category.name}
+        </span>
+      </div>
     ),
   },
   {
@@ -93,20 +102,18 @@ export const columns = [
 ];
 
 const ArchivedTable = () => {
-  const { id: recruiterId } = JSON.parse(
-    localStorage.getItem("userdata")
-  );
-  const [filterTerm, setFilterTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const { id: recruiterId } = JSON.parse(localStorage.getItem("userdata"));
 
   const [searchParams, setSearchParams] = useSearchParams({});
 
   const page = Number(searchParams.get("page")) || 1;
+  const filterTerm = searchParams.get("filterTerm");
+  const selectedCategory = Number(searchParams.get("category")) || null;
 
-  const handlePageChange = (page) => {
+  const handleParamChange = (key, value) => {
     setSearchParams(
       (pre) => {
-        pre.set("page", `${page}`);
+        pre.set(`${key}`, `${value}`);
         return pre;
       },
       { replace: true }
@@ -116,17 +123,14 @@ const ArchivedTable = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["Candidates", "Archive", page, selectedCategory, filterTerm],
     queryFn: () =>
-      fetchArchivedCandidate(
-        page,
-        selectedCategory ? selectedCategory : null
-      ),
+      fetchArchivedCandidate(page, selectedCategory ? selectedCategory : null),
   });
 
-  useEffect(() => {
-    if (filterTerm) {
-      handlePageChange(1);
-    }
-  }, [filterTerm]);
+  // useEffect(() => {
+  //   if (filterTerm) {
+  //     handlePageChange(1);
+  //   }
+  // }, [filterTerm]);
 
   const totalPages = Math.floor(data?.data?.totalRows / 30) || 1;
 
@@ -134,11 +138,11 @@ const ArchivedTable = () => {
     <div className="w-full">
       <div className="pb-4 flex_between">
         <SearchFilter
-          className=""
-          onChange={setFilterTerm}
-          placeholder="Search by Name"
+          initialValue={filterTerm}
+          onChange={(value) => handleParamChange("filterTerm", value)}
+          placeholder="Search by Name..."
         />
-        <div className="flex flex-row justify-between gap-2 w-1/3">
+        <div className="flex flex-row justify-between w-1/3 gap-2">
           <ReactSelect
             options={categoryOptions}
             className="w-full text-sm"
@@ -147,7 +151,7 @@ const ArchivedTable = () => {
             value={categoryOptions.find(
               (option) => option.value === selectedCategory
             )}
-            onChange={(e) => setSelectedCategory(e.value)}
+            onChange={(e) => handleParamChange("category", e.value)}
           />
           <Button
             onClick={() =>
@@ -175,7 +179,7 @@ const ArchivedTable = () => {
       />
       <Pagination
         page={page || 1}
-        setPage={handlePageChange}
+        setPage={(value) => handleParamChange("page", value)}
         totalPages={totalPages}
       />
     </div>
