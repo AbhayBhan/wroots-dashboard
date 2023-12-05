@@ -5,9 +5,13 @@ import SimpleTable from "@/components/organism/simple-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { exportMyCandidates, fetchMyCandidates ,assignCandidateInBulk } from "@/services/candidate";
+import {
+  exportMyCandidates,
+  fetchMyCandidates,
+  assignCandidateInBulk,
+} from "@/services/candidate";
 import { formatTimestamp } from "@/utils/dateTime";
-import { useQuery , useMutation} from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
 import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
@@ -121,17 +125,18 @@ const MyCanidateTable = () => {
   const { id: recruiterId, categoryId } = JSON.parse(
     localStorage.getItem("userdata")
   );
-  const [filterTerm, setFilterTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({});
 
-  const page = Number(searchParams.get("page"));
+  const page = Number(searchParams.get("page")) || 1;
+  const filterTerm = searchParams.get("filterTerm");
+  const selectedStatus = searchParams.get("status") || null;
 
-  const handlePageChange = (page) => {
+  const handleParamChange = (key, value) => {
     setSearchParams(
       (pre) => {
-        pre.set("page", `${page}`);
+        pre.set(`${key}`, `${value}`);
         return pre;
       },
       { replace: true }
@@ -152,7 +157,6 @@ const MyCanidateTable = () => {
     },
   });
 
-  
   const selectAllRows = (e) => {
     if (e) {
       const allRowIds = candidateList?.map((candidate) => candidate.id);
@@ -161,7 +165,7 @@ const MyCanidateTable = () => {
       setSelectedRows([]);
     }
   };
-  
+
   const toggleRowSelection = (rowId) => {
     if (selectedRows.includes(rowId)) {
       setSelectedRows(selectedRows.filter((id) => id !== rowId));
@@ -177,13 +181,13 @@ const MyCanidateTable = () => {
       recruiterId: userdata?.id,
     };
     assignMutation.mutate(payload);
-  }
-  
-  useEffect(() => {
-    if (filterTerm) {
-      handlePageChange(1);
-    }
-  }, [filterTerm]);
+  };
+
+  // useEffect(() => {
+  //   if (filterTerm) {
+  //     handlePageChange(1);
+  //   }
+  // }, [filterTerm]);
 
   const totalPages = Math.ceil(data?.data?.totalRows / 30) || 1;
   const candidateList = data?.data?.candidates;
@@ -191,28 +195,30 @@ const MyCanidateTable = () => {
   return (
     <div className="w-full">
       <div className="pb-4 flex_between">
-        <SearchFilter onChange={setFilterTerm} placeholder="Search by Name" />
+        <SearchFilter
+          initialValue={filterTerm}
+          onChange={(value) => handleParamChange("filterTerm", value)}
+          placeholder="Search by Name..."
+        />
         {selectedRows.length > 0 ? (
           <div>
-            <Button
-                size="sm"
-                disabled={isLoading}
-                onClick={handleAssignAction}
-              >
-                {isLoading ? (
-                  <Spinner className="text-white" />
-                ) : (
-                  "Assign Selected"
-                )}
-              </Button>
+            <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
+              {isLoading ? (
+                <Spinner className="text-white" />
+              ) : (
+                "Assign Selected"
+              )}
+            </Button>
           </div>
         ) : (
-          <div className="flex flex-row justify-between gap-2 w-1/3">
+          <div className="flex flex-row justify-between w-1/3 gap-2">
             <ReactSelect
               options={latestStatus}
               className="w-full text-sm"
-              value={selectedStatus?.label}
-              onChange={(data) => setSelectedStatus(data.value)}
+              value={latestStatus.find(
+                (option) => option.value === selectedStatus
+              )}
+              onChange={(e) => handleParamChange("status", e.value)}
               placeholder="Select Status"
             />
             <Button
@@ -241,7 +247,7 @@ const MyCanidateTable = () => {
       />
       <Pagination
         page={page || 1}
-        setPage={handlePageChange}
+        setPage={(value) => handleParamChange("page", value)}
         totalPages={totalPages}
       />
     </div>

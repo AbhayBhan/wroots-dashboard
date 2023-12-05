@@ -175,7 +175,6 @@ const UnassignedCanidateTable = () => {
     <div className="w-full">
       <div className="pb-4 flex_between">
         <SearchFilter
-          className=""
           initialValue={filterTerm}
           onChange={(value) => handleParamChange("filterTerm", value)}
           placeholder="Search by Name..."

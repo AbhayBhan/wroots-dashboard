@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import ArchivedTable from "./archived-candidate-table";
 
 const CandidateList = () => {
-  const {isManager} = JSON.parse(localStorage.getItem("userdata"));
+  const { isManager } = JSON.parse(localStorage.getItem("userdata"));
 
   const [searchParams, setSearchParams] = useSearchParams({
     currentTab: "Unassigned Candidate",
@@ -30,6 +30,9 @@ const CandidateList = () => {
       (pre) => {
         pre.set("currentTab", e);
         pre.delete("page");
+        pre.delete("filterTerm");
+        pre.delete("status");
+        pre.delete("category");
         return pre;
       },
       { replace: true }
@@ -40,7 +43,7 @@ const CandidateList = () => {
     <div>
       <div className="mb-5 flex_between">
         <h2 className="text-2xl font-bold tracking-tight">Candidate List</h2>
-        <div className="flex items-center">         
+        <div className="flex items-center">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant="default" className="ml-auto">
@@ -63,7 +66,7 @@ const CandidateList = () => {
             "Unassigned Candidates",
             "My Candidates",
             isManager && "All Candidates",
-            isManager && "Archived Candidates"
+            isManager && "Archived Candidates",
           ]
             .filter((item) => item !== false)
             .map((item) => (
