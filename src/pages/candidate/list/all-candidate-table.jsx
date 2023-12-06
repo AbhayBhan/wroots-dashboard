@@ -5,7 +5,7 @@ import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DateRange } from "@/components/ui/date-range";
+import { Input } from "@/components/ui/input";
 import {
   assignCandidateInBulk,
   exportAllCandidates,
@@ -15,10 +15,9 @@ import { latestStatus } from "@/services/mock/latestStatus";
 import { fetchRecruiters } from "@/services/recruiter";
 import { categoryOptions } from "@/utils/contants";
 import {
-  formatDateOnlyString,
   formatTimestamp,
-  getCurrentDate,
-  getFirstDayOfYear,
+  getFirstDateOfCurrentYear,
+  getNow
 } from "@/utils/dateTime";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -126,12 +125,12 @@ export const columns = [
 const CandidateTable = () => {
   const [selectedRecruiter, setSelectedRecruiter] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedRecuiterIds, setSelectedRecruiterIds] = useState(null);
+  const [selectedRecuiterIds, setSelectedRecruiterIds] = useState([]);
   const [recruiterOptions, setRecruiterOptions] = useState([]);
 
   const [dateValues, setDateValues] = useState({
-    startDate: getFirstDayOfYear(),
-    endDate: getCurrentDate(),
+    startDate: "",
+    endDate: "",
   });
 
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -175,8 +174,8 @@ const CandidateTable = () => {
         selectedStatus,
         selectedCategory,
         selectedRecuiterIds,
-        formatDateOnlyString(dateValues.startDate),
-        formatDateOnlyString(dateValues.endDate)
+        dateValues.startDate,
+        dateValues.endDate
       ),
     // keepPreviousData: true,
   });
@@ -236,7 +235,13 @@ const CandidateTable = () => {
     const dateRange = searchParams.get("dateRange");
     if (dateRange) {
       const [startDate, endDate] = dateRange.split("_");
+      console.log(startDate, endDate);
       setDateValues({ startDate, endDate });
+    } else {
+      setDateValues({
+        startDate: getFirstDateOfCurrentYear(),
+        endDate: getNow(),
+      });
     }
   }, [searchParams]);
 
@@ -280,7 +285,12 @@ const CandidateTable = () => {
               onChange={(value) => handleParamChange("filterTerm", value)}
               placeholder="Search by Name..."
             />
-            <DateRange
+            {/* <DateRange
+              from={dateValues.startDate}
+              to={dateValues.endDate}
+              onChange={handleDateRangeChange}
+            /> */}
+            <DateRangeSelect
               from={dateValues.startDate}
               to={dateValues.endDate}
               onChange={handleDateRangeChange}
@@ -348,6 +358,47 @@ const CandidateTable = () => {
         page={page || 1}
         setPage={(value) => handleParamChange("page", value)}
         totalPages={totalPages}
+      />
+    </div>
+  );
+};
+
+const DateRangeSelect = ({ from, to, onChange }) => {
+  const [dateRange, setDateRange] = useState({
+    from: "",
+    to: "",
+  });
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+
+    setDateRange((prev) => ({ ...prev, [name]: value }));
+
+    onChange({
+      startDate: name === "from" ? value : dateRange.from,
+      endDate: name === "to" ? value : dateRange.to,
+    });
+  };
+
+  useEffect(() => {
+    setDateRange({ from, to });
+  }, [from, to]);
+
+  console.log(dateRange);
+
+  return (
+    <div className="flex space-x-2">
+      <Input
+        type="date"
+        name="from"
+        value={dateRange.from || ""}
+        onChange={handleDateChange}
+      />
+      <Input
+        type="date"
+        name="to"
+        value={dateRange.to || ""}
+        onChange={handleDateChange}
       />
     </div>
   );

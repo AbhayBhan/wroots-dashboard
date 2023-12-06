@@ -34,6 +34,7 @@ const CandidateList = () => {
         pre.delete("status");
         pre.delete("category");
         pre.delete("dateRange");
+        pre.delete("recruiters");
         return pre;
       },
       { replace: true }

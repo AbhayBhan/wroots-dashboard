@@ -21,6 +21,17 @@ export function getFirstDayOfYear() {
   return firstDayOfYear;
 }
 
+export function getFirstDateOfCurrentYear() {
+  const currentYear = dayjs().year();
+  const firstDateOfCurrentYear = `${currentYear}-01-01`;
+  return firstDateOfCurrentYear;
+}
+
+export function getNow() {
+  const currentDate = dayjs().format("YYYY-MM-DD");
+  return currentDate;
+}
+
 export function getCurrentDate() {
   const currentDate = new Date();
   // const formattedDate = currentDate.toISOString().split('T')[0];
