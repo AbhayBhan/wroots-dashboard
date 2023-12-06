@@ -4,9 +4,9 @@ import Spinner from "./spinner";
 
 const CountBadge = ({title,data,isLoading}) => {
   return (
-    <div className="flex flex-row justify-center mb-2">
-      <Badge className="bg-blue-600 text-md">
-        Total {title} : {isLoading ? <Spinner className="text-white"/> : data}
+    <div className="flex items-center justify-center mb-2">
+      <Badge className="text-sm">
+        Total {title} : {isLoading ? <Spinner className="text-white" /> : data}
       </Badge>
     </div>
   );

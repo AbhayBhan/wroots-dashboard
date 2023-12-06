@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from "react";
+import CountBadge from "@/components/organism/countbadge";
 import Pagination from "@/components/organism/pagination";
 import SearchFilter from "@/components/organism/search-filter";
 import SimpleTable from "@/components/organism/simple-table";
 import { Badge } from "@/components/ui/badge";
-import { DateRange } from "@/components/ui/date-range";
-import { categoryOptions } from "@/utils/contants";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DateRange } from "@/components/ui/date-range";
 import {
+  assignCandidateInBulk,
   exportAllCandidates,
   fetchAllCandidates,
-  assignCandidateInBulk,
 } from "@/services/candidate";
 import { latestStatus } from "@/services/mock/latestStatus";
-import { formatDateOnlyString, formatTimestamp } from "@/utils/dateTime";
+import { fetchRecruiters } from "@/services/recruiter";
+import { categoryOptions } from "@/utils/contants";
+import {
+  formatDateOnlyString,
+  formatTimestamp,
+  getCurrentDate,
+  getFirstDayOfYear,
+} from "@/utils/dateTime";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import AllCandidateAction from "./actions/all-candidate-action";
-import CountBadge from "@/components/organism/countbadge";
-import { fetchRecruiters } from "@/services/recruiter";
-import { getFirstDayOfYear, getCurrentDate } from "@/utils/dateTime";
 
 export const columns = [
   {
@@ -120,13 +124,10 @@ export const columns = [
 ];
 
 const CandidateTable = () => {
-  const [filterTerm, setFilterTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedRecruiter, setSelectedRecruiter] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [recruiterArray, setRecruiterArray] = useState(null);
-  const [recruiterList, setRecruiterList] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedRecuiterIds, setSelectedRecruiterIds] = useState(null);
+  const [recruiterOptions, setRecruiterOptions] = useState([]);
 
   const [dateValues, setDateValues] = useState({
     startDate: getFirstDayOfYear(),
@@ -135,16 +136,25 @@ const CandidateTable = () => {
 
   const [searchParams, setSearchParams] = useSearchParams({});
 
-  const page = Number(searchParams.get("page"));
+  const page = Number(searchParams.get("page")) || 1;
+  const filterTerm = searchParams.get("filterTerm");
+  const selectedCategory = Number(searchParams.get("category")) || null;
+  const selectedStatus = searchParams.get("status") || null;
 
-  const handlePageChange = (page) => {
+  const handleParamChange = (key, value) => {
     setSearchParams(
       (pre) => {
-        pre.set("page", `${page}`);
+        pre.set(`${key}`, `${value}`);
         return pre;
       },
       { replace: true }
     );
+  };
+
+  const handleDateRangeChange = (range) => {
+    setDateValues({ startDate: range.startDate, endDate: range.endDate });
+    const dateRangeString = `${range.startDate}_${range.endDate}`;
+    handleParamChange("dateRange", dateRangeString);
   };
 
   const { data, isLoading } = useQuery({
@@ -154,7 +164,7 @@ const CandidateTable = () => {
       page,
       selectedCategory,
       selectedStatus,
-      selectedRecruiter,
+      selectedRecuiterIds,
       filterTerm,
       dateValues,
     ],
@@ -164,7 +174,7 @@ const CandidateTable = () => {
         filterTerm,
         selectedStatus,
         selectedCategory,
-        recruiterArray,
+        selectedRecuiterIds,
         formatDateOnlyString(dateValues.startDate),
         formatDateOnlyString(dateValues.endDate)
       ),
@@ -173,7 +183,7 @@ const CandidateTable = () => {
 
   const { mutate } = useMutation(fetchRecruiters, {
     onSuccess: ({ data }) => {
-      setRecruiterList(
+      setRecruiterOptions(
         data.recruiters.map((it) => {
           return { label: it.recruiter_name, value: it.id };
         })
@@ -215,16 +225,37 @@ const CandidateTable = () => {
     assignMutation.mutate(payload);
   };
 
+  const handleSelectRecruiter = (data) => {
+    const selectedValues = data.map((option) => option.value);
+    setSelectedRecruiter(data);
+    setSelectedRecruiterIds(selectedValues);
+    handleParamChange("recruiters", selectedValues);
+  };
+
   useEffect(() => {
-    if (filterTerm) {
-      handlePageChange(1);
+    const dateRange = searchParams.get("dateRange");
+    if (dateRange) {
+      const [startDate, endDate] = dateRange.split("_");
+      setDateValues({ startDate, endDate });
     }
-  }, [filterTerm]);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const recruiters = searchParams.get("recruiters");
+    if (recruiters) {
+      const splitedRecruiters = recruiters.split(",");
+      const recruiterArray = recruiterOptions.filter((recruiter) =>
+        splitedRecruiters.includes(`${recruiter.value}`)
+      );
+      setSelectedRecruiter(recruiterArray);
+      setSelectedRecruiterIds(splitedRecruiters);
+    }
+  }, [recruiterOptions, searchParams]);
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("userdata")).id;
     const reqbody = {
-      pageno: page,
+      // pageno: page,
       recruiterId: id,
     };
     mutate(reqbody);
@@ -242,20 +273,20 @@ const CandidateTable = () => {
           </Button>
         </div>
       ) : (
-        <div className="pb-4 flex flex-col gap-4">
-          <div className="flex flex-row justify-between gap-2 w-full">
+        <div className="flex flex-col gap-4 pb-4">
+          <div className="flex flex-row justify-between w-full gap-2">
             <SearchFilter
-              className=""
-              onChange={setFilterTerm}
-              placeholder="Search by name..."
+              initialValue={filterTerm}
+              onChange={(value) => handleParamChange("filterTerm", value)}
+              placeholder="Search by Name..."
             />
             <DateRange
               from={dateValues.startDate}
               to={dateValues.endDate}
-              onChange={setDateValues}
+              onChange={handleDateRangeChange}
             />
           </div>
-          <div className="flex flex-row justify-between gap-2 w-full">
+          <div className="flex flex-row justify-between w-full gap-2">
             <ReactSelect
               options={categoryOptions}
               className="w-full text-sm"
@@ -263,24 +294,22 @@ const CandidateTable = () => {
               value={categoryOptions.find(
                 (option) => option.value === selectedCategory
               )}
-              onChange={(e) => setSelectedCategory(e.value)}
+              onChange={(e) => handleParamChange("category", e.value)}
             />
             <ReactSelect
               options={latestStatus}
               className="w-full text-sm"
-              value={selectedStatus?.label}
-              onChange={(data) => setSelectedStatus(data.value)}
+              value={latestStatus.find(
+                (option) => option.value === selectedStatus
+              )}
+              onChange={(e) => handleParamChange("status", e.value)}
               placeholder="Select Status"
             />
             <ReactSelect
-              options={recruiterList}
+              options={recruiterOptions}
               className="w-full text-sm"
               value={selectedRecruiter}
-              onChange={(data) => {
-                const selectedValues = data.map((option) => option.value);
-                setSelectedRecruiter(data);
-                setRecruiterArray(selectedValues);
-              }}
+              onChange={handleSelectRecruiter}
               placeholder="Select Recruiter"
               isSearchable
               isMulti
@@ -317,7 +346,7 @@ const CandidateTable = () => {
       />
       <Pagination
         page={page || 1}
-        setPage={handlePageChange}
+        setPage={(value) => handleParamChange("page", value)}
         totalPages={totalPages}
       />
     </div>
