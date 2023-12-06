@@ -15,6 +15,7 @@ import { createCandidate } from "@/services/candidate";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/organism/spinner";
+import { toast } from "react-toastify";
 
 export function CandidateForm({ onSuccessAction, initialData }) {
   const isEditing = !!initialData; // Determine if it's editing or adding
@@ -36,9 +37,12 @@ export function CandidateForm({ onSuccessAction, initialData }) {
 
   const candidateMuatation = useMutation(createCandidate, {
     onSuccess: ({ data }) => {
-      console.log(data);
+      toast.success("Candidate Created Successfully.");
       onSuccessAction();
     },
+    onError: ({data}) => {
+      toast.error(data?.msg);
+    }
   });
 
   function onSubmit(data) {

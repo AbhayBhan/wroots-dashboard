@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiFillAlert } from "react-icons/ai";
-import { MdPersonSearch, MdWork, MdApartment,MdAutoAwesome,MdOutlineApps,MdGrading,MdGroupAdd, MdInstallMobile, MdCurrencyRupee, MdEmergencyShare } from "react-icons/md";
+import { MdPersonSearch, MdWork, MdApartment,MdAutoAwesome,MdOutlineApps,MdGrading,MdGroupAdd, MdInstallMobile, MdCurrencyRupee, MdEmergencyShare, MdReport, MdDataArray } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import LogoHalf from "../../assets/placeholder-logo-half.png";
@@ -25,6 +25,7 @@ const routes = [
   getItem("Locations", "/location", "location", MdEmergencyShare),
   getItem("Payouts", "/payout", "payout", MdCurrencyRupee),
   getItem("Recruiters", "/recruiter", "recruiter", MdPersonSearch),
+  getItem("Reports", "/reports", "reports", MdDataArray)
 ];
 
 const allowedRecruiter = ["Candidates","Dashboard","Jobs","Jobs Categories","App Users","Companies","Skills","Locations"]
