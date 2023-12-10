@@ -7,6 +7,9 @@ export const getSuperAdminDashboard = (payload) => {
 
 export const getRecruiterDashboard = (payload) => {
    return axiosInstance.post("/dashboard/getRouterDashboardForRecruiter", payload);
-
 }
+
+export const getRecruiterReports = (payload) => {
+   return axiosInstance.post("/dashboard/getRouterDashboardRecruiter", payload);
+ }
   

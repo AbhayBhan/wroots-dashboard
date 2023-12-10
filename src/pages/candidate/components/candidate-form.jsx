@@ -40,8 +40,9 @@ export function CandidateForm({ onSuccessAction, initialData }) {
       toast.success("Candidate Created Successfully.");
       onSuccessAction();
     },
-    onError: ({data}) => {
+    onError: ({ data }) => {
       toast.error(data?.msg);
+      form.reset();
     }
   });
 
