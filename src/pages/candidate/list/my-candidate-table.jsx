@@ -10,6 +10,14 @@ import {
   fetchMyCandidates,
   assignCandidateInBulk,
 } from "@/services/candidate";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Spinner from "@/components/organism/spinner";
 import { formatTimestamp } from "@/utils/dateTime";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import MyCandidateAction from "./actions/mycandidate-action";
@@ -17,6 +25,7 @@ import ReactSelect from "react-select";
 import { latestStatus } from "@/services/mock/latestStatus";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import RecruiterListModal from "./actions/recruiterListModal";
 import CountBadge from "@/components/organism/countbadge";
 
 export const columns = [
@@ -122,10 +131,12 @@ export const columns = [
 ];
 
 const MyCanidateTable = () => {
-  const { id: recruiterId, categoryId } = JSON.parse(
-    localStorage.getItem("userdata")
-  );
-  
+  const {
+    id: recruiterId,
+    categoryId,
+    isManager,
+  } = JSON.parse(localStorage.getItem("userdata"));
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({});
 
@@ -149,14 +160,6 @@ const MyCanidateTable = () => {
       fetchMyCandidates(recruiterId, page, filterTerm, selectedStatus),
   });
 
-  const assignMutation = useMutation({
-    mutationFn: assignCandidateInBulk,
-    onSuccess: () => {
-      toast.success("Candidates Assigned");
-      window.location.reload();
-    },
-  });
-
   const selectAllRows = (e) => {
     if (e) {
       const allRowIds = candidateList?.map((candidate) => candidate.id);
@@ -172,15 +175,6 @@ const MyCanidateTable = () => {
     } else {
       setSelectedRows([...selectedRows, rowId]);
     }
-  };
-
-  const handleAssignAction = () => {
-    const userdata = JSON.parse(localStorage.getItem("userdata"));
-    const payload = {
-      candidateIDs: selectedRows,
-      recruiterId: userdata?.id,
-    };
-    assignMutation.mutate(payload);
   };
 
   // useEffect(() => {
@@ -201,15 +195,7 @@ const MyCanidateTable = () => {
           placeholder="Search by Name..."
         />
         {selectedRows.length > 0 ? (
-          <div>
-            <Button size="sm" disabled={isLoading} onClick={handleAssignAction}>
-              {isLoading ? (
-                <Spinner className="text-white" />
-              ) : (
-                "Assign Selected"
-              )}
-            </Button>
-          </div>
+          <AssignRecruiter selectedRows={selectedRows} isManager={isManager} />
         ) : (
           <div className="flex flex-row justify-between w-1/3 gap-2">
             <ReactSelect
@@ -250,6 +236,70 @@ const MyCanidateTable = () => {
         setPage={(value) => handleParamChange("page", value)}
         totalPages={totalPages}
       />
+    </div>
+  );
+};
+
+const AssignRecruiter = ({ selectedRows, isManager }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const assignMutation = useMutation({
+    mutationFn: assignCandidateInBulk,
+    onSuccess: () => {
+      toast.success("Candidates Assigned");
+      navigate(`/candidate?currentTab=My+Candidates`);
+      setIsOpen(false);
+    },
+  });
+
+  const handleAssignAction = () => {
+    const userdata = JSON.parse(localStorage.getItem("userdata"));
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: userdata?.id,
+    };
+    assignMutation.mutate(payload);
+  };
+
+  const handleAssignToRecruiterAction = (id) => {
+    const payload = {
+      candidateIDs: selectedRows,
+      recruiterId: id,
+    };
+    assignMutation.mutate(payload);
+  };
+
+  return (
+    <div className="flex gap-2">
+      {isManager && (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button variant="default" size="sm">
+              Assign To Recruiter
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="mb-3">Choose Recruiter</DialogTitle>
+              <RecruiterListModal
+                isLoading={assignMutation.isLoading}
+                handleAssignToRecruiterAction={handleAssignToRecruiterAction}
+              />
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
+      <Button
+        size="sm"
+        disabled={assignMutation.isLoading}
+        onClick={handleAssignAction}
+      >
+        {assignMutation.isLoading ? (
+          <Spinner className="text-white" />
+        ) : (
+          "Assign Selected"
+        )}
+      </Button>
     </div>
   );
 };

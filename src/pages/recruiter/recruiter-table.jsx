@@ -82,7 +82,7 @@ const RecruiterTable = ({ ShouldRefresh, SetShouldRefresh }) => {
   ];
 
 
-  const [filterTerm, setFilterTerm] = useState("second");
+  const [filterTerm, setFilterTerm] = useState("");
   const [page, setPage] = useState(1);
   const [recruiterList, setRecruiterList] = useState([]);
   const [recruiterData, setRecruiterData] = useState([]);
@@ -179,13 +179,6 @@ const RecruiterTable = ({ ShouldRefresh, SetShouldRefresh }) => {
     }
   }, [ShouldRefresh]);
 
-  // useEffect(() => {
-  //   if (ShouldRefresh) {
-  //     setShouldRefresh(true);
-  //     SetShouldRefresh(false);
-  //   }
-  // }, [ShouldRefresh])
-
   useEffect(()=>{
     setIsRowSelected(Array(recruiterDataLength).fill(false))
     setIsAllRowSelected(false)
@@ -196,20 +189,20 @@ const RecruiterTable = ({ ShouldRefresh, SetShouldRefresh }) => {
       <div className="flex justify-between pb-4">
         <SearchFilter
           className=""
-          value={filterTerm}
+          initialValue={filterTerm}
           onChange={(e) => {
             setFilterTerm(e)
             if (e.length) {
               setRecruiterData(recruiterList.filter((rec) => { return (rec.recruiter_name?.toLowerCase().startsWith(e) || rec.recruiter_email?.toLowerCase().startsWith(e)) }))
-              setIsRowSelected(Array(recruiterDataLength).fill(false))
-              setIsAllRowSelected(false)
+              setIsRowSelected(Array(recruiterDataLength).fill(false));
+              setIsAllRowSelected(false);
             } else {
               setRecruiterData(recruiterList);
-              setIsRowSelected(Array(recruiterDataLength).fill(false))
-              setIsAllRowSelected(false)
+              setIsRowSelected(Array(recruiterDataLength).fill(false));
+              setIsAllRowSelected(false);
             }
           }}
-          placeholder="Search by Name"
+          placeholder="Search by Name/Email"
         />
 
         <AlertDialog open={deleteModal} onOpenChange={setDeleteModal}>
